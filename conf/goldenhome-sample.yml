@@ -1,0 +1,60 @@
+name: goldenhome
+version: 1.0
+nodes:
+  2D_A:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
+    endpoint: 192.168.1.111:8021
+    config:
+      face: A
+      cameraip: 192.168.2.120
+      savepath: /home/ubuntu/edgeplat
+      offline: 1
+    subscriber:
+      - merger: 5551
+  2D_B:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
+    endpoint: 192.168.1.111:8022
+    config:
+      face: B
+      cameraip: 192.168.3.112
+      savepath: /home/ubuntu/edgeplat
+      offline: 1
+    subscriber:
+      - merger: 5552
+
+  3D_A:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/3dlmi:1.0
+    endpoint: 192.168.1.100:8031
+    config:
+      face: A
+      cameraip: 192.168.1.10
+      savepath: d:/work/edgeplat
+      offline: 1
+    subscriber:
+      - merger: 5555
+  3D_B:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/3dlmi:1.0
+    endpoint: 192.168.1.100:8032
+    config:
+      face: B
+      cameraip: 192.168.1.11
+      savepath: d:/work/edgeplat
+      offline: 1
+    subscriber:
+      - merger: 5556
+
+  merger:
+    endpoint: 192.168.1.10:8080
+    config:
+      collectSize: 9
+    subscriber:
+      - publisher: 5571
+  publisher:
+    endpoint: 192.168.1.10:8090
+    config:
+      host: 192.168.10.10
+      port: 5672
+      username: admin
+      password: softwork
+      exchange: goldenhome
+      routekey: detect

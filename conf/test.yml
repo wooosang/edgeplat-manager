@@ -1,0 +1,44 @@
+name: offlinetest
+version: 1.0
+nodes:
+  plc:
+    image: ip:port/plc:1.0
+    endpoint: 192.168.9.116:8083
+    config:
+    subscriber:
+      - cameraA: 5554
+
+  cameraA:
+    endpoint: 192.168.9.116:8080
+    config:
+      cameraip: 192.168.9.144
+      station: S1_A_2D
+      face: A
+      savepath: /home/ubuntu/edgeplat
+      offline: 0
+    subscriber:
+      - check: 5555
+
+  check:
+    endpoint: 192.168.9.116:8085
+    config:
+      type: CHECK_REQUEST
+      endpoint:
+        type: HTTP
+        method: POST
+        url: http://192.168.9.112:9007
+        params:
+          - mpr: http://192.168.9.158:8080/mpr/${barcode}
+          - image: ${image_url}
+    subscriber:
+      - publisher: 5570
+
+  publisher:
+    endpoint: 192.168.9.116:8088
+    config:
+      host: 192.168.9.138
+      port: 5672
+      username: admin
+      password: softwork
+      exchange: goldenhome
+      routekey: detect

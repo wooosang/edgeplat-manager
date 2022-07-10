@@ -1,0 +1,105 @@
+name: goldenhome
+version: 1.0
+nodes:
+  barcodereader:
+    endpoint: 192.168.9.132:8080
+    config:
+      host: 192.168.9.138
+      port: 5672
+      username: admin
+      password: softwork
+      queue: queueTest
+      exchange: goldenhome
+      routekey: detect
+    subscriber:
+      - 2D_A: 5521
+      - 2D_B: 5522
+      - 2D_C: 5523
+      - 2D_D: 5524
+      - 3D_A: 5531
+      - 3D_B: 5532
+      - 3D_C: 5533
+      - 3D_D: 5534
+  2D_A:
+    endpoint: 192.168.9.132:8021
+    config:
+      face: A
+      cameraip: xxxx
+      savepath: /home/ubuntu/edgeplat
+    subscriber:
+      - merger: 5551
+  2D_B:
+    endpoint: 192.168.9.132:8022
+    config:
+      face: B
+      cameraip: xxxx
+      savepath: /home/ubuntu/edgeplat
+    subscriber:
+      - merger: 5552
+  2D_C:
+    endpoint: 192.168.9.132:8023
+    config:
+      face: C
+      cameraip: xxxx
+      savepath: /home/ubuntu/edgeplat
+    subscriber:
+      - merger: 5553
+  2D_D:
+    endpoint: 192.168.9.132:8024
+    config:
+      face: D
+      cameraip: xxxx
+      savepath: /home/ubuntu/edgeplat
+    subscriber:
+      - merger: 5554
+  3D_A:
+    endpoint: 192.168.9.132:8031
+    image: lmi
+    config:
+      face: A
+      cameraip: xxxx
+      savepath: d:/work/edgeplat
+    subscriber:
+      - merger: 5555
+  3D_B:
+    endpoint: 192.168.9.132:8032
+    image: lmi
+    config:
+      face: B1
+      cameraip: xxxx
+      savepath: d:/work/edgeplat
+    subscriber:
+      - merger: 5556
+  3D_C:
+    endpoint: 192.168.9.132:8033
+    iamge: hikvision
+    config:
+      face: C
+      cameraip: xxxx
+      savepath: d:/work/edgeplat
+    subscriber:
+      - merger: 5557
+  3D_D:
+    endpoint: 192.168.9.132:8034
+    image: hikvision
+    config:
+      face: D
+      cameraip: xxxx
+      savepath: d:/work/edgeplat
+    subscriber:
+      - merger: 5558
+  merger:
+    endpoint: 192.168.9.133:8080
+    config:
+      collectSize: 9
+    subscriber:
+      - publisher: 5571
+  publisher:
+    endpoint: 192.168.9.133:8090
+    config:
+      host: 192.168.10.10
+      port: 5672
+      username: admin
+      password: softwork
+      exchange: goldenhome
+      routekey: detect
