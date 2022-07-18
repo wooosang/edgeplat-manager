@@ -85,6 +85,6 @@ def testsend():
 
 
 if __name__ == '__main__':
-    app.manager = Manager('conf/edgetest.yml')
+    app.manager = Manager('conf/edgeplat.yml')
     # startPlc()
     app.run(debug=True, host='0.0.0.0', port=9000)
