@@ -9,23 +9,25 @@ from Manager import Manager
 
 app = Flask(__name__)
 plc_url = 'http://192.168.10.10:1880/'
-mq_host = '192.168.9.138'
+# mq_host = '192.168.9.138'
 
 credentials = pika.PlainCredentials('admin', 'softwork' )
-connection = pika.BlockingConnection(pika.ConnectionParameters(mq_host, 5672, '/', credentials ,heartbeat=0))
-channel = connection.channel()
+# connection = pika.BlockingConnection(pika.ConnectionParameters(mq_host, 5672, '/', credentials ,heartbeat=0))
+# channel = connection.channel()
 
 @app.route("/start", methods=["POST"])
 def start():
     global app
-    param = request.json
-    request_param = dict(param)
+    print(request)
+    # param = request.json
+    # request_param = dict(param)
     # del request_param['packheight']
     # del request_param['checkcount']
-    print(request_param)
+    # print(request_param)
     # packheight = param['packheight']
     # checkcount = param['checkcount']
     app.manager.stop()
+    request_param = {}
     app.manager.startWithConfig(request_param)
     # response = startCheck(packheight, checkcount)
     return jsonify({'success':True})
