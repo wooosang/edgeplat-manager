@@ -11,21 +11,12 @@ app = Flask(__name__)
 plc_url = 'http://192.168.10.10:1880/'
 # mq_host = '192.168.9.138'
 
-credentials = pika.PlainCredentials('admin', 'softwork' )
-# connection = pika.BlockingConnection(pika.ConnectionParameters(mq_host, 5672, '/', credentials ,heartbeat=0))
-# channel = connection.channel()
+# credentials = pika.PlainCredentials('admin', 'softwork' )
 
 @app.route("/start", methods=["POST"])
 def start():
     global app
     print(request)
-    # param = request.json
-    # request_param = dict(param)
-    # del request_param['packheight']
-    # del request_param['checkcount']
-    # print(request_param)
-    # packheight = param['packheight']
-    # checkcount = param['checkcount']
     app.manager.stop()
     request_param = {}
     app.manager.startWithConfig(request_param)
@@ -35,22 +26,23 @@ def start():
 @app.route('/stop', methods=['GET'])
 def stop():
     global app
-    response = requests.get(plc_url + 'deviceReset')
+    # response = requests.get(plc_url + 'deviceReset')
     app.manager.stop()
     return jsonify({'success':True})
 
 def startPlc():
-    response = requests.get(plc_url + 'deviceStart')
+    # response = requests.get(plc_url + 'deviceStart')
     time.sleep(1)
-    response = requests.get(plc_url+'setMode?mode=1')
-    response = requests.get(plc_url+'deviceInit')
+    # response = requests.get(plc_url+'setMode?mode=1')
+    # response = requests.get(plc_url+'deviceInit')
 
 
 def startCheck(packheight, checkcount):
-    response = requests.get(plc_url + 'deviceReset')
+    # response = requests.get(plc_url + 'deviceReset')
+    response = {}
     print("height={}, count={}".format(packheight,checkcount))
-    response = requests.get(plc_url + 'setParams'+'?height='+str(packheight)+'&amount='+str(checkcount))
-    response = requests.get(plc_url + 'testStart')
+    # response = requests.get(plc_url + 'setParams'+'?height='+str(packheight)+'&amount='+str(checkcount))
+    # response = requests.get(plc_url + 'testStart')
     return response
 
 

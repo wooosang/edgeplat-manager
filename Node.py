@@ -38,7 +38,11 @@ class Node:
         return self.subscribers[node]
 
     def getConfigCommand(self):
-        config_command = self.config
+        if 'wrapped' in self.config and self.config['wrapped']:
+            config_command = {}
+            config_command['config'] = self.config
+        else:
+            config_command = self.config
         config_command['command'] = 'config'
 
         if self.hasConfig('cameraip') and self.sources:
