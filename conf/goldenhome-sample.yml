@@ -15,55 +15,158 @@ nodes:
     image: upload:latest
     endpoint: 192.168.1.52:8031
     config:
+      wrapped: true
       mode: RESTFUL
       address: http://10.10.80.30:8888/keer-admin/api/v1/files
       method: POST
       params:
         - file: "#{image}"
-        - bucketName: mpr
+        - bucketName: sample
         - objectName: "#{station}#{id}#{face}_#{idx}.jpg"
     subscriber:
       - publisher_A: 5571
   publisher_A:
     endpoint: 192.168.1.52:8041
     config:
+      wrapped: false
       host: 10.10.80.30
       port: 5672
       username: admin
       password: softwork
       exchange: goldenhome
       routekey: sample
-#  2D_B:
-#    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
-#    endpoint: 192.168.1.52:8022
-#    config:
-#      face: B
-#      cameraip: 192.168.3.10
-#      savepath: /home/ubuntu/edgeplat
-#      offline: 1
-#    subscriber:
-#      - merger: 5552
-#
+  2D_B:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
+    endpoint: 192.168.1.52:8022
+    config:
+      face: B
+      cameraip: 192.168.3.10
+      savepath: /home/ubuntu/edgeplat
+      offline: 1
+    subscriber:
+      - uploader_B: 5552
+  uploader_B:
+    image: upload:latest
+    endpoint: 192.168.1.52:8032
+    config:
+      wrapped: true
+      mode: RESTFUL
+      address: http://10.10.80.30:8888/keer-admin/api/v1/files
+      method: POST
+      params:
+        - file: "#{image}"
+        - bucketName: sample
+        - objectName: "#{station}#{id}#{face}_#{idx}.jpg"
+    subscriber:
+      - publisher_B: 5572
+  publisher_B:
+    endpoint: 192.168.1.52:8042
+    config:
+      wrapped: false
+      host: 10.10.80.30
+      port: 5672
+      username: admin
+      password: softwork
+      exchange: goldenhome
+      routekey: sample
+  2D_C:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
+    endpoint: 192.168.1.52:8023
+    config:
+      face: C
+      cameraip: 192.168.4.10
+      savepath: /home/ubuntu/edgeplat
+      offline: 1
+    subscriber:
+      - uploader_C: 5553
+  uploader_C:
+    image: upload:latest
+    endpoint: 192.168.1.52:8033
+    config:
+      wrapped: true
+      mode: RESTFUL
+      address: http://10.10.80.30:8888/keer-admin/api/v1/files
+      method: POST
+      params:
+        - file: "#{image}"
+        - bucketName: sample
+        - objectName: "#{station}#{id}#{face}_#{idx}.jpg"
+    subscriber:
+      - publisher_C: 5573
+  publisher_C:
+    endpoint: 192.168.1.52:8043
+    config:
+      wrapped: false
+      host: 10.10.80.30
+      port: 5672
+      username: admin
+      password: softwork
+      exchange: goldenhome
+      routekey: sample
+  2D_D:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
+    endpoint: 192.168.1.52:8024
+    config:
+      face: D
+      cameraip: 192.168.5.10
+      savepath: /home/ubuntu/edgeplat
+      offline: 1
+    subscriber:
+      - uploader_D: 5554
+  uploader_D:
+    image: upload:latest
+    endpoint: 192.168.1.52:8034
+    config:
+      wrapped: true
+      mode: RESTFUL
+      address: http://10.10.80.30:8888/keer-admin/api/v1/files
+      method: POST
+      params:
+        - file: "#{image}"
+        - bucketName: sample
+        - objectName: "#{station}#{id}#{face}_#{idx}.jpg"
+    subscriber:
+      - publisher_D: 5574
+  publisher_D:
+    endpoint: 192.168.1.52:8044
+    config:
+      wrapped: false
+      host: 10.10.80.30
+      port: 5672
+      username: admin
+      password: softwork
+      exchange: goldenhome
+      routekey: sample
 #  3D_A:
 #    image: registry.cn-hangzhou.aliyuncs.com/open-ys/3dlmi:1.0
-#    endpoint: 192.168.1.100:8031
+#    endpoint: 192.168.1.32:8031
 #    config:
 #      face: A
 #      cameraip: 192.168.1.10
-#      savepath: d:/work/edgeplat
+#      savepath: d:/work/edgeplat/A
 #      offline: 1
 #    subscriber:
 #      - merger: 5555
 #  3D_B:
 #    image: registry.cn-hangzhou.aliyuncs.com/open-ys/3dlmi:1.0
-#    endpoint: 192.168.1.100:8032
+#    endpoint: 192.168.1.32:8032
 #    config:
 #      face: B
-#      cameraip: 192.168.1.11
-#      savepath: d:/work/edgeplat
+#      cameraip: 192.168.1.32
+#      savepath: d:/work/edgeplat/B
 #      offline: 1
 #    subscriber:
 #      - merger: 5556
+#  3D_C:
+#    image: registry.cn-hangzhou.aliyuncs.com/open-ys/3dhik:1.0
+#    endpoint: 192.168.1.32:8033
+#    config:
+#      face: C
+#      cameraip: 192.168.3.10
+#      savepath: d:/work/edgeplat/C/
+#      offline: 1
+#    subscriber:
+#      - merger: 5557
 
 #  merger:
 #    endpoint: 192.168.1.10:8080
@@ -71,4 +174,4 @@ nodes:
 #      collectSize: 9
 #    subscriber:
 #      - publisher: 5571
-  
+

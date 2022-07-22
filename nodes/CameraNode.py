@@ -1,0 +1,25 @@
+from nodes.Node import Node
+import logging
+
+class CameraNode(Node):
+    def __init__(self, name, config):
+        super(CameraNode,self).__init__(name,config)
+
+    def getConfigCommand(self, parameter={}):
+        configCommand = super(CameraNode, self).getConfigCommand(self)
+        return configCommand
+
+    def getSubscribeCommand(self):
+        subscribeCommand = super(CameraNode, self).getSubscribeCommand()
+        subscribeCommand['cameraip'] = self.getConfig('cameraip')
+        return subscribeCommand
+
+    def getStartCommand(self, parameter={}):
+        startCommand = super(CameraNode, self).getStartCommand(parameter)
+        startCommand['cameraip'] = self.config['cameraip']
+        if self.code in parameter:
+            dynamic_parameter = parameter[self.code]
+            print("获取到动态参数: {}".format(dynamic_parameter))
+            for key in dynamic_parameter:
+                startCommand[key] = dynamic_parameter[key]
+        return startCommand

@@ -1,0 +1,53 @@
+name: offlinetest
+version: 1.0
+nodes:
+  cameraA:
+    code: cameraA
+    type: 2DCamera
+    endpoint: localhost:8081
+    config:
+      cameraip: 192.168.10.11
+      station: S1_A_2D
+      face: A
+      savepath: /home/ubuntu/edgeplat
+      offline: 1
+    subscriber:
+      - aggregation: 5555
+#  cameraB:
+#    endpoint: 192.168.10.10:8082
+#    config:
+#      cameraip: 192.168.10.12
+#      station: S1_B_2D
+#      face: B
+#      savepath: /home/ubuntu/edgeplat
+#      offline: 1
+#    subscriber:
+#      - aggregation: 5556
+#  cameraC:
+#    endpoint: 192.168.10.10:8083
+#    config:
+#      cameraip: 192.168.10.13
+#      station: S1_C_2D
+#      face: C
+#      savepath: /home/ubuntu/edgeplat
+#      offline: 1
+#      snapnum: 4
+#    subscriber:
+#      - aggregation: 5557
+  aggregation:
+    endpoint: localhost:8091
+    config:
+      id: packagenum
+      collectSize: 6
+    subscriber:
+      - publisher: 5570
+  publisher:
+    endpoint: localhost:8092
+    config:
+      host: 192.168.10.10
+      port: 5672
+      username: admin
+      password: softwork
+      exchange: test
+      routekey: detect
+

@@ -17,9 +17,10 @@ plc_url = 'http://192.168.10.10:1880/'
 def start():
     global app
     print(request)
+    print("Debug: {}".format(request.args.get('debug')))
     app.manager.stop()
     request_param = {}
-    app.manager.startWithConfig(request_param)
+    app.manager.doStart(request_param)
     # response = startCheck(packheight, checkcount)
     return jsonify({'success':True})
 
@@ -34,6 +35,7 @@ def startPlc():
     # response = requests.get(plc_url + 'deviceStart')
     time.sleep(1)
     # response = requests.get(plc_url+'setMode?mode=1')
+    time.sleep(1)
     # response = requests.get(plc_url+'deviceInit')
 
 
@@ -79,6 +81,6 @@ def testsend():
 
 
 if __name__ == '__main__':
-    app.manager = Manager('conf/edgeplat.yml')
+    app.manager = Manager('conf/offline-hefei/edge-ciga.yml')
     # startPlc()
-    app.run(debug=True, host='0.0.0.0', port=9000)
+    app.run(debug=False, host='0.0.0.0', port=9000)

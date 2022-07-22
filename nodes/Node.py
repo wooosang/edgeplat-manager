@@ -4,6 +4,10 @@ class Node:
         self.subscribers = {}
         self.sources = []
         self.yml = config
+        if 'type' in config:
+            self.type = config['type']
+        if 'code' in config:
+            self.code = config['code']
         endpoint = config['endpoint'].split(':')
         self.ip = endpoint[0]
         self.port = endpoint[1]
@@ -37,7 +41,7 @@ class Node:
     def getOutboundPort(self, node):
         return self.subscribers[node]
 
-    def getConfigCommand(self):
+    def getConfigCommand(self, parameter={}):
         if 'wrapped' in self.config and self.config['wrapped']:
             config_command = {}
             config_command['config'] = self.config
@@ -51,15 +55,15 @@ class Node:
         return config_command
 
     def getSubscribeCommand(self):
+        if len(self.subscribers) == 0:
+            return None
         subscribe_command = {'command':'subscribe'}
-        if self.hasConfig('cameraip'):
-            subscribe_command['cameraip'] = self.getConfig('cameraip')
         for sink in self.subscribers:
             subscribe_command['endpoint'] = 'tcp://*:'+str(self.getOutboundPort(sink))
             subscribe_command['port'] = self.getOutboundPort(sink)
         return subscribe_command
 
-    def getStartCommand(self):
+    def getStartCommand(self, parameter={}):
         start_command = {}
         if len(self.sources)>1:
             sources=[];
