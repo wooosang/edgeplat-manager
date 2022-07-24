@@ -17,9 +17,17 @@ class CameraNode(Node):
     def getStartCommand(self, parameter={}):
         startCommand = super(CameraNode, self).getStartCommand(parameter)
         startCommand['cameraip'] = self.config['cameraip']
-        if self.code in parameter:
-            dynamic_parameter = parameter[self.code]
-            print("获取到动态参数: {}".format(dynamic_parameter))
+        if 'node_parameter' in parameter:
+            node_parameter = parameter["node_parameter"]
+        else:
+            node_parameter = {}
+        for key in parameter:
+            if key != 'node_parameter':
+                startCommand[key] = parameter[key]
+
+        if self.code in node_parameter:
+            dynamic_parameter = node_parameter[self.code]
+            # print("获取到动态参数: {}".format(dynamic_parameter))
             for key in dynamic_parameter:
                 startCommand[key] = dynamic_parameter[key]
         return startCommand

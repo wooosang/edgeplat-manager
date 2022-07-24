@@ -3,7 +3,7 @@ import socket,json, time, yaml,logging
 import traceback
 from Manager import Manager
 from flask import Flask, jsonify, request
-from offline.ManagerExt import ext_api
+from ManagerExt import ext_api
 
 edgenodes = {}
 debug=False
@@ -24,13 +24,12 @@ app.register_blueprint(ext_api)
 @app.route("/start", methods=["POST"])
 def start():
     global app
-    print(request)
-    print("Debug: {}".format(request.args.get('debug')))
+    logging.debug(request)
     debug = request.args.get('debug')
     request_param = request.get_json()
-    print("Request body: {}".format(request_param))
+    logging.debug("Request body: {}".format(request_param))
     result = app.manager.start(request_param, debug)
-    return jsonify(result)
+    return result
 
 @app.route('/stop', methods=['GET'])
 def stop():
@@ -41,7 +40,6 @@ def stop():
 
 
 if __name__ == '__main__':
-    app.manager = Manager('conf/test/edge-ciga.yml')
+    app.manager = Manager('conf/edgeplat.yml')
     ext_api.manager = app.manager
-    # startPlc()
     app.run(debug=False, host='0.0.0.0', port=9000)
