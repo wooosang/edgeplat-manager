@@ -4,7 +4,8 @@ nodes:
   cameraA:
     code: cameraA
     type: 2DCamera
-    endpoint: localhost:8081
+    endpoint: localhost:8082
+    ignore_response: true
     config:
       cameraip: 192.168.10.11
       station: S1_A_2D

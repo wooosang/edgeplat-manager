@@ -1,8 +1,9 @@
 
 import socket,json, time, yaml,logging
 import traceback
-from flask import Flask, jsonify, request
 from Manager import Manager
+from flask import Flask, jsonify, request
+from offline.ManagerExt import ext_api
 
 edgenodes = {}
 debug=False
@@ -18,19 +19,29 @@ main_logger.addHandler(console_handler)
 
 
 app = Flask(__name__)
+app.register_blueprint(ext_api)
 
 @app.route("/start", methods=["POST"])
 def start():
     global app
     print(request)
     print("Debug: {}".format(request.args.get('debug')))
+    debug = request.args.get('debug')
     request_param = request.get_json()
     print("Request body: {}".format(request_param))
-    app.manager.start(request_param)
-    return jsonify({'success':True})
+    result = app.manager.start(request_param, debug)
+    return jsonify(result)
+
+@app.route('/stop', methods=['GET'])
+def stop():
+    global app
+    # response = requests.get(plc_url + 'deviceReset')
+    result = app.manager.stop()
+    return jsonify(result)
 
 
 if __name__ == '__main__':
     app.manager = Manager('conf/test/edge-ciga.yml')
+    ext_api.manager = app.manager
     # startPlc()
     app.run(debug=False, host='0.0.0.0', port=9000)

@@ -1,7 +1,7 @@
 import traceback,socket,yaml,logging,time,json
 from nodes.NodeFactory import NodeFactory
+from offline.ManagerExt import ManagerExt
 
-debug=False
 connect_timeout=1.0
 recv_timeout=1.0
 
@@ -28,22 +28,24 @@ class Manager(object):
                 self.edgenodes[edgenode].addOutbound(self.edgenodes[outbound], outport)
                 self.edgenodes[outbound].addInbound(self.edgenodes[edgenode])
 
-    def preStart(self):
-        # 启动之前的扩展逻辑放这里
-        pass
+    def preStart(self, parameter):
+        return ManagerExt.preStart(parameter)
 
-    def postStart(self):
-        # 启动之后的扩展逻辑放这里
-        pass
+    def postStart(self, parameter):
+        return ManagerExt.postStart(parameter)
 
-    def start(self, parameter):
-        self.preStart()
-        self.stop()
-        self.doStart(parameter)
+    def start(self, parameter, debug=False):
+        result = {"success": True}
+        self.preStart(parameter)
+        self.stop(debug)
+        self.doStart(parameter, debug)
         # response = startCheck(packheight, checkcount)
-        self.postStart()
+        post_start_result = self.postStart(parameter)
+        # merged_result = {key: value for (key, value) in (result.items() + post_start_result.items())}
+        result.update(post_start_result)
+        return result
 
-    def doStart(self, parameter):
+    def doStart(self, parameter, debug=False):
         node_parameter = parameter["node_parameter"]
         for edgenode in self.edgenodes:
             try:
@@ -62,7 +64,11 @@ class Manager(object):
                 if not debug:
                     sock.sendall(json.dumps(config_command).encode())
                     sock.settimeout(recv_timeout)
-                    result = sock.recv(1)
+                    if hasattr(node,'ignore_response') and node.ignore_response:
+                        time.sleep(1)
+                        result = 0
+                    else:
+                        result = sock.recv(1)
                     print("Config {} result: {}".format(edgenode, result))
                     sock.close()
 
@@ -77,7 +83,11 @@ class Manager(object):
                     # sock.send(len(subscribe_command))
                     if not debug:
                         sock.sendall(json.dumps(subscribe_command).encode())
-                        result = sock.recv(1)
+                        if hasattr(node, 'ignore_response') and node.ignore_response:
+                            time.sleep(1)
+                            result = 0
+                        else:
+                            result = sock.recv(1)
                         sock.close()
 
                 if not debug:
@@ -89,7 +99,11 @@ class Manager(object):
                 # sock.send(len(start_command))
                 if not debug:
                     sock.sendall(json.dumps(start_command).encode())
-                    result = sock.recv(1)
+                    if hasattr(node, 'ignore_response') and node.ignore_response:
+                        time.sleep(1)
+                        result = 0
+                    else:
+                        result = sock.recv(1)
                     sock.close()
                 print("Node {} started.".format(edgenode))
             except Exception as e:
@@ -127,7 +141,21 @@ class Manager(object):
     #         finally:
     #             sock.close()
 
-    def stop(self):
+    def preStop(self, debug=False):
+        return ManagerExt.preStop(debug)
+
+    def postStop(self, debug=False):
+        return ManagerExt.postStop(debug)
+
+    def stop(self, debug=False):
+        result = {'success': True}
+        pre_stop_result = self.preStop(debug)
+        result.update(pre_stop_result)
+        self.doStop(debug)
+        self.postStop(debug)
+        return result
+
+    def doStop(self, debug=False):
         for edgenode in self.edgenodes:
             try:
                 node = self.edgenodes[edgenode]
@@ -150,3 +178,4 @@ class Manager(object):
             finally:
                 if not debug:
                     sock.close()
+

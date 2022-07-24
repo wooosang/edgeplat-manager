@@ -8,6 +8,8 @@ class Node:
             self.type = config['type']
         if 'code' in config:
             self.code = config['code']
+        if 'ignore_response' in config:
+            self.ignore_response = config['ignore_response']
         endpoint = config['endpoint'].split(':')
         self.ip = endpoint[0]
         self.port = endpoint[1]
