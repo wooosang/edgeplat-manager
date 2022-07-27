@@ -104,7 +104,7 @@ class Manager(object):
                     sock.close()
                 logging.debug("Node {} started.".format(edgenode))
             except Exception as e:
-                logging.error("Can't connect to node {}!!! Reason: {}".format(edgenode, e))
+                logging.error("Can't connect to node {}-{}:{}!!! Reason: {}".format(edgenode, nodeip, nodeport, e))
                 traceback.print_exc()
             finally:
                 if not debug:
