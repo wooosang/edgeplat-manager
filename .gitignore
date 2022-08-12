@@ -1,2 +1,5 @@
 nodes/__pycache__
 __pycache__
+**/*.swp
+**/*.un~
+**/*.yml~

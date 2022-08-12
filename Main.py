@@ -26,6 +26,9 @@ def start():
     global app
     logging.debug(request)
     debug = request.args.get('debug')
+    conf = request.args.get('conf')
+    if conf is not None:
+        init('conf/'+conf+'.yml')
     request_param = request.get_json()
     logging.debug("Request body: {}".format(request_param))
     result = app.manager.start(request_param, debug)
@@ -38,8 +41,21 @@ def stop():
     result = app.manager.stop()
     return jsonify(result)
 
+@app.route('/reload', methods=['GET','POST'])
+def reload():
+    conf = request.args.get('conf')
+    logging.info('Reload conf {}'.format(conf))
+    init(conf)
+
+def init(conf):
+    app.manager = Manager(conf)
+    ext_api.manager = app.manager
 
 if __name__ == '__main__':
-    app.manager = Manager('conf/edgeplat.yml')
-    ext_api.manager = app.manager
+    # app.manager = Manager('conf/edgeplat.yml')
+    # app.manager = Manager('conf/online-wy/check.yml')
+    # ext_api.manager = app.manager
+    conf = 'conf/edgeplat.yml'
+    # conf = 'conf/online-wy/check.yml'
+    init(conf)
     app.run(debug=False, host='0.0.0.0', port=9000)

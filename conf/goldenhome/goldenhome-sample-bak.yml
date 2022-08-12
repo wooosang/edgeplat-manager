@@ -4,56 +4,18 @@ nodes:
   2D_A:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
     endpoint: 192.168.1.52:8021
-    type: 2DCamera
-    code: CameraA
     config:
       face: A
       cameraip: 192.168.2.10
       savepath: /home/ubuntu/edgeplat
       offline: 1
     subscriber:
-      - uploader: 5551
-  2D_B:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
-    endpoint: 192.168.1.52:8022
-    type: 2DCamera
-    code: CameraB
-    config:
-      face: B
-      cameraip: 192.168.3.10
-      savepath: /home/ubuntu/edgeplat
-      offline: 1
-    subscriber:
-      - uploader: 5552
-  2D_C:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
-    endpoint: 192.168.1.52:8023
-    type: 2DCamera
-    code: CameraC
-    config:
-      face: C
-      cameraip: 192.168.4.10
-      savepath: /home/ubuntu/edgeplat
-      offline: 1
-    subscriber:
-      - uploader: 5553
-  2D_D:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
-    endpoint: 192.168.1.52:8024
-    type: 2DCamera
-    code: CameraD
-    config:
-      face: D
-      cameraip: 192.168.5.10
-      savepath: /home/ubuntu/edgeplat
-      offline: 1
-    subscriber:
-      - uploader: 5554
-  uploader:
+      - uploader_A: 5551
+  uploader_A:
     image: upload:latest
     endpoint: 192.168.1.52:8031
-    type: Uploader
     config:
+      wrapped: true
       mode: RESTFUL
       address: http://10.10.80.30:8888/keer-admin/api/v1/files
       method: POST
@@ -62,8 +24,8 @@ nodes:
         - bucketName: sample
         - objectName: "#{station}#{id}#{face}_#{idx}.jpg"
     subscriber:
-      - publisher: 5571
-  publisher:
+      - publisher_A: 5571
+  publisher_A:
     endpoint: 192.168.1.52:8041
     config:
       wrapped: false
@@ -73,8 +35,108 @@ nodes:
       password: softwork
       exchange: goldenhome
       routekey: sample
-
-
+  2D_B:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
+    endpoint: 192.168.1.52:8022
+    config:
+      face: B
+      cameraip: 192.168.3.10
+      savepath: /home/ubuntu/edgeplat
+      offline: 1
+    subscriber:
+      - uploader_B: 5552
+  uploader_B:
+    image: upload:latest
+    endpoint: 192.168.1.52:8032
+    config:
+      wrapped: true
+      mode: RESTFUL
+      address: http://10.10.80.30:8888/keer-admin/api/v1/files
+      method: POST
+      params:
+        - file: "#{image}"
+        - bucketName: sample
+        - objectName: "#{station}#{id}#{face}_#{idx}.jpg"
+    subscriber:
+      - publisher_B: 5572
+  publisher_B:
+    endpoint: 192.168.1.52:8042
+    config:
+      wrapped: false
+      host: 10.10.80.30
+      port: 5672
+      username: admin
+      password: softwork
+      exchange: goldenhome
+      routekey: sample
+  2D_C:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
+    endpoint: 192.168.1.52:8023
+    config:
+      face: C
+      cameraip: 192.168.4.10
+      savepath: /home/ubuntu/edgeplat
+      offline: 1
+    subscriber:
+      - uploader_C: 5553
+  uploader_C:
+    image: upload:latest
+    endpoint: 192.168.1.52:8033
+    config:
+      wrapped: true
+      mode: RESTFUL
+      address: http://10.10.80.30:8888/keer-admin/api/v1/files
+      method: POST
+      params:
+        - file: "#{image}"
+        - bucketName: sample
+        - objectName: "#{station}#{id}#{face}_#{idx}.jpg"
+    subscriber:
+      - publisher_C: 5573
+  publisher_C:
+    endpoint: 192.168.1.52:8043
+    config:
+      wrapped: false
+      host: 10.10.80.30
+      port: 5672
+      username: admin
+      password: softwork
+      exchange: goldenhome
+      routekey: sample
+  2D_D:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
+    endpoint: 192.168.1.52:8024
+    config:
+      face: D
+      cameraip: 192.168.5.10
+      savepath: /home/ubuntu/edgeplat
+      offline: 1
+    subscriber:
+      - uploader_D: 5554
+  uploader_D:
+    image: upload:latest
+    endpoint: 192.168.1.52:8034
+    config:
+      wrapped: true
+      mode: RESTFUL
+      address: http://10.10.80.30:8888/keer-admin/api/v1/files
+      method: POST
+      params:
+        - file: "#{image}"
+        - bucketName: sample
+        - objectName: "#{station}#{id}#{face}_#{idx}.jpg"
+    subscriber:
+      - publisher_D: 5574
+  publisher_D:
+    endpoint: 192.168.1.52:8044
+    config:
+      wrapped: false
+      host: 10.10.80.30
+      port: 5672
+      username: admin
+      password: softwork
+      exchange: goldenhome
+      routekey: sample
 #  3D_A:
 #    image: registry.cn-hangzhou.aliyuncs.com/open-ys/3dlmi:1.0
 #    endpoint: 192.168.1.32:8031

@@ -1,0 +1,30 @@
+name: offlinetest
+version: 1.0
+nodes:
+  cameraA:
+    endpoint: 192.168.50.219:6001
+    code: cameraA
+    type: 2DCamera
+    debug: true
+    config:
+      cameraip: 192.168.40.20
+      station: S1_A_2D
+      face: A
+    subscriber:
+      - checker_A: 6061
+
+  checker_A:
+    endpoint: 192.168.50.219:8080
+    config:
+      type: mock_json
+      pass_img: True
+      cut_shape: [ 250, 360, 1350, 980 ]
+    subscriber:
+      - uploader: 6062 @result=NG
+      - merger: 6063 @result=OK
+  uploader:
+    endpoint: 192.168.50.219:8090
+    debug: true
+  merger:
+    endpoint: 192.168.50.219:8091
+    debug: true
