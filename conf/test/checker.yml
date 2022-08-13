@@ -13,15 +13,28 @@ nodes:
     subscriber:
       - checker_A: 6061
 
+  cameraB:
+    endpoint: 192.168.50.219:6002
+    code: cameraB
+    type: 2DCaemra
+    debug: true
+    config:
+      cameraip: 192.168.50.20
+    subscriber:
+      - checker_A: 6063
+
   checker_A:
     endpoint: 192.168.50.219:8080
     config:
       type: mock_json
+      ng_condition: face in ['A']
+      ok_output: {'result':'OK'}
+      ng_output: {'result':'NG',"defects":[{"image":"#{filename}","result":"NG","type":"d001","face":"A","comment":"staint","position":"100,100,200,200"}]}
       pass_img: True
       cut_shape: [ 250, 360, 1350, 980 ]
     subscriber:
-      - uploader: 6062 @result=NG
-      - merger: 6063 @result=OK
+      - uploader: 6072 @result=NG
+      - merger: 6073 @result=OK
   uploader:
     endpoint: 192.168.50.219:8090
     debug: true
