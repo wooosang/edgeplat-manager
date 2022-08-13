@@ -9,7 +9,7 @@ class Manager(object):
     def __init__(self,yml):
         logging.debug('Init config file {}'.format(yml))
         self.edgenodes = {}
-        with open(yml, 'r') as file:
+        with open(yml, 'r',encoding='utf-8') as file:
             edgeconfig = yaml.safe_load(file)
             nodes = edgeconfig["nodes"]
             for node_name in nodes:

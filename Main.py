@@ -52,10 +52,7 @@ def init(conf):
     ext_api.manager = app.manager
 
 if __name__ == '__main__':
-    # app.manager = Manager('conf/edgeplat.yml')
-    # app.manager = Manager('conf/online-wy/check.yml')
     # ext_api.manager = app.manager
     conf = 'conf/edgeplat.yml'
-    # conf = 'conf/online-wy/check.yml'
     init(conf)
     app.run(debug=False, host='0.0.0.0', port=9000)

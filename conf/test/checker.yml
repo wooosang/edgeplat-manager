@@ -29,7 +29,36 @@ nodes:
       type: mock_json
       ng_condition: face in ['A']
       ok_output: {'result':'OK'}
-      ng_output: {'result':'NG',"defects":[{"image":"#{filename}","result":"NG","type":"d001","face":"A","comment":"staint","position":"100,100,200,200"}]}
+      ng_output: |+
+        { 
+          "result":"NG",
+          "defects": [
+          {
+            "image": "#{filename}",
+            "result": "NG",
+            "type": "f001",
+            "face": "A",
+            "comment": "破损",
+            "position": [100,100,200,200]
+          },
+          {
+            "image": "#{filename}",
+            "result": "NG",
+            "type": "f002",
+            "face": "A",
+            "comment": "刮伤",
+            "position": [100,100,200,200]
+          },
+          {
+            "image": "#{filename}",
+            "result": "NG",
+            "type": "f003",
+            "face": "A",
+            "comment": "污渍",
+            "position": [100,100,200,200]
+          }
+        ]
+        }
       pass_img: True
       cut_shape: [ 250, 360, 1350, 980 ]
     subscriber:
