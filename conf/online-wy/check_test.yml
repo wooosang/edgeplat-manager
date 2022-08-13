@@ -93,9 +93,10 @@ nodes:
       - voter: 6076
   voter:
     endpoint: 192.168.9.125:6031
+    debug: true
     config:
       type: socket
-      ip: 192.168.9.132
+      ip: 192.168.9.125
       port: 3000
     subscriber:
       - publisher: 6082
