@@ -59,6 +59,7 @@ nodes:
   checker_A:
     endpoint: 192.168.9.125:6021
     config:
+      type: 2class_dl
       cut_shape: [250, 360, 1350, 980]
       savepath: /home/ubuntu/edgeplat
     subscriber:
