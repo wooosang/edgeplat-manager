@@ -3,7 +3,7 @@ from nodes.NodeFactory import NodeFactory
 from ManagerExt import ManagerExt
 
 connect_timeout=1.0
-recv_timeout=3.0
+recv_timeout=6.0
 
 class Manager(object):
     def __init__(self,yml):
