@@ -11,7 +11,7 @@ class CameraNode(Node):
 
     def getSubscribeCommand(self):
         subscribeCommand = super(CameraNode, self).getSubscribeCommand()
-        subscribeCommand['cameraip'] = self.getConfig('cameraip')
+        subscribeCommand['cameraip'] = self.config['cameraip']
         return subscribeCommand
 
     def getStartCommand(self, parameter={}):
