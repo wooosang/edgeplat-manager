@@ -66,6 +66,7 @@ nodes:
   checker_B:
     endpoint: 192.168.9.125:6022
     config:
+      type: 2class_dl
       cut_shape: [350,360,1450,980]
       savepath: /home/ubuntu/edgeplat
     subscriber:
@@ -73,6 +74,7 @@ nodes:
   checker_C:
     endpoint: 192.168.9.125:6023
     config:
+      type: 2class_dl
       cut_shape: [200,400,1800,850]
       savepath: /home/ubuntu/edgeplat
     subscriber:
@@ -80,6 +82,7 @@ nodes:
   checker_E:
     endpoint: 192.168.9.125:6025
     config:
+      type: 2class_dl
       cut_shape: [550,300,950,1100]
       savepath: /home/ubuntu/edgeplat
     subscriber:
@@ -87,6 +90,7 @@ nodes:
   checker_F:
     endpoint: 192.168.9.125:6026
     config:
+      type: 2class_dl
       cut_shape: [500,250,900,1050]
       savepath: /home/ubuntu/edgeplat
     subscriber:
