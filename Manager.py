@@ -3,7 +3,7 @@ from nodes.NodeFactory import NodeFactory
 from ManagerExt import ManagerExt
 
 connect_timeout=1.0
-recv_timeout=6.0
+recv_timeout=9.0
 
 class Manager(object):
     def __init__(self,yml):
@@ -39,13 +39,16 @@ class Manager(object):
 
     def start(self, parameter, debug=False):
         result = {"success": True}
-        self.preStart(parameter)
-        self.stop(debug)
-        self.doStart(parameter, debug)
-        # response = startCheck(packheight, checkcount)
-        post_start_result = self.postStart(parameter)
-        # merged_result = {key: value for (key, value) in (result.items() + post_start_result.items())}
-        result.update(post_start_result)
+        try:
+            self.preStart(parameter)
+            self.stop(debug)
+            self.doStart(parameter, debug)
+            # response = startCheck(packheight, checkcount)
+            post_start_result = self.postStart(parameter)
+            # merged_result = {key: value for (key, value) in (result.items() + post_start_result.items())}
+            result.update(post_start_result)
+        except Exception as e:
+            result = {"success": False, "msg": str(e)}
         return result
 
     def doStart(self, parameter, debug=False):
@@ -69,9 +72,12 @@ class Manager(object):
                         time.sleep(1)
                         result = 0
                     else:
-                        result = sock.recv(1)
+                        result = sock.recv(4)
+                        result = int.from_bytes(result, 'big')
                     logging.debug("Config {} result: {}".format(edgenode, result))
                     sock.close()
+                    if result != 0:
+                        raise Exception("配置{}失败! 配置返回 {}".format(edgenode, result))
 
                 if not debug and not node.debug:
                     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -107,8 +113,9 @@ class Manager(object):
                     sock.close()
                 logging.debug("Node {} started.".format(edgenode))
             except Exception as e:
-                logging.error("Can't connect to node {}-{}:{}!!! Reason: {}".format(edgenode, nodeip, nodeport, e))
+                logging.error("启动节点{}失败！ 地址:  {}:{}!!! Reason: {}".format(edgenode, nodeip, nodeport, e))
                 traceback.print_exc()
+                raise e
             finally:
                 if not debug and not node.debug:
                     sock.close()
@@ -152,8 +159,9 @@ class Manager(object):
                     # time.sleep(0.1)
                 logging.debug("Node {} stopped.".format(edgenode))
             except Exception as e:
-                logging.error("Can't connect to node {}!!! {}".format(edgenode, e))
+                logging.error("停止节点{}失败!!! {}".format(edgenode, e))
                 traceback.print_exc()
+
             finally:
                 if not debug and not node.debug:
                     sock.close()
