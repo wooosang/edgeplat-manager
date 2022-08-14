@@ -1,8 +1,9 @@
+import tkinter
 import traceback,socket,yaml,logging,time,json
 from nodes.NodeFactory import NodeFactory
 from ManagerExt import ManagerExt
 
-connect_timeout=1.0
+connect_timeout=6.0
 recv_timeout=9.0
 
 class Manager(object):
@@ -66,7 +67,7 @@ class Manager(object):
                 # config_command = config_command | config
                 logging.info("%s: %s",edgenode,config_command)
                 if not debug and not node.debug:
-                    sock.sendall(json.dumps(config_command).encode())
+                    sock.send(json.dumps(config_command).encode())
                     sock.settimeout(recv_timeout)
                     if hasattr(node,'ignore_response') and node.ignore_response:
                         time.sleep(1)
@@ -77,7 +78,7 @@ class Manager(object):
                     logging.debug("Config {} result: {}".format(edgenode, result))
                     sock.close()
                     if result != 0:
-                        raise Exception("配置{}失败! 配置返回 {}".format(edgenode, result))
+                        raise Exception("配置{}失败! 配置命令返回: {}".format(edgenode, result))
 
                 if not debug and not node.debug:
                     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -88,13 +89,16 @@ class Manager(object):
                     logging.info("%s: %s",edgenode,subscribe_commands)
                     if not debug and not node.debug:
                         for subscribe_command in subscribe_commands:
-                            sock.sendall(json.dumps(subscribe_command).encode())
+                            sock.send(json.dumps(subscribe_command).encode())
                             if hasattr(node, 'ignore_response') and node.ignore_response:
                                 time.sleep(1)
                                 result = 0
                             else:
                                 result = sock.recv(1)
+                                result = int.from_bytes(result, 'big')
                         sock.close()
+                        if result != 0:
+                            raise Exception("订阅到{}失败! 订阅命令返回 {}".format(edgenode, result))
 
                 if not debug and not node.debug:
                     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -104,13 +108,16 @@ class Manager(object):
                 logging.info("%s: %s", edgenode,start_command)
                 # sock.send(len(start_command))
                 if not debug and not node.debug:
-                    sock.sendall(json.dumps(start_command).encode())
+                    sock.send(json.dumps(start_command).encode())
                     if hasattr(node, 'ignore_response') and node.ignore_response:
                         time.sleep(1)
                         result = 0
                     else:
                         result = sock.recv(1)
+                        result = int.from_bytes(result, 'big')
                     sock.close()
+                    if result != 0:
+                        raise Exception("启动{}失败! 启动命令返回 {}".format(edgenode, result))
                 logging.debug("Node {} started.".format(edgenode))
             except Exception as e:
                 logging.error("启动节点{}失败！ 地址:  {}:{}!!! Reason: {}".format(edgenode, nodeip, nodeport, e))
@@ -139,6 +146,7 @@ class Manager(object):
         for edgenode in self.edgenodes:
             try:
                 node = self.edgenodes[edgenode]
+                sock = None
                 nodeip = node.getIp()
                 nodeport = int(node.getPort())
                 logging.debug("Begin connect to node {} {}:{}".format(node.getName(), nodeip, nodeport))
@@ -155,12 +163,21 @@ class Manager(object):
                         result = 0
                     else:
                         result = sock.recv(1)
-                    logging.debug("Stop {} result: {}".format(edgenode,result))
+                        result = int.from_bytes(result, 'big')
+                    if result != 0:
+                        logging.error("停止节点[{}]失败！ Result: {}".format(edgenode, result))
+                    else:
+                        logging.debug("Stop {} succeed! Result: {}".format(edgenode,result))
                     # time.sleep(0.1)
                 logging.debug("Node {} stopped.".format(edgenode))
+                if not debug and not node.debug and sock:
+                    sock.close()
+                    logging.debug("Close connection to {}".format(edgenode))
             except Exception as e:
-                logging.error("停止节点{}失败!!! {}".format(edgenode, e))
+                msg = "停止节点[{}]失败!!! Reason: {}".format(edgenode, e)
+                logging.error(msg)
                 traceback.print_exc()
+                raise Exception(msg)
 
             finally:
                 if not debug and not node.debug:

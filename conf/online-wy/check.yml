@@ -2,7 +2,7 @@ name: onlinetest
 version: 1.0
 nodes:
   cameraA:
-    endpoint: 192.168.9.125:6001
+    endpoint: 192.168.2.244:6001
     code: cameraA
     type: 2DCamera
     debug: true
@@ -13,7 +13,7 @@ nodes:
     subscriber:
       - checker_A: 6061
   cameraB:
-    endpoint: 192.168.9.125:6002
+    endpoint: 192.168.2.244:6002
     code: cameraB
     type: 2DCamera
     debug: true
@@ -24,7 +24,7 @@ nodes:
     subscriber:
       - checker_B: 6062
   cameraC:
-    endpoint: 192.168.9.125:6003
+    endpoint: 192.168.2.244:6003
     code: cameraC
     type: 2DCamera
     debug: true
@@ -35,7 +35,7 @@ nodes:
     subscriber:
       - checker_C: 6063
   cameraE:
-    endpoint: 192.168.9.125:6005
+    endpoint: 192.168.2.244:6005
     code: cameraE
     type: 2DCamera
     debug: true
@@ -46,7 +46,7 @@ nodes:
     subscriber:
       - checker_E: 6064
   cameraF:
-    endpoint: 192.168.9.125:6006
+    endpoint: 192.168.2.244:6006
     code: cameraF
     type: 2DCaemra
     config:
@@ -56,7 +56,7 @@ nodes:
     subscriber:
       - checker_F: 6065
   checker_A:
-    endpoint: 192.168.9.125:6021
+    endpoint: 192.168.2.244:6021
     config:
       type: 2class_dl
       cut_shape: [250, 360, 1350, 980]
@@ -64,35 +64,35 @@ nodes:
     subscriber:
       - voter: 6071
   checker_B:
-    endpoint: 192.168.9.125:6022
+    endpoint: 192.168.2.244:6022
     config:
       cut_shape: [350,360,1450,980]
       savepath: /home/ubuntu/edgeplat
     subscriber:
       - voter: 6072
   checker_C:
-    endpoint: 192.168.9.125:6023
+    endpoint: 192.168.2.244:6023
     config:
       cut_shape: [200,400,1800,850]
       savepath: /home/ubuntu/edgeplat
     subscriber:
       - voter: 6073
   checker_E:
-    endpoint: 192.168.9.125:6025
+    endpoint: 192.168.2.244:6025
     config:
       cut_shape: [550,300,950,1100]
       savepath: /home/ubuntu/edgeplat
     subscriber:
       - voter: 6075
   checker_F:
-    endpoint: 192.168.9.125:6026
+    endpoint: 192.168.2.244:6026
     config:
       cut_shape: [500,250,900,1050]
       savepath: /home/ubuntu/edgeplat
     subscriber:
       - voter: 6076
   voter:
-    endpoint: 192.168.9.125:6031
+    endpoint: 192.168.2.244:6031
     config:
       type: socket
       ip: 192.168.9.125
@@ -100,7 +100,7 @@ nodes:
     subscriber:
       - publisher: 6082
   publisher:
-    endpoint: 192.168.9.125:6032
+    endpoint: 192.168.2.244:6032
     ignore_response: true
     config:
       host: 192.168.9.132
