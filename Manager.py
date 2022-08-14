@@ -1,4 +1,3 @@
-import tkinter
 import traceback,socket,yaml,logging,time,json
 from nodes.NodeFactory import NodeFactory
 from ManagerExt import ManagerExt
