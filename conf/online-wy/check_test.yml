@@ -94,7 +94,6 @@ nodes:
       - voter: 6076
   voter:
     endpoint: 192.168.9.125:6031
-    debug: true
     config:
       type: socket
       ip: 192.168.9.125
