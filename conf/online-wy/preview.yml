@@ -10,7 +10,6 @@ nodes:
       cameraip: 192.168.40.20
       station: S1_A_2D
       face: A
-      savepath: /home/ubuntu/edgeplat
     subscriber:
       - preview_publisher: 6061
   cameraB:
@@ -22,7 +21,6 @@ nodes:
       cameraip: 192.168.20.20
       station: S1_B_2D
       face: B
-      savepath: /home/ubuntu/edgeplat
     subscriber:
       - preview_publisher: 6062
   cameraC:
@@ -34,7 +32,6 @@ nodes:
       cameraip: 192.168.50.20
       station: S1_C_2D
       face: C
-      savepath: /home/ubuntu/edgeplat
     subscriber:
       - preview_publisher: 6063
   cameraE:
@@ -46,7 +43,6 @@ nodes:
       cameraip: 192.168.10.20
       station: S1_E_2D
       face: E
-      savepath: /home/ubuntu/edgeplat
     subscriber:
       - preview_publisher: 6064
   cameraF:
@@ -57,7 +53,6 @@ nodes:
       cameraip: 192.168.30.20
       station: S1_F_2D
       face: F
-      savepath: /home/ubuntu/edgeplat
     subscriber:
       - checker_F: 6065
   preview_publisher:

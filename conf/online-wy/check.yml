@@ -12,6 +12,7 @@ nodes:
       face: A
     subscriber:
       - checker_A: 6061
+      - preview_publisher: 6051
   cameraB:
     endpoint: 192.168.2.244:6002
     code: cameraB
@@ -23,6 +24,7 @@ nodes:
       face: B
     subscriber:
       - checker_B: 6062
+      - preview_publisher: 6052
   cameraC:
     endpoint: 192.168.2.244:6003
     code: cameraC
@@ -34,6 +36,7 @@ nodes:
       face: C
     subscriber:
       - checker_C: 6063
+      - preview_publisher: 6053
   cameraE:
     endpoint: 192.168.2.244:6005
     code: cameraE
@@ -45,6 +48,7 @@ nodes:
       face: E
     subscriber:
       - checker_E: 6064
+      - preview_publisher: 6054
   cameraF:
     endpoint: 192.168.2.244:6006
     code: cameraF
@@ -55,6 +59,13 @@ nodes:
       face: F
     subscriber:
       - checker_F: 6065
+      - preview_publisher: 6055
+
+  preview_publisher:
+    endpoint: 192.168.2.244:6011
+    config:
+      outport: 4000
+
   checker_A:
     endpoint: 192.168.2.244:6021
     config:
@@ -91,6 +102,7 @@ nodes:
       savepath: /home/ubuntu/edgeplat
     subscriber:
       - voter: 6076
+
   voter:
     endpoint: 192.168.2.244:6031
     config:
