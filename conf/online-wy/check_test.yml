@@ -12,6 +12,7 @@ nodes:
       face: A
     subscriber:
       - checker_A: 6061
+      - preview_publisher: 6051
   cameraB:
     endpoint: 192.168.9.125:6002
     code: cameraB
@@ -55,6 +56,12 @@ nodes:
       face: F
     subscriber:
       - checker_F: 6065
+
+  preview_publisher:
+    endpoint: 192.168.2.244:6081
+    config:
+      outport: 4000
+
   checker_A:
     endpoint: 192.168.9.125:6021
     config:
