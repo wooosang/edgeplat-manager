@@ -58,7 +58,7 @@ nodes:
       - checker_F: 6065
 
   preview_publisher:
-    endpoint: 192.168.2.244:6081
+    endpoint: 192.168.9.125:6081
     config:
       outport: 4000
 
