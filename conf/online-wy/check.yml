@@ -47,8 +47,8 @@ nodes:
       station: S1_E_2D
       face: E
     subscriber:
-      - checker_E: 6064
-      - preview_publisher: 6054
+      - checker_E: 6065
+      - preview_publisher: 6055
   cameraF:
     endpoint: 192.168.2.244:6006
     code: cameraF
@@ -58,8 +58,8 @@ nodes:
       station: S1_F_2D
       face: F
     subscriber:
-      - checker_F: 6065
-      - preview_publisher: 6055
+      - checker_F: 6066
+      - preview_publisher: 6056
 
   preview_publisher:
     endpoint: 192.168.2.244:6011
