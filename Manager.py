@@ -121,7 +121,7 @@ class Manager(object):
             except Exception as e:
                 logging.error("启动节点{}失败！ 地址:  {}:{}!!! Reason: {}".format(edgenode, nodeip, nodeport, e))
                 traceback.print_exc()
-                raise e
+                raise Exception("启动节点{}失败！ 地址:  {}:{}!!! Reason: {}".format(edgenode, nodeip, nodeport, e))
             finally:
                 if not debug and not node.debug:
                     sock.close()
