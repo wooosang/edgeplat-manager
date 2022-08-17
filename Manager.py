@@ -142,6 +142,8 @@ class Manager(object):
         return result
 
     def doStop(self, debug=False):
+        nodeip = None
+        nodeport = None
         for edgenode in self.edgenodes:
             try:
                 node = self.edgenodes[edgenode]
@@ -173,7 +175,7 @@ class Manager(object):
                     sock.close()
                     logging.debug("Close connection to {}".format(edgenode))
             except Exception as e:
-                msg = "Stop node [{}] failed!!! Reason: {}".format(edgenode, e)
+                msg = "Stop node [{}] failed!!! Address: {}:{} Reason: {}".format(edgenode, nodeip, nodeport, e)
                 logging.error(msg)
                 traceback.print_exc()
                 raise Exception(msg)
