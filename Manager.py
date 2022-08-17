@@ -173,7 +173,7 @@ class Manager(object):
                     sock.close()
                     logging.debug("Close connection to {}".format(edgenode))
             except Exception as e:
-                msg = "停止节点[{}]失败!!! Reason: {}".format(edgenode, e)
+                msg = "Stop node [{}] failed!!! Reason: {}".format(edgenode, e)
                 logging.error(msg)
                 traceback.print_exc()
                 raise Exception(msg)
