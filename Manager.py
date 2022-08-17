@@ -116,12 +116,12 @@ class Manager(object):
                         result = int.from_bytes(result, 'big')
                     sock.close()
                     if result != 0:
-                        raise Exception("启动{}失败! 启动命令返回 {}".format(edgenode, result))
+                        raise Exception("Start [{}] failed! Start command return {}".format(edgenode, result))
                 logging.debug("Node {} started.".format(edgenode))
             except Exception as e:
-                logging.error("启动节点{}失败！ 地址:  {}:{}!!! Reason: {}".format(edgenode, nodeip, nodeport, e))
+                logging.error("Start node {} failed！ Address:  {}:{}!!! Reason: {}".format(edgenode, nodeip, nodeport, e))
                 traceback.print_exc()
-                raise Exception("启动节点{}失败！ 地址:  {}:{}!!! Reason: {}".format(edgenode, nodeip, nodeport, e))
+                raise Exception("Start node{} failed！ Address:  {}:{}!!! Reason: {}".format(edgenode, nodeip, nodeport, e))
             finally:
                 if not debug and not node.debug:
                     sock.close()
