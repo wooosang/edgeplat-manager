@@ -77,7 +77,7 @@ class Manager(object):
                     logging.debug("Config {} result: {}".format(edgenode, result))
                     sock.close()
                     if result != 0:
-                        raise Exception("配置{}失败! 配置命令返回: {}".format(edgenode, result))
+                        raise Exception("Config [{}] failed! Config command return: {}".format(edgenode, result))
 
                 if not debug and not node.debug:
                     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -97,7 +97,7 @@ class Manager(object):
                                 result = int.from_bytes(result, 'big')
                         sock.close()
                         if result != 0:
-                            raise Exception("订阅到{}失败! 订阅命令返回 {}".format(edgenode, result))
+                            raise Exception("Subscribe to [{}] failed! Subscribe command return: {}".format(edgenode, result))
 
                 if not debug and not node.debug:
                     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -116,12 +116,12 @@ class Manager(object):
                         result = int.from_bytes(result, 'big')
                     sock.close()
                     if result != 0:
-                        raise Exception("Start [{}] failed! Start command return {}".format(edgenode, result))
+                        raise Exception("Start [{}] failed! Start command return: {}".format(edgenode, result))
                 logging.debug("Node {} started.".format(edgenode))
             except Exception as e:
-                logging.error("Start node {} failed！ Address:  {}:{}!!! Reason: {}".format(edgenode, nodeip, nodeport, e))
+                logging.error("Start node [{}] failed！ Address:  {}:{}!!! Reason: {}".format(edgenode, nodeip, nodeport, e))
                 traceback.print_exc()
-                raise Exception("Start node{} failed！ Address:  {}:{}!!! Reason: {}".format(edgenode, nodeip, nodeport, e))
+                raise Exception("Start node [{}] failed！ Address:  {}:{}!!! Reason: {}".format(edgenode, nodeip, nodeport, e))
             finally:
                 if not debug and not node.debug:
                     sock.close()
