@@ -2,7 +2,7 @@ name: onlinetest
 version: 1.0
 nodes:
   cameraA:
-    endpoint: 192.168.2.244:6001
+    endpoint: 192.168.2.244:8021
     code: cameraA
     type: 2DCamera
     debug: true
@@ -11,9 +11,9 @@ nodes:
       station: S1_A_2D
       face: A
     subscriber:
-      - preview_publisher: 6061
+      - preview_publisher: 6021
   cameraB:
-    endpoint: 192.168.2.244:6002
+    endpoint: 192.168.2.244:8022
     code: cameraB
     type: 2DCamera
     debug: true
@@ -22,9 +22,9 @@ nodes:
       station: S1_B_2D
       face: B
     subscriber:
-      - preview_publisher: 6062
+      - preview_publisher: 6022
   cameraC:
-    endpoint: 192.168.2.244:6003
+    endpoint: 192.168.2.244:8023
     code: cameraC
     type: 2DCamera
     debug: true
@@ -33,9 +33,9 @@ nodes:
       station: S1_C_2D
       face: C
     subscriber:
-      - preview_publisher: 6063
+      - preview_publisher: 6023
   cameraE:
-    endpoint: 192.168.2.244:6005
+    endpoint: 192.168.2.244:8025
     code: cameraE
     type: 2DCamera
     debug: true
@@ -44,18 +44,20 @@ nodes:
       station: S1_E_2D
       face: E
     subscriber:
-      - preview_publisher: 6064
+      - preview_publisher: 6025
   cameraF:
-    endpoint: 192.168.2.244:6006
+    endpoint: 192.168.2.244:8026
     code: cameraF
     type: 2DCaemra
+    debug: true
     config:
       cameraip: 192.168.30.20
       station: S1_F_2D
       face: F
     subscriber:
-      - checker_F: 6065
+      - preview_publisher: 6026
   preview_publisher:
-    endpoint: 192.168.2.244:6021
+    endpoint: 192.168.2.244:8070
+    debug: true
     config:
-      outport: 4000
+      outport: 5550

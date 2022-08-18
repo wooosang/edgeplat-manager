@@ -28,6 +28,8 @@ class Manager(object):
                 if isinstance(outport,str) and '@' in outport:
                     self.edgenodes[edgenode].addOutboundWithCondition(self.edgenodes[outbound], outport.split('@')[0], outport.split('@')[1])
                 else:
+                    if outbound not in self.edgenodes:
+                        raise Exception("{} not config correctly!".format(outbound))
                     self.edgenodes[edgenode].addOutbound(self.edgenodes[outbound], outport)
                 self.edgenodes[outbound].addInbound(self.edgenodes[edgenode])
 
@@ -66,7 +68,7 @@ class Manager(object):
                 # config_command = config_command | config
                 logging.info("%s: %s",edgenode,config_command)
                 if not debug and not node.debug:
-                    sock.send(json.dumps(config_command).encode())
+                    sock.sendall(json.dumps(config_command).encode())
                     sock.settimeout(recv_timeout)
                     if hasattr(node,'ignore_response') and node.ignore_response:
                         time.sleep(1)
@@ -88,7 +90,7 @@ class Manager(object):
                     logging.info("%s: %s",edgenode,subscribe_commands)
                     if not debug and not node.debug:
                         for subscribe_command in subscribe_commands:
-                            sock.send(json.dumps(subscribe_command).encode())
+                            sock.sendall(json.dumps(subscribe_command).encode())
                             if hasattr(node, 'ignore_response') and node.ignore_response:
                                 time.sleep(1)
                                 result = 0
@@ -107,7 +109,7 @@ class Manager(object):
                 logging.info("%s: %s", edgenode,start_command)
                 # sock.send(len(start_command))
                 if not debug and not node.debug:
-                    sock.send(json.dumps(start_command).encode())
+                    sock.sendall(json.dumps(start_command).encode())
                     if hasattr(node, 'ignore_response') and node.ignore_response:
                         time.sleep(1)
                         result = 0

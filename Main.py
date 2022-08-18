@@ -27,8 +27,11 @@ def start():
     logging.debug(request)
     debug = request.args.get('debug')
     conf = request.args.get('conf')
-    if conf is not None:
-        init('conf/'+conf+'.yml')
+    try:
+        if conf is not None:
+            init('conf/'+conf+'.yml')
+    except Exception as e:
+        return {"success": False, "msg": str(e)}
     request_param = request.get_json()
     logging.debug("Request body: {}".format(request_param))
     result = app.manager.start(request_param, debug)
