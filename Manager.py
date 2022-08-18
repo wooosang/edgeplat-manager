@@ -60,6 +60,7 @@ class Manager(object):
                 nodeip = node.getIp()
                 nodeport = int(node.getPort())
                 logging.debug("Begin connect to node {} {}:{}".format(node.getName(), nodeip, nodeport))
+                sock = None
                 if not debug and not node.debug:
                     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                     sock.settimeout(connect_timeout)
@@ -69,7 +70,7 @@ class Manager(object):
                 logging.info("%s: %s",edgenode,config_command)
                 if not debug and not node.debug:
                     sock.sendall(json.dumps(config_command).encode())
-                    sock.settimeout(recv_timeout)
+                    # sock.settimeout(recv_timeout)
                     if hasattr(node,'ignore_response') and node.ignore_response:
                         time.sleep(1)
                         result = 0
@@ -77,14 +78,14 @@ class Manager(object):
                         result = sock.recv(4)
                         result = int.from_bytes(result, 'big')
                     logging.debug("Config {} result: {}".format(edgenode, result))
-                    sock.close()
+                    # sock.close()
                     if result != 0:
                         raise Exception("Config [{}] failed! Config command return: {}".format(edgenode, result))
 
-                if not debug and not node.debug:
-                    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    sock.settimeout(recv_timeout)
-                    sock.connect((nodeip, nodeport))
+                # if not debug and not node.debug:
+                #     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                #     sock.settimeout(recv_timeout)
+                #     sock.connect((nodeip, nodeport))
                 subscribe_commands = self.edgenodes[edgenode].getSubscribeCommand()
                 if subscribe_commands:
                     logging.info("%s: %s",edgenode,subscribe_commands)
@@ -97,14 +98,14 @@ class Manager(object):
                             else:
                                 result = sock.recv(1)
                                 result = int.from_bytes(result, 'big')
-                        sock.close()
+                        # sock.close()
                         if result != 0:
                             raise Exception("Subscribe to [{}] failed! Subscribe command return: {}".format(edgenode, result))
 
-                if not debug and not node.debug:
-                    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    sock.settimeout(recv_timeout)
-                    sock.connect((nodeip, nodeport))
+                # if not debug and not node.debug:
+                #     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                #     sock.settimeout(recv_timeout)
+                #     sock.connect((nodeip, nodeport))
                 start_command = self.edgenodes[edgenode].getStartCommand(parameter)
                 logging.info("%s: %s", edgenode,start_command)
                 # sock.send(len(start_command))
@@ -116,7 +117,7 @@ class Manager(object):
                     else:
                         result = sock.recv(1)
                         result = int.from_bytes(result, 'big')
-                    sock.close()
+                    # sock.close()
                     if result != 0:
                         raise Exception("Start [{}] failed! Start command return: {}".format(edgenode, result))
                 logging.debug("Node {} started.".format(edgenode))
