@@ -174,9 +174,9 @@ class Manager(object):
                         logging.debug("Stop {} succeed! Result: {}".format(edgenode,result))
                     # time.sleep(0.1)
                 logging.debug("Node {} stopped.".format(edgenode))
-                if not debug and not node.debug and sock:
-                    sock.close()
-                    logging.debug("Close connection to {}".format(edgenode))
+                # if not debug and not node.debug and sock:
+                #     sock.close()
+                #     logging.debug("Close connection to {}".format(edgenode))
             except Exception as e:
                 msg = "Stop node [{}] failed!!! Address: {}:{} Reason: {}".format(edgenode, nodeip, nodeport, e)
                 logging.error(msg)
@@ -186,4 +186,5 @@ class Manager(object):
             finally:
                 if not debug and not node.debug:
                     sock.close()
+                    logging.debug("Close connection to {}".format(edgenode))
 
