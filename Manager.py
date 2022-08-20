@@ -98,6 +98,7 @@ class Manager(object):
                             else:
                                 result = sock.recv(1)
                                 result = int.from_bytes(result, 'big')
+                                logging.debug("Subscribe {} result: {}".format(edgenode, result))
                         # sock.close()
                         if result != 0:
                             raise Exception("Subscribe to [{}] failed! Subscribe command return: {}".format(edgenode, result))
@@ -117,6 +118,7 @@ class Manager(object):
                     else:
                         result = sock.recv(1)
                         result = int.from_bytes(result, 'big')
+                        logging.debug("Start {} result: {}".format(edgenode, result))
                     # sock.close()
                     if result != 0:
                         raise Exception("Start [{}] failed! Start command return: {}".format(edgenode, result))
