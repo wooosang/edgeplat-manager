@@ -23,9 +23,10 @@ class CameraNode(Node):
             node_parameter = parameter["node_parameter"]
         else:
             node_parameter = {}
-        for key in parameter:
-            if key != 'node_parameter':
-                startCommand[key] = parameter[key]
+        if parameter:
+            for key in parameter:
+                if key != 'node_parameter':
+                    startCommand[key] = parameter[key]
 
         if self.code in node_parameter:
             dynamic_parameter = node_parameter[self.code]
