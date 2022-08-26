@@ -43,7 +43,7 @@ class Manager(object):
         result = {"success": True}
         try:
             self.preStart(parameter)
-            self.stop(debug)
+            # self.stop(debug)   ### 暂时交由前端去停止
             self.doStart(parameter, debug)
             # response = startCheck(packheight, checkcount)
             post_start_result = self.postStart(parameter)
