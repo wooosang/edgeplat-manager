@@ -1,3 +1,5 @@
+import logging
+
 class Node:
     def __init__(self, name,config):
         self.name = name
@@ -14,6 +16,7 @@ class Node:
             self.ignore_response = config['ignore_response']
         if 'debug' in config:
             self.debug = config['debug']
+        logging.debug("Endpoint: {}".format(config['endpoint']))
         endpoint = config['endpoint'].split(':')
         self.ip = endpoint[0]
         self.port = endpoint[1]

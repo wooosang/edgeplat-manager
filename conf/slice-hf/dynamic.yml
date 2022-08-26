@@ -1,0 +1,20 @@
+name: dynamictest
+version: 1.0
+nodes:
+  camera:
+    endpoint: 172.18.74.103:6000
+    code: camera
+    type: 2DCamera
+    debug: true
+    config:
+      cameraip: 192.168.0.9
+      station: S1_2D
+      face: A
+      offline: 1
+      imgtype: bmp
+    subscriber:
+      - uploader: 5555
+  uploader:
+    endpoint: 172.18.74.103:8080
+    config:
+      url: http://172.18.74.41:9099/models/yansi/predict

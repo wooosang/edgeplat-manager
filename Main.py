@@ -21,28 +21,48 @@ main_logger.addHandler(console_handler)
 app = Flask(__name__)
 app.register_blueprint(ext_api)
 
-@app.route("/start", methods=["POST"])
-def start():
+def doStart(conf=None, request_param={}, debug=False):
+    logging.debug("Start starting..............")
     global app
-    logging.debug(request)
-    debug = request.args.get('debug')
-    conf = request.args.get('conf')
     try:
         if conf is not None:
             init('conf/'+conf+'.yml')
     except Exception as e:
+        traceback.print_exc()
         return {"success": False, "msg": str(e)}
+    result = app.manager.start(request_param, debug)
+    return result
+
+
+@app.route("/start", methods=["POST"])
+def start():
+    logging.debug(request)
+    debug = request.args.get('debug')
+    conf = request.args.get('conf')
     request_param = request.get_json()
     logging.debug("Request body: {}".format(request_param))
-    result = app.manager.start(request_param, debug)
+    return doStart(conf, debug)
+
+def doStop(conf=None, debug=False):
+    logging.debug("Start stopping................")
+    global app
+    result = app.manager.stop()
     return result
 
 @app.route('/stop', methods=['GET'])
 def stop():
-    global app
-    # response = requests.get(plc_url + 'deviceReset')
-    result = app.manager.stop()
+    logging.debug(request)
+    debug = request.args.get('debug')
+    conf = request.args.get('conf')
+    result = doStop(conf, debug)
     return jsonify(result)
+
+@app.route('/startorstop/<action>', methods=['GET'])
+def startorstop(action):
+    if action == '1':
+        return doStart()
+    else:
+        return doStop()
 
 @app.route('/reload', methods=['GET','POST'])
 def reload():

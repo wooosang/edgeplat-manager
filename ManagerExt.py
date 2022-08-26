@@ -1,6 +1,6 @@
 from flask import Blueprint
-
 ext_api = Blueprint('ext_api', __name__)
+
 
 class ManagerExt():
     def __init__(self):
@@ -21,3 +21,5 @@ class ManagerExt():
     @staticmethod
     def postStop(debug=False):
         return {}
+
+
