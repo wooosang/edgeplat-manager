@@ -19,7 +19,7 @@ class CameraNode(Node):
     def getStartCommand(self, parameter={}):
         startCommand = super(CameraNode, self).getStartCommand(parameter)
         startCommand['cameraip'] = self.config['cameraip']
-        if 'node_parameter' in parameter:
+        if parameter and 'node_parameter' in parameter:
             node_parameter = parameter["node_parameter"]
         else:
             node_parameter = {}
