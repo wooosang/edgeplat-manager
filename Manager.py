@@ -23,6 +23,8 @@ class Manager(object):
         for edgenode in self.edgenodes:
             subscribers = self.edgenodes[edgenode].getSubscribers()
             for subscriber in subscribers:
+                if isinstance(subscriber, str):
+                    print('wrong '+subscriber)
                 outbound = list(subscriber.keys())[0]
                 outport = subscriber[outbound]
                 if isinstance(outport,str) and '@' in outport:
@@ -88,9 +90,10 @@ class Manager(object):
                 #     sock.connect((nodeip, nodeport))
                 subscribe_commands = self.edgenodes[edgenode].getSubscribeCommand()
                 if subscribe_commands:
-                    logging.info("%s: %s",edgenode,subscribe_commands)
+                    logging.info("Ready to send to %s: %s", edgenode, subscribe_commands)
                     if not debug and not node.debug:
                         for subscribe_command in subscribe_commands:
+                            logging.info("%s: %s", edgenode, subscribe_command)
                             sock.sendall(json.dumps(subscribe_command).encode())
                             if hasattr(node, 'ignore_response') and node.ignore_response:
                                 time.sleep(1)

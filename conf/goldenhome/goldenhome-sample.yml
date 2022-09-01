@@ -1,115 +1,504 @@
+# 检测流程IP及端口说明（除3D检测流程的采集节点，算法交互节点其他均为Linux系统（IP：192.168.1.52）， windows系统（IP：192.168.1.32））
+#2D检测： (801x)Barcode(550x)  (802x)2D(552x)      (804x)algorithm(554x)  (806x)upload(556x)    (801x)merger(5599)  (809x)publisher(559x)
+#3D检测:  (801x)Barcode(551x)  (803x)3D/LMI(553x)  (805x)algorithm(555x)  (807x)mprcheck(557x)  (801x)merger(5599)  (809x)publisher(559x)
+#
+#样张采集均为Linux（IP：192.168.1.52）
+#2D图片: (801x)Barcode(550x)  (802x)2D(552x)  (806x)upload(556x)  (809x)publisher(559x)
+
+
 name: goldenhome
 version: 1.0
 nodes:
-  2D_A:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
-    endpoint: 192.168.1.52:8021
-    type: 2DCamera
-    code: CameraA
-    config:
-      face: A
-      cameraip: 192.168.2.10
-      savepath: /home/ubuntu/edgeplat
-      offline: 1
-    subscriber:
-      - uploader: 5551
-  2D_B:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
-    endpoint: 192.168.1.52:8022
-    type: 2DCamera
-    code: CameraB
-    config:
-      face: B
-      cameraip: 192.168.3.10
-      savepath: /home/ubuntu/edgeplat
-      offline: 1
-    subscriber:
-      - uploader: 5552
-  2D_C:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
-    endpoint: 192.168.1.52:8023
-    type: 2DCamera
-    code: CameraC
-    config:
-      face: C
-      cameraip: 192.168.4.10
-      savepath: /home/ubuntu/edgeplat
-      offline: 1
-    subscriber:
-      - uploader: 5553
-  2D_D:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
-    endpoint: 192.168.1.52:8024
-    type: 2DCamera
-    code: CameraD
-    config:
-      face: D
-      cameraip: 192.168.5.10
-      savepath: /home/ubuntu/edgeplat
-      offline: 1
-    subscriber:
-      - uploader: 5554
-  uploader:
-    image: upload:latest
-    endpoint: 192.168.1.52:8031
-    type: Uploader
-    config:
-      mode: RESTFUL
-      address: http://10.10.80.30:8888/keer-admin/api/v1/files
-      method: POST
-      params:
-        - file: "#{image}"
-        - bucketName: sample
-        - objectName: "#{station}#{id}#{face}_#{idx}.jpg"
-    subscriber:
-      - publisher: 5571
-  publisher:
-    endpoint: 192.168.1.52:8041
+  Barcode:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/mqconsumer:1.0
+    endpoint: 192.168.1.52:8011
+    ignore_response: true
+    type: Barcode
     config:
       wrapped: false
       host: 10.10.80.30
       port: 5672
       username: admin
       password: softwork
+      queue: edge_edgeplat_barcode
+      exchange: 
+      routekey: 
+    subscriber:
+      - 2D_A: 5501
+      - 2D_B: 5502
+      - 2D_C: 5503
+      - 2D_D: 5504
+      # - 2D_E: 5505
+      # - 2D_F: 5506
+      - DownloadMpr: 5509
+      # - LMI_A: 5511
+      # - LMI_B: 5512
+      # - 3D_C: 5513
+      # - 3D_D: 5514
+      # - 3D_E: 5515
+      # - 3D_F: 5516
+  2D_A:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
+    endpoint: 192.168.1.52:8021
+    type: 2DCamera
+    code: cameraA
+    config:
+      face: A
+      cameraip: 192.168.2.10
+      savepath: /home/ubuntu/edgeplat
+      imgquality: 90
+      # offline: 1
+    subscriber:
+      - algorithm_2A: 5521
+      
+  2D_B:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
+    endpoint: 192.168.1.52:8022
+    type: 2DCamera
+    code: cameraB
+    config:
+      face: B
+      cameraip: 192.168.3.10
+      savepath: /home/ubuntu/edgeplat
+      imgquality: 90
+      # offline: 1
+    subscriber:
+      - algorithm_2B: 5522
+
+  2D_C:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
+    endpoint: 192.168.1.52:8023
+    type: 2DCamera
+    code: cameraC
+    config:
+      face: C
+      cameraip: 192.168.4.10
+      savepath: /home/ubuntu/edgeplat
+      imgquality: 90
+      # offline: 1
+    subscriber:
+      - algorithm_2C: 5523
+
+  2D_D:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
+    endpoint: 192.168.1.52:8024
+    type: 2DCamera
+    code: cameraD
+    config:
+      face: D
+      cameraip: 192.168.5.10
+      savepath: /home/ubuntu/edgeplat
+      imgquality: 90
+      # offline: 1
+    subscriber:
+      - algorithm_2D: 5524
+
+  # 2D_E:
+    # image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
+    # endpoint: 192.168.1.52:8025
+    # type: 2DCamera
+    # code: cameraE
+    # config:
+      # face: E
+      # cameraip: 192.168.6.10
+      # savepath: /home/ubuntu/edgeplat
+      # imgquality: 90
+      # offline: 1
+    # subscriber:
+      # - algorithm_2E: 5525
+      
+  # 2D_F:
+    # image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:1.0
+    # endpoint: 192.168.1.52:8026
+    # type: 2DCamera
+    # code: cameraF
+    # config:
+      # face: D
+      # cameraip: 192.168.7.10
+      # savepath: /home/ubuntu/edgeplat
+      # imgquality: 90
+      # offline: 1
+    # subscriber:
+      # - algorithm_2F: 5526
+ 
+  algorithm_2A:
+    endpoint: 192.168.1.52:8041
+    config:
+      address: http://10.10.53.197:8002/jinPaiDetect
+      endpoint: tcp://192.168.1.52:5521
+    subscriber:
+      - uploader_A: 5541
+
+  algorithm_2B:
+    endpoint: 192.168.1.52:8042
+    config:
+      address: http://10.10.53.197:8002/jinPaiDetect
+      endpoint: tcp://192.168.1.52:5522
+    subscriber:
+      - uploader_B: 5542
+
+  algorithm_2C:
+    endpoint: 192.168.1.52:8043
+    config:
+      address: http://10.10.53.197:8002/jinPaiDetect
+      endpoint: tcp://192.168.1.52:5523
+    subscriber:
+      - uploader_C: 5543
+
+  algorithm_2D:
+    endpoint: 192.168.1.52:8044
+    config:
+      address: http://10.10.53.197:8002/jinPaiDetect
+      endpoint: tcp://192.168.1.52:5524
+    subscriber:
+      - uploader_D: 5544
+
+  # algorithm_2E:
+    # endpoint: 192.168.1.52:8045
+    # config:
+      # address: http://10.10.53.197:8002/jinPaiDetect
+      # endpoint: tcp://192.168.1.52:5525
+    # subscriber:
+      # - uploader_E: 5545
+
+  # algorithm_2F:
+    # endpoint: 192.168.1.52:8046
+    # config:
+      # address: http://10.10.53.197:8002/jinPaiDetect
+      # endpoint: tcp://192.168.1.52:5526
+    # subscriber:
+      # - uploader_F: 5546
+      
+  uploader_A:
+    image: upload:latest
+    endpoint: 192.168.1.52:8061
+    type: Uploader
+    config:
+      mode: RESTFUL
+      address: http://10.10.80.30:8888/keer-admin/api/v1/files/compressImg
+      method: POST
+      params:
+        - file: "#{image}"
+        - bucketName: sample
+        - objectName: "#{filename}.jpg"
+    subscriber:
+      - merger: 5561
+      
+  uploader_B:
+    image: upload:latest
+    endpoint: 192.168.1.52:8062
+    type: Uploader
+    config:
+      mode: RESTFUL
+      address: http://10.10.80.30:8888/keer-admin/api/v1/files/compressImg
+      method: POST
+      params:
+        - file: "#{image}"
+        - bucketName: sample
+        - objectName: "#{filename}.jpg"
+    subscriber:
+      - merger: 5562
+
+  uploader_C:
+    image: upload:latest
+    endpoint: 192.168.1.52:8063
+    type: Uploader
+    config:
+      mode: RESTFUL
+      address: http://10.10.80.30:8888/keer-admin/api/v1/files/compressImg
+      method: POST
+      params:
+        - file: "#{image}"
+        - bucketName: sample
+        - objectName: "#{filename}.jpg"
+    subscriber:
+      - merger: 5563
+
+  uploader_D:
+    image: upload:latest
+    endpoint: 192.168.1.52:8064
+    type: Uploader
+    config:
+      mode: RESTFUL
+      address: http://10.10.80.30:8888/keer-admin/api/v1/files/compressImg
+      method: POST
+      params:
+        - file: "#{image}"
+        - bucketName: sample
+        - objectName: "#{filename}.jpg"
+    subscriber:
+      - merger: 5564
+      
+  # uploader_E:
+    # image: upload:latest
+    # endpoint: 192.168.1.52:8065
+    # type: Uploader
+    # config:
+      # mode: RESTFUL
+      # address: http://10.10.80.30:8888/keer-admin/api/v1/files/compressImg
+      # method: POST
+      # params:
+        # - file: "#{image}"
+        # - bucketName: sample
+        # - objectName: "#{filename}.jpg"
+    # subscriber:
+      # - merger: 5579
+
+  # uploader_F:
+    # image: upload:latest
+    # endpoint: 192.168.1.52:8066
+    # type: Uploader
+    # config:
+      # mode: RESTFUL
+      # address: http://10.10.80.30:8888/keer-admin/api/v1/files/compressImg
+      # method: POST
+      # params:
+        # - file: "#{image}"
+        # - bucketName: sample
+        # - objectName: "#{filename}.jpg"
+    # subscriber:
+      # - merger: 5579
+   
+  DownloadMpr:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/download_mpr:1.0
+    endpoint: 192.168.1.52:8012
+    #type: Uploader
+    config:
+      mode: RESTFUL
+      address: http://10.10.80.30:8888/keer-admin/api/v1/files/downloadMPR?barcode=
+      method: GET
+    subscriber:
+      - LMI_A: 5511
+      - LMI_B: 5512
+      - 3D_C: 5513
+      - 3D_D: 5514
+      # - 3D_E: 5515
+      # - 3D_F: 5516
+  LMI_A:
+    #image: registry.cn-hangzhou.aliyuncs.com/open-ys/3dlmi:1.0
+    endpoint: 192.168.1.32:8031
+    type: 2DCamera
+    code: cameraA
+    debug: false
+    config:
+      face: A
+      cameraip: 192.168.5.50
+      savepath: d:/work/edgeplat/A
+      # offline: 1
+    subscriber:
+      - algorithm_3A: 5531
+
+  LMI_B:
+    #image: registry.cn-hangzhou.aliyuncs.com/open-ys/3dlmi:1.0
+    endpoint: 192.168.1.32:8032
+    type: 2DCamera
+    code: cameraB
+    debug: false
+    config:
+      face: B
+      cameraip: 192.168.1.32
+      savepath: d:/work/edgeplat/B
+      # offline: 1
+    subscriber:
+      - algorithm_3B: 5532
+      
+  3D_C:
+    #image: registry.cn-hangzhou.aliyuncs.com/open-ys/3dlmi:1.0
+    endpoint: 192.168.1.32:8033
+    type: 2DCamera
+    code: cameraC
+    config:
+      face: C
+      cameraip: 192.168.4.10
+      savepath: d:/work/edgeplat/C
+      # offline: 1
+    subscriber:
+      - algorithm_3C: 5533
+  3D_D:
+    #image: registry.cn-hangzhou.aliyuncs.com/open-ys/3dlmi:1.0
+    endpoint: 192.168.1.32:8034
+    type: 2DCamera
+    code: cameraD
+    config:
+      face: D
+      cameraip: 192.168.3.10
+      savepath: d:/work/edgeplat/D
+      # offline: 1
+    subscriber:
+      - algorithm_3D: 5534
+      
+  # 3D_E:
+    # #image: registry.cn-hangzhou.aliyuncs.com/open-ys/3dlmi:1.0
+    # endpoint: 192.168.1.32:8035
+    # type: 2DCamera
+    # code: cameraE
+    # config:
+      # face: E
+      # cameraip: 192.168.4.10
+      # savepath: d:/work/edgeplat/E
+      # offline: 1
+    # subscriber:
+      # - algorithm_E: 5535
+      
+  # 3D_F:
+   # image: registry.cn-hangzhou.aliyuncs.com/open-ys/3dhik:1.0
+   # endpoint: 192.168.1.32:8036
+   # type: 2DCamera
+   # code: cameraF
+   # config:
+     # face: F
+     # cameraip: 192.168.3.10
+     # savepath: d:/work/edgeplat/C/
+     # offline: 1
+   # subscriber:
+     # - algorithm_F: 5546
+
+  algorithm_3A:
+    endpoint: 192.168.1.32:8051
+    config:
+      # address: http://10.10.27.104:8002/jinPaiDetect
+      # address: http://10.10.53.197:8002/jinPaiDetect
+      address: http://10.10.80.33:8002/jinPaiDetect
+      endpoint: tcp://192.168.1.32:5531
+    subscriber:
+      # - mprcheck_A: 5551
+      - merger: 5551
+
+  algorithm_3B:
+    endpoint: 192.168.1.32:8052
+    config:
+      # address: http://10.10.27.104:8002/jinPaiDetect
+      # address: http://10.10.53.197:8002/jinPaiDetect
+      address: http://10.10.80.33:8002/jinPaiDetect
+      endpoint: tcp://192.168.1.32:5532
+    subscriber:
+      # - mprcheck_B: 5552
+      - merger: 5552
+
+  algorithm_3C:
+    endpoint: 192.168.1.32:8053
+    config:
+      # address: http://10.10.27.104:8002/jinPaiDetect
+      # address: http://10.10.53.197:8002/jinPaiDetect
+      address: http://10.10.80.33:8002/jinPaiDetect
+      endpoint: tcp://192.168.1.32:5533
+    subscriber:
+      # - mprcheck_C: 5553
+      - merger: 5553
+
+  algorithm_3D:
+    endpoint: 192.168.1.32:8054
+    config:
+      # address: http://10.10.27.104:8002/jinPaiDetect
+      # address: http://10.10.53.197:8002/jinPaiDetect
+      address: http://10.10.80.33:8002/jinPaiDetect
+      endpoint: tcp://192.168.1.32:5534
+    subscriber:
+      # - mprcheck_D: 5554
+      - merger: 5554
+      - merger:5555
+      
+  # algorithm_3E:
+    # endpoint: 192.168.1.32:8055
+    # config:
+      # address: http://10.10.27.104:8002/jinPaiDetect
+      # endpoint: tcp://192.168.1.32:5521
+    # subscriber:
+      # - mprcheck_E: 5555
+      
+  # algorithm_3F:
+    # endpoint: 192.168.1.32:8056
+    # config:
+      # address: http://10.10.27.104:8002/jinPaiDetect
+      # endpoint: tcp://192.168.1.32:5522
+    # subscriber:
+      # - mprcheck_F: 5556
+
+  # mprcheck_A:
+    # image: registry.cn-hangzhou.aliyuncs.com/open-ys/mprcheck:1.0
+    # endpoint: 192.168.1.52:8071
+    # #type: Uploader
+    # config:
+      # mode: RESTFUL
+      # address: http://10.10.80.30:8888/keer-admin/api/v1/files/downloadMPR?barcode=
+      # method: GET
+    # subscriber:
+      # - merger: 5571
+      
+  # mprcheck_B:
+    # image: registry.cn-hangzhou.aliyuncs.com/open-ys/mprcheck:1.0
+    # endpoint: 192.168.1.52:8072
+    # #type: Uploader
+    # config:
+      # mode: RESTFUL
+      # address: http://10.10.80.30:8888/keer-admin/api/v1/files/downloadMPR?barcode=
+      # method: GET
+    # subscriber:
+      # - merger: 5572
+
+  # mprcheck_C:
+    # image: registry.cn-hangzhou.aliyuncs.com/open-ys/mprcheck:1.0
+    # endpoint: 192.168.1.52:8073
+    # #type: Uploader
+    # config:
+      # mode: RESTFUL
+      # address: http://10.10.80.30:8888/keer-admin/api/v1/files/downloadMPR?barcode=
+      # method: GET
+    # subscriber:
+      # - merger: 5573
+      
+  # mprcheck_D:
+    # image: registry.cn-hangzhou.aliyuncs.com/open-ys/mprcheck:1.0
+    # endpoint: 192.168.1.52:8074
+    # #type: Uploader
+    # config:
+      # mode: RESTFUL
+      # address: http://10.10.80.30:8888/keer-admin/api/v1/files/downloadMPR?barcode=
+      # method: GET
+    # subscriber:
+      # - merger: 5574
+
+  # mprcheck_E:
+    # image: registry.cn-hangzhou.aliyuncs.com/open-ys/mprcheck:1.0
+    # endpoint: 192.168.1.52:8075
+    # #type: Uploader
+    # config:
+      # mode: RESTFUL
+      # address: http://10.10.80.30:8888/keer-admin/api/v1/files/downloadMPR?barcode=
+      # method: GET
+    # subscriber:
+      # - merger: 5575
+
+  # mprcheck_F:
+    # image: registry.cn-hangzhou.aliyuncs.com/open-ys/mprcheck:1.0
+    # endpoint: 192.168.1.52:8076
+    # #type: Uploader
+    # config:
+      # mode: RESTFUL
+      # address: http://10.10.80.30:8888/keer-admin/api/v1/files/downloadMPR?barcode=
+      # method: GET
+    # subscriber:
+      # - merger: 5576
+     
+  merger:
+    endpoint: 192.168.1.52:8015
+    ignore_response: true
+    type: Uploader
+    config:
+      id: id
+      collect: face
+      collectValue: ['A','B','C','D']
+      collectSize: 8
+    subscriber:
+      - publisher: 5599
+      
+  publisher:
+    endpoint: 192.168.1.52:8095
+    ignore_response: true
+    config:
+      host: 10.10.80.30
+      port: 5672
+      username: admin
+      password: softwork
       exchange: goldenhome
-      routekey: sample
-
-
-#  3D_A:
-#    image: registry.cn-hangzhou.aliyuncs.com/open-ys/3dlmi:1.0
-#    endpoint: 192.168.1.32:8031
-#    config:
-#      face: A
-#      cameraip: 192.168.1.10
-#      savepath: d:/work/edgeplat/A
-#      offline: 1
-#    subscriber:
-#      - merger: 5555
-#  3D_B:
-#    image: registry.cn-hangzhou.aliyuncs.com/open-ys/3dlmi:1.0
-#    endpoint: 192.168.1.32:8032
-#    config:
-#      face: B
-#      cameraip: 192.168.1.32
-#      savepath: d:/work/edgeplat/B
-#      offline: 1
-#    subscriber:
-#      - merger: 5556
-#  3D_C:
-#    image: registry.cn-hangzhou.aliyuncs.com/open-ys/3dhik:1.0
-#    endpoint: 192.168.1.32:8033
-#    config:
-#      face: C
-#      cameraip: 192.168.3.10
-#      savepath: d:/work/edgeplat/C/
-#      offline: 1
-#    subscriber:
-#      - merger: 5557
-
-#  merger:
-#    endpoint: 192.168.1.10:8080
-#    config:
-#      collectSize: 9
-#    subscriber:
-#      - publisher: 5571
-
+      routekey: checkresult

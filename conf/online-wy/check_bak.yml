@@ -1,0 +1,124 @@
+name: onlinetest
+version: 1.0
+nodes:
+  cameraA:
+    endpoint: 192.168.2.244:6001
+    code: cameraA
+    type: 2DCamera
+    debug: true
+    config:
+      cameraip: 192.168.40.20
+      station: S1_A_2D
+      face: A
+    subscriber:
+      - checker_A: 6061
+      - preview_publisher: 6051
+  cameraB:
+    endpoint: 192.168.2.244:6002
+    code: cameraB
+    type: 2DCamera
+    debug: true
+    config:
+      cameraip: 192.168.20.20
+      station: S1_B_2D
+      face: B
+    subscriber:
+      - checker_B: 6062
+      - preview_publisher: 6052
+  cameraC:
+    endpoint: 192.168.2.244:6003
+    code: cameraC
+    type: 2DCamera
+    debug: true
+    config:
+      cameraip: 192.168.50.20
+      station: S1_C_2D
+      face: C
+    subscriber:
+      - checker_C: 6063
+      - preview_publisher: 6053
+  cameraE:
+    endpoint: 192.168.2.244:6005
+    code: cameraE
+    type: 2DCamera
+    debug: true
+    config:
+      cameraip: 192.168.10.20
+      station: S1_E_2D
+      face: E
+    subscriber:
+      - checker_E: 6065
+      - preview_publisher: 6055
+  cameraF:
+    endpoint: 192.168.2.244:6006
+    code: cameraF
+    type: 2DCaemra
+    config:
+      cameraip: 192.168.30.20
+      station: S1_F_2D
+      face: F
+    subscriber:
+      - checker_F: 6066
+      - preview_publisher: 6056
+
+  preview_publisher:
+    endpoint: 192.168.2.244:6011
+    config:
+      outport: 4000
+
+  checker_A:
+    endpoint: 192.168.2.244:6021
+    config:
+      type: 2class_dl
+      cut_shape: [250, 360, 1350, 980]
+      savepath: /home/ubuntu/edgeplat
+    subscriber:
+      - voter: 6071
+  checker_B:
+    endpoint: 192.168.2.244:6022
+    config:
+      cut_shape: [350,360,1450,980]
+      savepath: /home/ubuntu/edgeplat
+    subscriber:
+      - voter: 6072
+  checker_C:
+    endpoint: 192.168.2.244:6023
+    config:
+      cut_shape: [200,400,1800,850]
+      savepath: /home/ubuntu/edgeplat
+    subscriber:
+      - voter: 6073
+  checker_E:
+    endpoint: 192.168.2.244:6025
+    config:
+      cut_shape: [550,300,950,1100]
+      savepath: /home/ubuntu/edgeplat
+    subscriber:
+      - voter: 6075
+  checker_F:
+    endpoint: 192.168.2.244:6026
+    config:
+      cut_shape: [500,250,900,1050]
+      savepath: /home/ubuntu/edgeplat
+    subscriber:
+      - voter: 6076
+
+  voter:
+    endpoint: 192.168.2.244:6031
+    config:
+      type: socket
+      ip: 192.168.9.125
+      port: 3000
+    subscriber:
+      - publisher: 6082
+  publisher:
+    endpoint: 192.168.2.244:6032
+    ignore_response: true
+    config:
+      host: 192.168.9.132
+      port: 5672
+      username: admin
+      password: softwork
+      exchange: wyccd
+      routekey: defects
+
