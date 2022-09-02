@@ -106,6 +106,8 @@ class Manager(object):
                         if result != 0:
                             raise Exception("Subscribe to [{}] failed! Subscribe command return: {}".format(edgenode, result))
 
+                time.sleep(0.001)
+
                 # if not debug and not node.debug:
                 #     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 #     sock.settimeout(recv_timeout)
