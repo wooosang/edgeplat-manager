@@ -11,6 +11,7 @@ nodes:
       station: S1_A_2D
       face: A
       offline: 1
+      loglevel: 1
     subscriber:
       - preview_publisher: 5021
       - checker: 5031

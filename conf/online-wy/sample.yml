@@ -13,6 +13,7 @@ nodes:
       savepath: /home/ubuntu/edgeplat
     subscriber:
       - preview_publisher: 6061
+      - mq_publisher: 5031
   cameraB:
     endpoint: 192.168.2.244:6002
     code: cameraB
@@ -25,6 +26,7 @@ nodes:
       savepath: /home/ubuntu/edgeplat
     subscriber:
       - preview_publisher: 6062
+      - mq_publisher: 5032
   cameraC:
     endpoint: 192.168.2.244:6003
     code: cameraC
@@ -37,6 +39,7 @@ nodes:
       savepath: /home/ubuntu/edgeplat
     subscriber:
       - preview_publisher: 6063
+      - mq_publisher: 5033
   cameraE:
     endpoint: 192.168.2.244:6005
     code: cameraE
@@ -49,18 +52,34 @@ nodes:
       savepath: /home/ubuntu/edgeplat
     subscriber:
       - preview_publisher: 6064
+      - mq_publisher: 5035
   cameraF:
     endpoint: 192.168.2.244:6006
     code: cameraF
     type: 2DCaemra
+    debug: true
     config:
       cameraip: 192.168.30.20
       station: S1_F_2D
       face: F
       savepath: /home/ubuntu/edgeplat
     subscriber:
-      - checker_F: 6065
+      - preview_publisher: 6065
+      - mq_publisher: 5036
   preview_publisher:
     endpoint: 192.168.2.244:6021
+    debug: true
     config:
       outport: 4000
+  mq_publisher:
+    endpoint: 192.168.1.100:8071
+    ignore_response: true
+    type: Uploader
+    debug: true
+    config:
+      host: 192.168.1.100
+      port: 5672
+      username: admin
+      password: softwork
+      exchange: ccd
+      routekey: sample

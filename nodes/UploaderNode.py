@@ -6,12 +6,12 @@ class UploaderNode(Node):
 
     def getStartCommand(self, parameter={}):
         startCommand = super(UploaderNode, self).getStartCommand(parameter)
-        if 'endpoint' in startCommand:
-            del startCommand['endpoint']
+        if 'endpoints' in startCommand:
+            del startCommand['endpoints']
         sources = [];
         for source in self.sources:
             consume = 'tcp://' + source.getIp() + ':' + str(source.getOutboundPort(self.getName()))
             # print(consume)
             sources.append(consume)
-            startCommand['endpoints'] = sources
+            startCommand['endpoint'] = sources
         return startCommand
