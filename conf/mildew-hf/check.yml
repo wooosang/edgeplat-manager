@@ -1,0 +1,13 @@
+name: onlinetest
+version: 1.0
+nodes:
+  cameraA:
+    endpoint: 172.18.74.119:8888
+    subscriber:
+      - callalg: 5555
+  callalg:
+    endpoint: 172.18.74.119:8082
+    config:
+      mode: RESTFUL
+      address: http://139.199.31.200:13506/mildew/predict/normal
+      method: POST
