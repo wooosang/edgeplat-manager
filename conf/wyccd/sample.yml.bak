@@ -1,0 +1,85 @@
+name: onlinetest
+version: 1.0
+nodes:
+  camera0:
+    endpoint: 192.168.2.244:6020
+    code: camera0
+    type: 2DCamera
+    config:
+      cameraip: 192.168.40.20
+      station: S1_0_2D
+      face: 0
+      savepath: /home/ubuntu/work/samples/0
+      offline: 1
+      loglevel: 1
+    subscriber:
+      - preview_publisher: 5021
+      - mq_publisher: 5031
+  camera1:
+    endpoint: 192.168.2.244:6021
+    code: camera1
+    type: 2DCamera
+    config:
+      cameraip: 192.168.20.20
+      station: S1_1_2D
+      face: 1
+      savepath: /home/ubuntu/work/samples/1
+      offline: 1
+    subscriber:
+      - preview_publisher: 5022
+      - mq_publisher: 5032
+  camera2:
+    endpoint: 192.168.2.244:6022
+    code: camera2
+    type: 2DCamera
+    config:
+      cameraip: 192.168.50.20
+      station: S1_2_2D
+      face: 2
+      savepath: /home/ubuntu/work/samples/2
+      offline: 1
+    subscriber:
+      - preview_publisher: 5023
+      - mq_publisher: 5033
+  camera4:
+    endpoint: 192.168.2.244:6024
+    code: camera4
+    type: 2DCamera
+    config:
+      cameraip: 192.168.10.20
+      station: S1_4_2D
+      face: 4
+      savepath: /home/ubuntu/work/samples/4
+      offline: 1
+      loglevel: 1
+    subscriber:
+      - preview_publisher: 5025
+      - mq_publisher: 5035
+  camera5:
+    endpoint: 192.168.2.244:6025
+    code: camera5
+    type: 2DCamera
+    config:
+      cameraip: 192.168.30.20
+      station: S1_5_2D
+      face: 5
+      savepath: /home/ubuntu/work/samples/5
+      offline: 1
+    subscriber:
+      - preview_publisher: 5026
+      - mq_publisher: 5036
+  preview_publisher:
+    endpoint: 192.168.2.244:8070
+    config:
+      outport: 5550
+  mq_publisher:
+    endpoint: 192.168.2.244:8071
+    type: Uploader
+    ignore_response: true
+    config:
+      host: 192.168.2.244
+      port: 5672
+      username: admin
+      password: softwork
+      exchange: ccd
+      routekey: sample
