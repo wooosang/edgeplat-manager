@@ -41,6 +41,19 @@ nodes:
     subscriber:
       - preview_publisher: 5022
       - pypublisher: 5032
+  camera3:
+    endpoint: 192.168.2.244:6023
+    code: camera3
+    type: 2DCamera
+    config:
+      cameraip: 192.168.60.20
+      station: S1_3_2D
+      face: 3
+      savepath: /home/ubuntu/work/samples/3
+      offline: 1
+    subscriber:
+      - preview_publisher: 5023
+      - pypublisher: 5033
   camera4:
     endpoint: 192.168.2.244:6024
     code: camera4

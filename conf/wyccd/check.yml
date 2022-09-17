@@ -12,7 +12,7 @@ nodes:
       offline: 1
       loglevel: 1
     subscriber:
-      - checker0: 5030
+            #      - checker0: 5030
       - preview_publisher: 5020
   camera1:
     endpoint: 192.168.2.244:6021
@@ -38,6 +38,17 @@ nodes:
     subscriber:
       - preview_publisher: 5022
         #      - checker2: 3032
+  camera3:
+    endpoint: 192.168.2.244:6023
+    code: camera3
+    type: 2DCamera
+    config:
+      cameraip: 192.168.60.20
+      station: S1_3_2D
+      face: 3
+      offline: 1
+    subscriber:
+      - preview_publisher: 5023
   camera4:
     endpoint: 192.168.2.244:6024
     code: camera4
@@ -49,7 +60,7 @@ nodes:
       offline: 1
       loglevel: 1
     subscriber:
-      - checker4: 5034
+            # - checker4: 5034
       - preview_publisher: 5024
   camera5:
     endpoint: 192.168.2.244:6025
@@ -61,7 +72,7 @@ nodes:
       face: 5
       offline: 1
     subscriber:
-      - checker5: 5035
+            #      - checker5: 5035
       - preview_publisher: 5025
   preview_publisher:
     endpoint: 192.168.2.244:8070
