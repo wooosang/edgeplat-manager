@@ -1,9 +1,100 @@
-import traceback,socket,yaml,logging,time,json
+import traceback,socket,yaml,logging,time,json, threading, queue
 from nodes.NodeFactory import NodeFactory
 from ManagerExt import ManagerExt
 
 connect_timeout=6.0
 recv_timeout=9.0
+
+t_result = queue.Queue()
+
+def _configAndSubscribe(node, debug):
+    global t_result
+    logging.debug("Debug mode: {}".format(debug))
+    logging.debug("{} Start config node: [{}] \n".format(threading.current_thread().name, node.getName()))
+    nodeip = node.getIp()
+    nodeport = int(node.getPort())
+    logging.debug("Begin connect to node [{}] {}:{}".format(node.getName(), nodeip, nodeport))
+    sock = None
+    if not debug and not node.debug:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(connect_timeout)
+        sock.connect((nodeip, nodeport))
+    config_command = node.getConfigCommand()
+    # config_command = config_command | config
+    logging.info("Config [%s]: %s", node.getName(), config_command)
+    if not debug and not node.debug:
+        sock.sendall(json.dumps(config_command).encode())
+        # sock.settimeout(recv_timeout)
+        if hasattr(node, 'ignore_response') and node.ignore_response:
+            time.sleep(1)
+            result = 0
+        else:
+            result = sock.recv(4)
+            result = int.from_bytes(result, 'big')
+        logging.debug("Config {} result: {}".format(node.getName(), result))
+        msg = ''
+        if result != 0:
+            msg = '配置节点[{}]失败！'.format(node.getName())
+        t_result.put((result, msg))
+        return
+
+    # if not debug and not node.debug:
+    #     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    #     sock.settimeout(recv_timeout)
+    #     sock.connect((nodeip, nodeport))
+    subscribe_commands = node.getSubscribeCommand()
+    if subscribe_commands:
+        logging.info("Ready to send to %s: %s", node.getName(), subscribe_commands)
+        if not debug and not node.debug:
+            for subscribe_command in subscribe_commands:
+                logging.info("%s: %s", edgenode, subscribe_command)
+                sock.sendall(json.dumps(subscribe_command).encode())
+                if hasattr(node, 'ignore_response') and node.ignore_response:
+                    time.sleep(1)
+                    result = 0
+                else:
+                    result = sock.recv(1)
+                    result = int.from_bytes(result, 'big')
+                    logging.debug("Subscribe {} result: {}".format(edgenode, result))
+            sock.close()
+            msg = ''
+            if result != 0:
+                msg = '订阅节点[{}]失败!'.format(node.getName())
+            t_result.put((result, msg))
+
+    # time.sleep(0.001)
+
+def _start(node, parameter, debug):
+    sock = None
+    try:
+        nodeip = node.getIp()
+        nodeport = int(node.getPort())
+        start_command = node.getStartCommand(parameter)
+        logging.info("Start [%s]: %s", node.getName(), start_command)
+        # sock.send(len(start_command))
+        if not debug and not node.debug:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(connect_timeout)
+            sock.connect((nodeip, nodeport))
+            sock.sendall(json.dumps(start_command).encode())
+            if hasattr(node, 'ignore_response') and node.ignore_response:
+                time.sleep(1)
+                result = 0
+            else:
+                result = sock.recv(1)
+                result = int.from_bytes(result, 'big')
+                logging.debug("Start {} result: {}".format(node.getName(), result))
+            # sock.close()
+            if result != 0:
+                raise Exception("Start [{}] failed! Start command return: {}".format(node.getName(), result))
+        logging.debug("Node [{}] started.".format(node.getName()))
+    except Exception as e:
+        logging.error("Start node [{}] failed！ Address:  {}:{}!!! Reason: {}".format(node.getName(), nodeip, nodeport, e))
+        traceback.print_exc()
+        raise Exception("Start node [{}] failed！ Address:  {}:{}!!! Reason: {}".format(node.getName(), nodeip, nodeport, e))
+    finally:
+        if not debug and not node.debug:
+            sock.close()
 
 class Manager(object):
     def __init__(self,yml):
@@ -41,19 +132,50 @@ class Manager(object):
     def postStart(self, parameter):
         return ManagerExt.postStart(parameter)
 
-    def start(self, parameter, debug=False):
+    def start(self, parameter, debug=False):#使用模版模式
         result = {"success": True}
         try:
             self.preStart(parameter)
-            # self.stop(debug)   ### 暂时交由前端去停止
-            self.doStart(parameter, debug)
-            # response = startCheck(packheight, checkcount)
+            self.doStartAsync(parameter, debug)
+            # self.doStart(parameter, debug)
             post_start_result = self.postStart(parameter)
-            # merged_result = {key: value for (key, value) in (result.items() + post_start_result.items())}
             result.update(post_start_result)
         except Exception as e:
             result = {"success": False, "msg": str(e)}
         return result
+
+    def doStartAsync(self, parameter, debug=False):
+
+        start_time = time.time()
+        config_thread_list = []
+        start_thread_list = []
+        for edgenode in self.edgenodes:
+            node = self.edgenodes[edgenode]
+            config_t = threading.Thread(target=_configAndSubscribe, args=( node, debug,))
+            config_thread_list.append(config_t)
+            start_t = threading.Thread(target=_start, args=(node, parameter, debug,))
+            start_thread_list.append(start_t)
+        for t in config_thread_list:
+            t.setDaemon(True)
+            t.start()
+        for t in config_thread_list:
+            t.join()
+        logging.debug("All nodes config and subscribe done!")
+        for t in start_thread_list:
+            t.setDaemon(True)
+            t.start()
+        for t in start_thread_list:
+            t.join()
+
+        logging.debug('{} start nodes all done！'.format( threading.current_thread().name))
+        logging.debug('Start all nodes total cost：{}s'.format( (time.time() - start_time)))
+        results = list()
+        while not t_result.empty():
+            results.append(t_result.get())
+
+        for result in results:
+            logging.debug("{}".format(result))
+
 
     def doStart(self, parameter, debug=False):
         for edgenode in self.edgenodes:

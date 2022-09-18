@@ -1,5 +1,5 @@
 
-import socket,json, time, yaml,logging
+import socket,json, time, yaml,logging, os
 import traceback
 from Manager import Manager
 from flask import Flask, jsonify, request
@@ -41,7 +41,7 @@ def start():
     conf = request.args.get('conf')
     request_param = request.get_json()
     logging.debug("Request body: {}".format(request_param))
-    return doStart(conf, debug)
+    return doStart(conf, request_param, debug)
 
 def doStop(conf=None, debug=False):
     logging.debug("Start stopping................")
@@ -69,6 +69,21 @@ def reload():
     conf = request.args.get('conf')
     logging.info('Reload conf {}'.format(conf))
     init(conf)
+
+app.config['UPLOAD_FOLDER'] = '/Users/woosang/Downloads'
+
+@app.route('/upload', methods=['POST'], strict_slashes=False)
+def upload():
+    print('uploading...................')
+    f = request.files['file']  # 从表单的file字段获取文件，file为该表单的name值
+    if f:
+        fname = f.filename
+        ext = fname.rsplit('.', 1)[1]  # 获取文件后缀
+        unix_time = int(time.time())
+        new_filename = str(unix_time) + '.' + ext  # 修改文件名
+        f.save(os.path.join(app.config['UPLOAD_FOLDER'], new_filename))  # 保存文件到upload目录
+        return jsonify({"success": True, "msg": "文件上传成功!"})
+    return jsonify({"success": False, "msg":"文件上传失败！未找到文件"})
 
 def init(conf):
     app.manager = Manager(conf)

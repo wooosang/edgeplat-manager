@@ -16,10 +16,11 @@ class Node:
             self.ignore_response = config['ignore_response']
         if 'debug' in config:
             self.debug = config['debug']
-        logging.debug("Endpoint: {}".format(config['endpoint']))
-        endpoint = config['endpoint'].split(':')
-        self.ip = endpoint[0]
-        self.port = endpoint[1]
+        if 'endpoint' in config:
+            # logging.debug("Endpoint: {}".format(config['endpoint']))
+            endpoint = config['endpoint'].split(':')
+            self.ip = endpoint[0]
+            self.port = endpoint[1]
         if 'config' in config:
             self.config = config["config"]
             if self.config is None:

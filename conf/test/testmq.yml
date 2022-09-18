@@ -2,13 +2,16 @@ name: offlinetest
 version: 1.0
 nodes:
   barcodescanner:
-    endpoint: 192.168.9.113:9999
+    endpoint: 192.168.9.138:9999
+    debug: true
     config:
     subscriber:
-      - publisher: 5555
+      - publisher: 5559
 
   publisher:
-    endpoint: 192.168.9.116:8088
+    endpoint: 192.168.9.138:8880
+    type: Uploader
+    ignore_response: true
     config:
       host: 192.168.9.138
       port: 5672
