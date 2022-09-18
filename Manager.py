@@ -36,7 +36,6 @@ def _configAndSubscribe(node, debug):
         if result != 0:
             msg = '配置节点[{}]失败！'.format(node.getName())
         t_result.put((result, msg))
-        return
 
     # if not debug and not node.debug:
     #     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -47,7 +46,7 @@ def _configAndSubscribe(node, debug):
         logging.info("Ready to send to %s: %s", node.getName(), subscribe_commands)
         if not debug and not node.debug:
             for subscribe_command in subscribe_commands:
-                logging.info("%s: %s", edgenode, subscribe_command)
+                logging.info("%s: %s", node.getName(), subscribe_command)
                 sock.sendall(json.dumps(subscribe_command).encode())
                 if hasattr(node, 'ignore_response') and node.ignore_response:
                     time.sleep(1)
@@ -55,7 +54,7 @@ def _configAndSubscribe(node, debug):
                 else:
                     result = sock.recv(1)
                     result = int.from_bytes(result, 'big')
-                    logging.debug("Subscribe {} result: {}".format(edgenode, result))
+                    logging.debug("Subscribe {} result: {}".format(node.getName(), result))
             sock.close()
             msg = ''
             if result != 0:

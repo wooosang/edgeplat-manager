@@ -12,7 +12,7 @@ nodes:
       offline: 1
       loglevel: 1
     subscriber:
-            #      - checker0: 5030
+      - checker0: 5030
       - preview_publisher: 5020
   camera1:
     endpoint: 192.168.2.244:6021
@@ -36,8 +36,8 @@ nodes:
       face: 2
       offline: 1
     subscriber:
+      - checker2: 5032
       - preview_publisher: 5022
-        #      - checker2: 3032
   camera3:
     endpoint: 192.168.2.244:6023
     code: camera3
@@ -60,7 +60,7 @@ nodes:
       offline: 1
       loglevel: 1
     subscriber:
-            # - checker4: 5034
+      - checker4: 5034
       - preview_publisher: 5024
   camera5:
     endpoint: 192.168.2.244:6025
@@ -72,7 +72,7 @@ nodes:
       face: 5
       offline: 1
     subscriber:
-            #      - checker5: 5035
+      - checker5: 5035
       - preview_publisher: 5025
   preview_publisher:
     endpoint: 192.168.2.244:8070
@@ -98,10 +98,22 @@ nodes:
       - voter: 5081
   checker2:
     endpoint: 192.168.2.244:8002
-    debug: true
     config:
       savepath: /home/ubuntu/work/defects
       face: 2
+      width: 480
+      height: 900
+    subscriber:
+      - voter: 5082
+  checker3:
+    endpoint: 192.168.2.244:8003
+    config:
+      savepath: /home/ubuntu/work/defects
+      face: 3
+      width: 1624
+      height: 480
+    subscriber:
+      - voter2: 5083
   checker4:
     endpoint: 192.168.2.244:8004
     config:
@@ -128,6 +140,14 @@ nodes:
       port: 3000
     subscriber:
       - publisher: 5091
+  voter2:
+    endpoint: 192.168.2.244:9002
+    config:
+      type: socket
+      ip: 192.168.2.244
+      port: 4000
+    subscriber:
+      - publisher: 5092
   publisher:
     endpoint: 192.168.2.244:8071
     ignore_response: true
