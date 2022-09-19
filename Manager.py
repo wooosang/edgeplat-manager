@@ -139,8 +139,8 @@ class Manager(object):
         result = {"success": True}
         try:
             self.preStart(parameter)
-            # self.doStartAsync(parameter, debug)
-            self.doStart(parameter, debug)
+            self.doStartAsync(parameter, debug)
+            # self.doStart(parameter, debug)
             post_start_result = self.postStart(parameter)
             result.update(post_start_result)
         except Exception as e:
