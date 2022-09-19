@@ -49,7 +49,7 @@ def _configAndSubscribe(node, debug):
                 logging.info("%s: %s", node.getName(), subscribe_command)
                 sock.sendall(json.dumps(subscribe_command).encode())
                 if hasattr(node, 'ignore_response') and node.ignore_response:
-                    time.sleep(1)
+                    time.sleep(0.1)
                     result = 0
                 else:
                     result = sock.recv(1)
@@ -77,7 +77,7 @@ def _start(node, parameter, debug):
             sock.connect((nodeip, nodeport))
             sock.sendall(json.dumps(start_command).encode())
             if hasattr(node, 'ignore_response') and node.ignore_response:
-                time.sleep(1)
+                time.sleep(0.1)
                 result = 0
             else:
                 result = sock.recv(1)
@@ -135,8 +135,8 @@ class Manager(object):
         result = {"success": True}
         try:
             self.preStart(parameter)
-            self.doStartAsync(parameter, debug)
-            # self.doStart(parameter, debug)
+#            self.doStartAsync(parameter, debug)
+            self.doStart(parameter, debug)
             post_start_result = self.postStart(parameter)
             result.update(post_start_result)
         except Exception as e:

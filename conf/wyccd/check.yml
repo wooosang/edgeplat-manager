@@ -42,6 +42,7 @@ nodes:
     endpoint: 192.168.2.244:6023
     code: camera3
     type: 2DCamera
+    debug: true
     config:
       cameraip: 192.168.60.20
       station: S1_3_2D
