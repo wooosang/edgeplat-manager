@@ -93,4 +93,4 @@ if __name__ == '__main__':
     # ext_api.manager = app.manager
     conf = 'conf/edgeplat.yml'
     init(conf)
-    app.run(debug=False, host='0.0.0.0', port=9003)
+    app.run(debug=False, host='0.0.0.0', port=9000)

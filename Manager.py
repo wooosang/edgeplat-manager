@@ -139,8 +139,8 @@ class Manager(object):
         result = {"success": True}
         try:
             self.preStart(parameter)
-            self.doStartAsync(parameter, debug)
-#            self.doStart(parameter, debug)
+            # self.doStartAsync(parameter, debug)
+            self.doStart(parameter, debug)
             post_start_result = self.postStart(parameter)
             result.update(post_start_result)
         except Exception as e:
@@ -148,7 +148,6 @@ class Manager(object):
         return result
 
     def doStartAsync(self, parameter, debug=False):
-
         start_time = time.time()
         config_thread_list = []
         start_thread_list = []
@@ -297,6 +296,15 @@ class Manager(object):
         self.doStop(debug)
         self.postStop(debug)
         return result
+
+    def doStopAsync(self, debug=False):
+        start_time = time.time()
+        stop_thread_list = []
+        for edgenode in self.edgenodes:
+            node = self.edgenodes[edgenode]
+            stop_t = threading.Thread(target=_configAndSubscribe, args=(node, debug,))
+            stop_thread_list.append(stop_t)
+
 
     def doStop(self, debug=False):
         nodeip = None
