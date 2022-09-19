@@ -99,6 +99,32 @@ def _start(node, parameter, debug):
         if not debug and not node.debug:
             sock.close()
 
+def _stop(node, parameter, debug):
+    sock = None
+    nodeip = node.getIp()
+    nodeport = int(node.getPort())
+    logging.debug("Begin connect to node {} {}:{}".format(node.getName(), nodeip, nodeport))
+    if not debug and not node.debug:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(connect_timeout)
+        sock.connect((nodeip, nodeport))
+    stop_command = self.edgenodes[edgenode].getStopCommand()
+    logging.debug("Send to {} command: {}".format(edgenode, stop_command))
+    if not debug and not node.debug:
+        sock.send(json.dumps(stop_command).encode())
+        if hasattr(node, 'ignore_response') and node.ignore_response:
+            time.sleep(1)
+            result = 0
+        else:
+            result = sock.recv(1)
+            result = int.from_bytes(result, 'big')
+        if result != 0:
+            logging.error("停止节点[{}]失败！ Result: {}".format(edgenode, result))
+        else:
+            logging.debug("Stop {} succeed! Result: {}".format(edgenode, result))
+        # time.sleep(0.1)
+    logging.debug("Node {} stopped.".format(edgenode))
+
 class Manager(object):
     def __init__(self,yml):
         logging.debug('Init config file {}'.format(yml))
@@ -302,8 +328,14 @@ class Manager(object):
         stop_thread_list = []
         for edgenode in self.edgenodes:
             node = self.edgenodes[edgenode]
-            stop_t = threading.Thread(target=_configAndSubscribe, args=(node, debug,))
+            stop_t = threading.Thread(target=_stop, args=(node, debug,))
             stop_thread_list.append(stop_t)
+        for t in stop_thread_list:
+            t.setDaemon(True)
+            t.start()
+        for t in stop_thread_list:
+            t.join()
+        logging.debug("All nodes config and subscribe done!")
 
 
     def doStop(self, debug=False):
