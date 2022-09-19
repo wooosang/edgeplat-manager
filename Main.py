@@ -41,6 +41,7 @@ def start():
     conf = request.args.get('conf')
     request_param = request.get_json()
     logging.debug("Request body: {}".format(request_param))
+    result = doStop(conf, debug)
     return doStart(conf, request_param, debug)
 
 def doStop(conf=None, debug=False):
