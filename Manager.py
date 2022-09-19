@@ -26,7 +26,7 @@ def _configAndSubscribe(node, debug):
         sock.sendall(json.dumps(config_command).encode())
         # sock.settimeout(recv_timeout)
         if hasattr(node, 'ignore_response') and node.ignore_response:
-            time.sleep(1)
+            time.sleep(0.1)
             result = 0
         else:
             result = sock.recv(4)
@@ -34,7 +34,7 @@ def _configAndSubscribe(node, debug):
         logging.debug("Config {} result: {}".format(node.getName(), result))
         msg = ''
         if result != 0:
-            msg = '配置节点[{}]失败！'.format(node.getName())
+            msg = 'Config node [{}] failed!'.format(node.getName())
         t_result.put((result, msg))
 
     # if not debug and not node.debug:
@@ -52,13 +52,17 @@ def _configAndSubscribe(node, debug):
                     time.sleep(0.1)
                     result = 0
                 else:
-                    result = sock.recv(1)
-                    result = int.from_bytes(result, 'big')
-                    logging.debug("Subscribe {} result: {}".format(node.getName(), result))
+                    try:
+                        result = sock.recv(1)
+                        result = int.from_bytes(result, 'big')
+                        logging.debug("Subscribe {} result: {}".format(node.getName(), result))
+                    except Exception as e:
+                        t_result.put((-1, "Subscribe [{}] failed! Reason: {}".format(node.getName(), e)))
+                        return
             sock.close()
             msg = ''
             if result != 0:
-                msg = '订阅节点[{}]失败!'.format(node.getName())
+                msg = 'Subscribe node [{}] failed!'.format(node.getName())
             t_result.put((result, msg))
 
     # time.sleep(0.001)
@@ -135,8 +139,8 @@ class Manager(object):
         result = {"success": True}
         try:
             self.preStart(parameter)
-#            self.doStartAsync(parameter, debug)
-            self.doStart(parameter, debug)
+            self.doStartAsync(parameter, debug)
+#            self.doStart(parameter, debug)
             post_start_result = self.postStart(parameter)
             result.update(post_start_result)
         except Exception as e:
@@ -160,6 +164,19 @@ class Manager(object):
         for t in config_thread_list:
             t.join()
         logging.debug("All nodes config and subscribe done!")
+        msg = ''
+        success = True
+        results = list()
+        while not t_result.empty():
+            results.append(t_result.get())
+        for result in results:
+            logging.debug("{}".format(result))
+            if int(result[0]) != 0:
+                success = False
+                msg = msg + result[1] + ';'
+        if not success:
+            raise Exception("Start nodes failed! {}".format(msg))
+
         for t in start_thread_list:
             t.setDaemon(True)
             t.start()
@@ -168,12 +185,21 @@ class Manager(object):
 
         logging.debug('{} start nodes all done！'.format( threading.current_thread().name))
         logging.debug('Start all nodes total cost：{}s'.format( (time.time() - start_time)))
+        t_result.queue.clear()
         results = list()
         while not t_result.empty():
             results.append(t_result.get())
 
+        msg = ''
+        success = True
         for result in results:
             logging.debug("{}".format(result))
+            if int(result[0]) != 0:
+                success = False
+                msg = msg + result[1] + ';'
+        if not success:
+            raise Exception("Start nodes failed! {}".format(msg))
+        return {}
 
 
     def doStart(self, parameter, debug=False):
