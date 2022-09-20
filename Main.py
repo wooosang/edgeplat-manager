@@ -63,7 +63,7 @@ def doStop(conf=None, debug=False):
     try:
         result = app.manager.stop(conf, debug)
     except Exception as e:
-        return {"success": False, "msg": e}
+        return {"success": False, "msg": str(e)}
     logging.debug("Stop succeed!")
     return result
 
