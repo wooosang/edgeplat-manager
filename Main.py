@@ -54,7 +54,7 @@ def start():
 def doStop(conf=None, debug=False):
     logging.debug("Start stopping................")
     global app
-    result = app.manager.stop()
+    result = app.manager.stop(conf, debug)
     return result
 
 @app.route('/stop', methods=['GET'])

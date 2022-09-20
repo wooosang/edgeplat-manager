@@ -99,7 +99,7 @@ def _start(node, parameter, debug):
         if not debug and not node.debug:
             sock.close()
 
-def _stop(node, parameter, debug):
+def _stop(node, parameter, debug=False):
     sock = None
     nodeip = node.getIp()
     nodeport = int(node.getPort())
@@ -315,7 +315,7 @@ class Manager(object):
     def postStop(self, debug=False):
         return ManagerExt.postStop(debug)
 
-    def stop(self, debug=False):
+    def stop(self, conf, debug=False):
         result = {'success': True}
         pre_stop_result = self.preStop(debug)
         result.update(pre_stop_result)
