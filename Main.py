@@ -8,7 +8,7 @@ from ManagerExt import ext_api
 edgenodes = {}
 debug=False
 
-log_file_format = "[%(levelname)s] - %(asctime)s - %(name)s - : %(message)s in %(pathname)s:%(lineno)d"
+log_file_format = "[%(levelname)s] - %(asctime)s - %(name)s - : %(filename)s:%(lineno)d : %(message)s"
 log_console_format = "[%(levelname)s] - %(asctime)s - %(pathname)s:%(lineno)d : %(message)s"
 main_logger = logging.getLogger()
 main_logger.setLevel(logging.DEBUG)
@@ -16,6 +16,7 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 console_handler.setFormatter(logging.Formatter(log_console_format))
 main_logger.addHandler(console_handler)
+logging.basicConfig(filename="manager.log")
 
 
 app = Flask(__name__)
