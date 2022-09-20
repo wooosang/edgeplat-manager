@@ -16,7 +16,13 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 console_handler.setFormatter(logging.Formatter(log_console_format))
 main_logger.addHandler(console_handler)
-logging.basicConfig(filename="manager.log")
+
+handler = logging.FileHandler("manager.log")
+handler.setLevel(logging.DEBUG)#可以不设，默认是WARNING级别
+formatter = logging.Formatter(log_file_format)
+handler.setFormatter(formatter) #设置文件的log格式
+main_logger.addHandler(handler)
+
 
 
 app = Flask(__name__)
