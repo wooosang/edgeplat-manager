@@ -54,7 +54,17 @@ def start():
 def doStop(conf=None, debug=False):
     logging.debug("Start stopping................")
     global app
-    result = app.manager.stop(conf, debug)
+    try:
+        if conf is not None:
+            init('conf/'+conf+'.yml')
+    except Exception as e:
+        traceback.print_exc()
+        return {"success": False, "msg": str(e)}
+    try:
+        result = app.manager.stop(conf, debug)
+    except Exception as e:
+        return {"success": False, "msg": e}
+    logging.debug("Stop succeed!")
     return result
 
 @app.route('/stop', methods=['GET'])
