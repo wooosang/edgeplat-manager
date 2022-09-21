@@ -89,12 +89,15 @@ def _start(node, parameter, debug):
                 logging.debug("Start {} result: {}".format(node.getName(), result))
             # sock.close()
             if result != 0:
-                raise Exception("Start [{}] failed! Start command return: {}".format(node.getName(), result))
+                t_result.put((-1, "Start [{}] failed! Start command return: {}".format(node.getName(), result)))
+                # raise Exception("Start [{}] failed! Start command return: {}".format(node.getName(), result))
+
         logging.debug("Node [{}] started.".format(node.getName()))
     except Exception as e:
         logging.error("Start node [{}] failed！ Address:  {}:{}!!! Reason: {}".format(node.getName(), nodeip, nodeport, e))
         traceback.print_exc()
-        raise Exception("Start node [{}] failed！ Address:  {}:{}!!! Reason: {}".format(node.getName(), nodeip, nodeport, e))
+        t_result.put((-1, "Start node [{}] failed! Reason: {}".format(node.getName(), e)))
+        # raise Exception("Start node [{}] failed！ Address:  {}:{}!!! Reason: {}".format(node.getName(), nodeip, nodeport, e))
     finally:
         if not debug and not node.debug:
             sock.close()
