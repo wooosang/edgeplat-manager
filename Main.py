@@ -88,7 +88,7 @@ def reload():
     logging.info('Reload conf {}'.format(conf))
     init(conf)
 
-app.config['UPLOAD_FOLDER'] = '/Users/woosang/Downloads'
+app.config['UPLOAD_FOLDER'] = '/tmp'
 
 @app.route('/upload', methods=['POST'], strict_slashes=False)
 def upload():
