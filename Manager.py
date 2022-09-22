@@ -65,8 +65,6 @@ def _configAndSubscribe(node, debug):
                 msg = 'Subscribe node [{}] failed!'.format(node.getName())
             t_result.put((result, msg))
 
-    # time.sleep(0.001)
-
 def _start(node, parameter, debug):
     sock = None
     global t_result
@@ -75,7 +73,6 @@ def _start(node, parameter, debug):
         nodeport = int(node.getPort())
         start_command = node.getStartCommand(parameter)
         logging.info("Start [%s]: %s", node.getName(), start_command)
-        # sock.send(len(start_command))
         if not debug and not node.debug:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             sock.settimeout(connect_timeout)
