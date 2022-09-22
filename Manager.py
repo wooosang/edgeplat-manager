@@ -69,6 +69,7 @@ def _configAndSubscribe(node, debug):
 
 def _start(node, parameter, debug):
     sock = None
+    global t_result
     try:
         nodeip = node.getIp()
         nodeport = int(node.getPort())
@@ -96,8 +97,7 @@ def _start(node, parameter, debug):
     except Exception as e:
         logging.error("Start node [{}] failed！ Address:  {}:{}!!! Reason: {}".format(node.getName(), nodeip, nodeport, e))
         traceback.print_exc()
-        t_result.put((-1, "Start node [{}] failed! Reason: {}".format(node.getName(), e)))
-        # raise Exception("Start node [{}] failed！ Address:  {}:{}!!! Reason: {}".format(node.getName(), nodeip, nodeport, e))
+        t_result.put((-1, "Start node [{}] failed！ Address:  {}:{}!!! Reason: {}".format(node.getName(), nodeip, nodeport, e)))
     finally:
         if not debug and not node.debug:
             sock.close()
@@ -205,6 +205,7 @@ class Manager(object):
         if not success:
             raise Exception("Start nodes failed! {}".format(msg))
 
+        t_result.queue.clear()
         for t in start_thread_list:
             t.setDaemon(True)
             t.start()
@@ -213,7 +214,7 @@ class Manager(object):
 
         logging.debug('{} start nodes all done！'.format( threading.current_thread().name))
         logging.debug('Start all nodes total cost：{}s'.format( (time.time() - start_time)))
-        t_result.queue.clear()
+
         results = list()
         while not t_result.empty():
             results.append(t_result.get())
