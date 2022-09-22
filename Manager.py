@@ -88,10 +88,8 @@ def _start(node, parameter, debug):
                 result = sock.recv(1)
                 result = int.from_bytes(result, 'big')
                 logging.debug("Start {} result: {}".format(node.getName(), result))
-            # sock.close()
             if result != 0:
                 t_result.put((-1, "Start [{}] failed! Start command return: {}".format(node.getName(), result)))
-                # raise Exception("Start [{}] failed! Start command return: {}".format(node.getName(), result))
 
         logging.debug("Node [{}] started.".format(node.getName()))
     except Exception as e:
