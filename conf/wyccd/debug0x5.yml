@@ -12,56 +12,12 @@ nodes:
       offline: 1
       loglevel: 1
     subscriber:
+      - checker0: 5030
+      - checker1: 5031
+      - checker2: 5032
+      - checker4: 5034
+      - checker5: 5035
       - preview_publisher: 5020
-      - checker0: 3030
-  camera1:
-    endpoint: 192.168.1.100:6021
-    code: camera1
-    type: 2DCamera
-    config:
-      cameraip: 192.168.20.20
-      station: S1_1_2D
-      face: 1
-      offline: 1
-    subscriber:
-      - preview_publisher: 5021
-        #      - checker1: 3031
-  camera2:
-    endpoint: 192.168.1.100:6022
-    code: camera2
-    type: 2DCamera
-    config:
-      cameraip: 192.168.50.20
-      station: S1_2_2D
-      face: 2
-      offline: 1
-    subscriber:
-      - preview_publisher: 5022
-        #      - checker2: 3032
-  camera4:
-    endpoint: 192.168.1.100:6024
-    code: camera4
-    type: 2DCamera
-    config:
-      cameraip: 192.168.10.20
-      station: S1_4_2D
-      face: 4
-      offline: 1
-    subscriber:
-      - preview_publisher: 5024
-      - checker4: 3034
-  camera5:
-    endpoint: 192.168.1.100:6025
-    code: camera5
-    type: 2DCamera
-    config:
-      cameraip: 192.168.30.20
-      station: S1_5_2D
-      face: 5
-      offline: 1
-    subscriber:
-      - preview_publisher: 5025
-      - checker5: 3035
   preview_publisher:
     endpoint: 192.168.2.244:8070
     config:
@@ -71,45 +27,79 @@ nodes:
     config:
       savepath: /home/ubuntu/work/defects
       face: 0
+      width: 1920
+      height: 950
     subscriber:
       - voter: 5080
   checker1:
     endpoint: 192.168.2.244:8001
-    debug: true
     config:
       savepath: /home/ubuntu/work/defects
-      face: 1
+      face: 0
+      width: 1920
+      height: 950
+    subscriber:
+      - voter: 5081
   checker2:
     endpoint: 192.168.2.244:8002
-    debug: true
     config:
       savepath: /home/ubuntu/work/defects
-      face: 2
+      face: 0
+      width: 1920
+      height: 950
+    subscriber:
+      - voter: 5082
+  checker3:
+    endpoint: 192.168.2.244:8003
+    config:
+      savepath: /home/ubuntu/work/defects
+      face: 3
+      width: 1624
+      height: 480
+    subscriber:
+      - voter2: 5083
   checker4:
     endpoint: 192.168.2.244:8004
     config:
       savepath: /home/ubuntu/work/defects
-      face: 4
+      face: 0
+      width: 1920
+      height: 950
+    subscriber:
+      - voter: 5084
   checker5:
     endpoint: 192.168.2.244:8005
     config:
       savepath: /home/ubuntu/work/defects
-      face: 5
+      face: 0
+      width: 1920
+      height: 950
+    subscriber:
+      - voter: 5085
   voter:
     endpoint: 192.168.2.244:9001
     config:
       type: socket
-      ip: 192.168.1.100
+      ip: 192.168.2.244
       port: 3000
     subscriber:
-      - publisher: 5090
+      - publisher: 5091
+  voter2:
+    endpoint: 192.168.2.244:9002
+    config:
+      type: socket
+      ip: 192.168.2.244
+      port: 4000
+    subscriber:
+      - publisher: 5092
   publisher:
     endpoint: 192.168.2.244:8071
     ignore_response: true
+    type: Uploader
     config:
       host: 192.168.2.244
       port: 5672
       username: admin
       password: softwork
       exchange: ccd
-      routekey: check
+      routekey: defect
