@@ -49,7 +49,7 @@ nodes:
       offline: 1
       loglevel: 1
     subscriber:
-#      - checker3: 5033
+      - checker3: 5033
       - preview_publisher: 5023
   camera4:
     endpoint: 192.168.2.244:6024
@@ -74,7 +74,7 @@ nodes:
       face: 5
       offline: 1
     subscriber:
-#      - checker5: 5035
+      - checker5: 5035
       - preview_publisher: 5025
   preview_publisher:
     endpoint: 192.168.2.244:8070
