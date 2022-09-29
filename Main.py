@@ -8,7 +8,7 @@ from ManagerExt import ext_api
 edgenodes = {}
 debug=False
 
-log_file_format = "[%(levelname)s] - %(asctime)s - %(name)s - : %(message)s in %(pathname)s:%(lineno)d"
+log_file_format = "[%(levelname)s] - %(asctime)s - %(name)s - : %(filename)s:%(lineno)d : %(message)s"
 log_console_format = "[%(levelname)s] - %(asctime)s - %(pathname)s:%(lineno)d : %(message)s"
 main_logger = logging.getLogger()
 main_logger.setLevel(logging.DEBUG)
@@ -16,6 +16,13 @@ console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 console_handler.setFormatter(logging.Formatter(log_console_format))
 main_logger.addHandler(console_handler)
+
+handler = logging.FileHandler("manager.log")
+handler.setLevel(logging.DEBUG)#可以不设，默认是WARNING级别
+formatter = logging.Formatter(log_file_format)
+handler.setFormatter(formatter) #设置文件的log格式
+main_logger.addHandler(handler)
+
 
 
 app = Flask(__name__)
@@ -41,12 +48,23 @@ def start():
     conf = request.args.get('conf')
     request_param = request.get_json()
     logging.debug("Request body: {}".format(request_param))
+    result = doStop(conf, debug)
     return doStart(conf, request_param, debug)
 
 def doStop(conf=None, debug=False):
     logging.debug("Start stopping................")
     global app
-    result = app.manager.stop()
+    try:
+        if conf is not None:
+            init('conf/'+conf+'.yml')
+    except Exception as e:
+        traceback.print_exc()
+        return {"success": False, "msg": str(e)}
+    try:
+        result = app.manager.stop(conf, debug)
+    except Exception as e:
+        return {"success": False, "msg": str(e)}
+    logging.debug("Stop succeed!")
     return result
 
 @app.route('/stop', methods=['GET'])
@@ -70,7 +88,7 @@ def reload():
     logging.info('Reload conf {}'.format(conf))
     init(conf)
 
-app.config['UPLOAD_FOLDER'] = '/Users/woosang/Downloads'
+app.config['UPLOAD_FOLDER'] = '/tmp'
 
 @app.route('/upload', methods=['POST'], strict_slashes=False)
 def upload():
@@ -93,4 +111,4 @@ if __name__ == '__main__':
     # ext_api.manager = app.manager
     conf = 'conf/edgeplat.yml'
     init(conf)
-    app.run(debug=False, host='0.0.0.0', port=9003)
+    app.run(debug=False, host='0.0.0.0', port=9000)
