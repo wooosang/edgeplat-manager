@@ -2,7 +2,15 @@ name: base
 version: 1.0
 nodes:
   test:
-    endpoint: 127.0.0.1:8080
+    endpoint: 192.168.9.135:8080
     debug: true
+    subscriber:
+      - checker: 5030
+  checker:
+    endpoint: 192.168.9.135:8001
+    config:
+      face: 0
+      width: 1920
+      height: 950
 
 

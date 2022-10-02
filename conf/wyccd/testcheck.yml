@@ -1,0 +1,49 @@
+name: onlinecheck
+version: 1.0
+nodes:
+  mockcamera0:
+    endpoint: 192.168.9.135:6020
+    code: camera0
+    type: 2DCamera
+    debug: true
+    config:
+      cameraip: 192.168.40.20
+      station: S1_0_2D
+      face: 0
+      offline: 1
+      loglevel: 1
+    subscriber:
+      - checker0: 5030
+      - preview_publisher: 5020
+  preview_publisher:
+    endpoint: 192.168.9.135:8070
+    config:
+      outport: 5550
+  checker0:
+    endpoint: 192.168.9.135:8000
+    config:
+      savepath: /home/ubuntu/work/defects
+      face: 0
+      width: 1920
+      height: 950
+    subscriber:
+      - voter: 5080
+  voter:
+    endpoint: 192.168.9.135:9001
+    config:
+      type: socket
+      ip: 192.168.9.135
+      port: 3000
+    subscriber:
+      - publisher: 5091
+  publisher:
+    endpoint: 192.168.9.135:8071
+    ignore_response: true
+    type: Uploader
+    config:
+      host: 192.168.9.138
+      port: 5672
+      username: admin
+      password: softwork
+      exchange: ccd
+      routekey: defect

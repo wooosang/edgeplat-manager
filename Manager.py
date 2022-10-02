@@ -1,3 +1,4 @@
+# coding=UTF-8
 import traceback,socket,yaml,logging,time,json, threading, queue
 from nodes.NodeFactory import NodeFactory
 from ManagerExt import ManagerExt
@@ -25,17 +26,20 @@ def _configAndSubscribe(node, debug):
     if not debug and not node.debug:
         sock.sendall(json.dumps(config_command).encode())
         # sock.settimeout(recv_timeout)
-        if hasattr(node, 'ignore_response') and node.ignore_response:
-            time.sleep(0.1)
-            result = 0
-        else:
-            result = sock.recv(4)
-            result = int.from_bytes(result, 'big')
-        logging.debug("Config {} result: {}".format(node.getName(), result))
-        msg = ''
-        if result != 0:
-            msg = 'Config node [{}] failed!'.format(node.getName())
-        t_result.put((result, msg))
+        try:
+            if hasattr(node, 'ignore_response') and node.ignore_response:
+                time.sleep(0.1)
+                result = 0
+            else:
+                result = sock.recv(4)
+                result = int.from_bytes(result, 'big')
+            logging.debug("Config {} result: {}".format(node.getName(), result))
+            msg = ''
+            if result != 0:
+                msg = 'Config node [{}] failed!'.format(node.getName())
+            t_result.put((result, msg))
+        except socket.timeout:
+            t_result.put((3, '>>> 配置节点 [{}] 失败! 获取反馈超时！'.format(node.getName())))
 
     # if not debug and not node.debug:
     #     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -57,7 +61,7 @@ def _configAndSubscribe(node, debug):
                         result = int.from_bytes(result, 'big')
                         logging.debug("Subscribe {} result: {}".format(node.getName(), result))
                     except Exception as e:
-                        t_result.put((-1, "Subscribe [{}] failed! Reason: {}".format(node.getName(), e)))
+                        t_result.put((-1, ">>> 订阅节点 [{}] 失败! 原因: {}".format(node.getName(), e)))
                         return
             sock.close()
             msg = ''
@@ -92,7 +96,7 @@ def _start(node, parameter, debug):
     except Exception as e:
         logging.error("Start node [{}] failed！ Address:  {}:{}!!! Reason: {}".format(node.getName(), nodeip, nodeport, e))
         traceback.print_exc()
-        t_result.put((-1, "Start node [{}] failed！ Address:  {}:{}!!! Reason: {}".format(node.getName(), nodeip, nodeport, e)))
+        t_result.put((-1, ">>> 启动节点 [{}] 失败！ 地址:  {}:{}!!! 原因: {}".format(node.getName(), nodeip, nodeport, e)))
     finally:
         if not debug and not node.debug:
             sock.close()
@@ -193,12 +197,13 @@ class Manager(object):
         while not t_result.empty():
             results.append(t_result.get())
         for result in results:
-            logging.debug("{}".format(result))
+            # logging.debug("{}".format(result))
             if int(result[0]) != 0:
                 success = False
+                logging.warn("{}".format(result))
                 msg = msg + result[1] + ';'
         if not success:
-            raise Exception("Start nodes failed! {}".format(msg))
+            raise Exception("启动失败!!! {}".format(msg))
 
         t_result.queue.clear()
         for t in start_thread_list:
@@ -222,7 +227,7 @@ class Manager(object):
                 success = False
                 msg = msg + result[1] + ';'
         if not success:
-            raise Exception("Start nodes failed! {}".format(msg))
+            raise Exception("启动节点失败!!!  {}".format(msg))
         return {}
 
 
