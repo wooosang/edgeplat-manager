@@ -42,13 +42,14 @@ nodes:
     endpoint: 192.168.2.244:6023
     code: camera3
     type: 2DCamera
-    debug: true
     config:
       cameraip: 192.168.60.20
       station: S1_3_2D
       face: 3
       offline: 1
+      loglevel: 1
     subscriber:
+#      - checker3: 5033
       - preview_publisher: 5023
   camera4:
     endpoint: 192.168.2.244:6024
@@ -86,6 +87,7 @@ nodes:
       face: 0
       width: 1920
       height: 950
+      mode: 0
     subscriber:
       - voter: 5080
   checker1:
@@ -95,6 +97,7 @@ nodes:
       face: 1
       width: 1920
       height: 550
+      mode: 2
     subscriber:
       - voter: 5081
   checker2:
@@ -104,6 +107,7 @@ nodes:
       face: 2
       width: 480
       height: 900
+      mode: 0
     subscriber:
       - voter: 5082
   checker3:
@@ -112,7 +116,8 @@ nodes:
       savepath: /home/ubuntu/work/defects
       face: 3
       width: 1624
-      height: 480
+      height: 448
+      mode: 2
     subscriber:
       - voter2: 5083
   checker4:
@@ -122,6 +127,7 @@ nodes:
       face: 4
       width: 1920
       height: 1050
+      mode: 0
     subscriber:
       - voter: 5084
   checker5:
@@ -131,6 +137,7 @@ nodes:
       face: 5
       width: 480
       height: 900
+      mode: 2
     subscriber:
       - voter: 5085
   voter:
