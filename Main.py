@@ -88,7 +88,7 @@ def reload():
     logging.info('Reload conf {}'.format(conf))
     init(conf)
 
-app.config['UPLOAD_FOLDER'] = '/tmp'
+app.config['UPLOAD_FOLDER'] = '/upgrade_files'
 
 @app.route('/upload', methods=['POST'], strict_slashes=False)
 def upload():
