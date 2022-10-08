@@ -100,7 +100,7 @@ def upload():
         unix_time = int(time.time())
         new_filename = str(unix_time) + '.' + ext  # 修改文件名
         f.save(os.path.join(app.config['UPLOAD_FOLDER'], new_filename))  # 保存文件到upload目录
-        os.system("sh "+app.config['UPLOAD_FOLDER']+"/update.sh")
+        os.system("su - ci "+app.config['UPLOAD_FOLDER']+"/update.sh "+new_filename)
         return jsonify({"success": True, "msg": "文件上传成功!"})
     return jsonify({"success": False, "msg":"文件上传失败！未找到文件"})
 
