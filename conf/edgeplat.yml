@@ -8,6 +8,7 @@ nodes:
       - checker: 5030
   checker:
     endpoint: 192.168.9.135:8000
+    debug: true
     config:
       face: 0
       width: 1920

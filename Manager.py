@@ -101,6 +101,7 @@ def _start(node, parameter, debug):
         if not debug and not node.debug:
             sock.close()
 
+#Stop异步执行方式暂未启用
 def _stop(node, parameter, debug=False):
     sock = None
     nodeip = node.getIp()
@@ -111,7 +112,7 @@ def _stop(node, parameter, debug=False):
         sock.settimeout(connect_timeout)
         sock.connect((nodeip, nodeport))
     stop_command = node.getStopCommand()
-    logging.debug("Send to {} command: {}".format(node.getName(), stop_command))
+    logging.debug("Send to [{}] command: {}".format(node.getName(), stop_command))
     if not debug and not node.debug:
         sock.send(json.dumps(stop_command).encode())
         if hasattr(node, 'ignore_response') and node.ignore_response:
@@ -123,7 +124,7 @@ def _stop(node, parameter, debug=False):
         if result != 0:
             logging.error("停止节点[{}]失败！ Result: {}".format(node.getName(), result))
         else:
-            logging.debug("Stop {} succeed! Result: {}".format(node.getName(), result))
+            logging.debug("Stop [{}] succeed! Result: {}".format(node.getName(), result))
         # time.sleep(0.1)
     logging.debug("Node {} stopped.".format(node.getName()))
 
@@ -351,13 +352,13 @@ class Manager(object):
                 sock = None
                 nodeip = node.getIp()
                 nodeport = int(node.getPort())
-                logging.debug("Begin connect to node {} {}:{}".format(node.getName(), nodeip, nodeport))
+                logging.debug("Begin connect to node [{}] {}:{}".format(node.getName(), nodeip, nodeport))
                 if not debug and not node.debug:
                     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                     sock.settimeout(connect_timeout)
                     sock.connect((nodeip, nodeport))
                 stop_command = self.edgenodes[edgenode].getStopCommand()
-                logging.debug("Send to {} command: {}".format(edgenode, stop_command))
+                logging.debug("Send to [{}] command: {}".format(edgenode, stop_command))
                 if not debug and not node.debug:
                     sock.send(json.dumps(stop_command).encode())
                     if hasattr(node, 'ignore_response') and node.ignore_response:
@@ -371,7 +372,7 @@ class Manager(object):
                     else:
                         logging.debug("Stop {} succeed! Result: {}".format(edgenode,result))
                     # time.sleep(0.1)
-                logging.debug("Node {} stopped.".format(edgenode))
+                logging.debug("Node [{}] stopped.".format(edgenode))
                 # if not debug and not node.debug and sock:
                 #     sock.close()
                 #     logging.debug("Close connection to {}".format(edgenode))

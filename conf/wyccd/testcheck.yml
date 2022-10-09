@@ -17,6 +17,7 @@ nodes:
       - preview_publisher: 5020
   preview_publisher:
     endpoint: 192.168.9.135:8070
+    debug: true
     config:
       outport: 5550
   checker0:
@@ -40,6 +41,7 @@ nodes:
     endpoint: 192.168.9.135:8071
     ignore_response: true
     type: Uploader
+    debug: true
     config:
       host: 192.168.9.138
       port: 5672
