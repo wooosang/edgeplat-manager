@@ -110,8 +110,8 @@ def _stop(node, parameter, debug=False):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(connect_timeout)
         sock.connect((nodeip, nodeport))
-    stop_command = self.edgenodes[edgenode].getStopCommand()
-    logging.debug("Send to {} command: {}".format(edgenode, stop_command))
+    stop_command = node.getStopCommand()
+    logging.debug("Send to {} command: {}".format(node.getName(), stop_command))
     if not debug and not node.debug:
         sock.send(json.dumps(stop_command).encode())
         if hasattr(node, 'ignore_response') and node.ignore_response:
@@ -121,11 +121,11 @@ def _stop(node, parameter, debug=False):
             result = sock.recv(1)
             result = int.from_bytes(result, 'big')
         if result != 0:
-            logging.error("停止节点[{}]失败！ Result: {}".format(edgenode, result))
+            logging.error("停止节点[{}]失败！ Result: {}".format(node.getName(), result))
         else:
-            logging.debug("Stop {} succeed! Result: {}".format(edgenode, result))
+            logging.debug("Stop {} succeed! Result: {}".format(node.getName(), result))
         # time.sleep(0.1)
-    logging.debug("Node {} stopped.".format(edgenode))
+    logging.debug("Node {} stopped.".format(node.getName()))
 
 class Manager(object):
     def __init__(self,yml):
