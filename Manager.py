@@ -38,7 +38,7 @@ def _configAndSubscribe(node, debug):
                 msg = 'Config node [{}] failed!'.format(node.getName())
             t_result.put((result, msg))
         except socket.timeout:
-            t_result.put((3, '>>> 配置节点 [{}] 失败! 获取反馈超时！'.format(node.getName())))
+            t_result.put((3, '>>> Config node [{}] failed! Fetch result timeout！'.format(node.getName())))
         except Exception as e:
             logging.error("Error!!! {}", e)
 
