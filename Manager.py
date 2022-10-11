@@ -25,7 +25,6 @@ def _configAndSubscribe(node, debug):
     logging.info("Config [%s]: %s", node.getName(), config_command)
     if not debug and not node.debug:
         sock.sendall(json.dumps(config_command).encode())
-        # sock.settimeout(recv_timeout)
         try:
             if hasattr(node, 'ignore_response') and node.ignore_response:
                 time.sleep(0.1)
@@ -322,7 +321,8 @@ class Manager(object):
         result = {'success': True}
         pre_stop_result = self.preStop(debug)
         result.update(pre_stop_result)
-        self.doStop(debug)
+        # self.doStop(debug)
+        self.doStopAsync(debug)
         self.postStop(debug)
         return result
 
