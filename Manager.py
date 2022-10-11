@@ -3,7 +3,7 @@ import traceback,socket,yaml,logging,time,json, threading, queue
 from nodes.NodeFactory import NodeFactory
 from ManagerExt import ManagerExt
 
-connect_timeout=18.0
+connect_timeout=30.0
 # recv_timeout=9.0
 
 t_result = queue.Queue()
@@ -321,8 +321,8 @@ class Manager(object):
         result = {'success': True}
         pre_stop_result = self.preStop(debug)
         result.update(pre_stop_result)
-        self.doStop(debug)
-        # self.doStopAsync(debug)
+        # self.doStop(debug)
+        self.doStopAsync(debug)
         self.postStop(debug)
         return result
 
