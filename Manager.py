@@ -40,6 +40,8 @@ def _configAndSubscribe(node, debug):
             t_result.put((result, msg))
         except socket.timeout:
             t_result.put((3, '>>> 配置节点 [{}] 失败! 获取反馈超时！'.format(node.getName())))
+        except Exception as e:
+            logging.error("Error!!! {}", e)
 
     # if not debug and not node.debug:
     #     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
