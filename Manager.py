@@ -321,8 +321,8 @@ class Manager(object):
         result = {'success': True}
         pre_stop_result = self.preStop(debug)
         result.update(pre_stop_result)
-        # self.doStop(debug)
-        self.doStopAsync(debug)
+        self.doStop(debug)
+        # self.doStopAsync(debug)
         self.postStop(debug)
         return result
 
