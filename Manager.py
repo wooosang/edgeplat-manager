@@ -4,7 +4,7 @@ from nodes.NodeFactory import NodeFactory
 from ManagerExt import ManagerExt
 
 connect_timeout=6.0
-recv_timeout=18.0
+recv_timeout=9.0
 
 t_result = queue.Queue()
 
@@ -25,7 +25,7 @@ def _configAndSubscribe(node, debug):
     logging.info("Config [%s]: %s", node.getName(), config_command)
     if not debug and not node.debug:
         sock.sendall(json.dumps(config_command).encode())
-        sock.settimeout(recv_timeout)
+        # sock.settimeout(recv_timeout)
         try:
             if hasattr(node, 'ignore_response') and node.ignore_response:
                 time.sleep(0.1)
@@ -43,16 +43,12 @@ def _configAndSubscribe(node, debug):
         except Exception as e:
             logging.error("Error!!! {}", e)
 
-    # if not debug and not node.debug:
-    #     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    #     sock.settimeout(recv_timeout)
-    #     sock.connect((nodeip, nodeport))
     subscribe_commands = node.getSubscribeCommand()
     if subscribe_commands:
         logging.info("Subscribe [%s]: %s", node.getName(), subscribe_commands)
         if not debug and not node.debug:
             for subscribe_command in subscribe_commands:
-                logging.info("%s: %s", node.getName(), subscribe_command)
+                # logging.info("%s: %s", node.getName(), subscribe_command)
                 sock.sendall(json.dumps(subscribe_command).encode())
                 if hasattr(node, 'ignore_response') and node.ignore_response:
                     time.sleep(0.1)
