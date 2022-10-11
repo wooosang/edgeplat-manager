@@ -58,7 +58,7 @@ def _configAndSubscribe(node, debug):
                         result = int.from_bytes(result, 'big')
                         logging.debug("Subscribe [{}] result: {}".format(node.getName(), result))
                     except Exception as e:
-                        t_result.put((-1, ">>> 订阅节点 [{}] 失败! 原因: {}".format(node.getName(), e)))
+                        t_result.put((-1, ">>> Subscribe [{}] failed! Reason: {}".format(node.getName(), e)))
                         return
             sock.close()
             msg = ''
