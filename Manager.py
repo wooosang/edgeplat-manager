@@ -4,7 +4,7 @@ from nodes.NodeFactory import NodeFactory
 from ManagerExt import ManagerExt
 
 connect_timeout=6.0
-recv_timeout=9.0
+recv_timeout=18.0
 
 t_result = queue.Queue()
 
@@ -25,7 +25,7 @@ def _configAndSubscribe(node, debug):
     logging.info("Config [%s]: %s", node.getName(), config_command)
     if not debug and not node.debug:
         sock.sendall(json.dumps(config_command).encode())
-        # sock.settimeout(recv_timeout)
+        sock.settimeout(recv_timeout)
         try:
             if hasattr(node, 'ignore_response') and node.ignore_response:
                 time.sleep(0.1)
@@ -49,7 +49,7 @@ def _configAndSubscribe(node, debug):
     #     sock.connect((nodeip, nodeport))
     subscribe_commands = node.getSubscribeCommand()
     if subscribe_commands:
-        logging.info("Ready to send to %s: %s", node.getName(), subscribe_commands)
+        logging.info("Subscribe [%s]: %s", node.getName(), subscribe_commands)
         if not debug and not node.debug:
             for subscribe_command in subscribe_commands:
                 logging.info("%s: %s", node.getName(), subscribe_command)
@@ -61,7 +61,7 @@ def _configAndSubscribe(node, debug):
                     try:
                         result = sock.recv(1)
                         result = int.from_bytes(result, 'big')
-                        logging.debug("Subscribe {} result: {}".format(node.getName(), result))
+                        logging.debug("Subscribe [{}] result: {}".format(node.getName(), result))
                     except Exception as e:
                         t_result.put((-1, ">>> 订阅节点 [{}] 失败! 原因: {}".format(node.getName(), e)))
                         return
