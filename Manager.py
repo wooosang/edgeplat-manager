@@ -3,7 +3,7 @@ import traceback,socket,yaml,logging,time,json, threading, queue
 from nodes.NodeFactory import NodeFactory
 from ManagerExt import ManagerExt
 
-connect_timeout=9.0
+connect_timeout=18.0
 # recv_timeout=9.0
 
 t_result = queue.Queue()
