@@ -2,6 +2,7 @@ name: dynamictest
 version: 1.0
 nodes:
   camera:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: 192.168.8.107:6000
     code: camera
     type: 2DCamera
@@ -15,6 +16,7 @@ nodes:
     subscriber:
       - uploader: 5555
   uploader:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/pyuploader:1.0
     endpoint: 192.168.8.107:8080
     config:
       url: http://172.18.74.41:9099/models/yansi/predict
