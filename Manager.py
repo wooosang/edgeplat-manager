@@ -32,7 +32,7 @@ def _configAndSubscribe(node, debug):
             else:
                 result = sock.recv(4)
                 result = int.from_bytes(result, 'big')
-            logging.debug("Config {} result: {}".format(node.getName(), result))
+            logging.debug("Config [{}] result: {}".format(node.getName(), result))
             msg = ''
             if result != 0:
                 msg = 'Config node [{}] failed!'.format(node.getName())
