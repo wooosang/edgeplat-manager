@@ -53,7 +53,7 @@ nodes:
       offline: 1
       loglevel: 1
     subscriber:
-#      - checker3: 5033
+      - checker3: 5033
       - preview_publisher: 5023
   camera4:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
@@ -86,6 +86,7 @@ nodes:
     endpoint: 192.168.2.244:8070
     config:
       outport: 5550
+#      saveall: true
   checker0:
     endpoint: 192.168.2.244:8000
     config:
@@ -93,9 +94,10 @@ nodes:
       face: 0
       width: 1920
       height: 950
-      mode: 0
+      mode: 2
+#      review: true
     subscriber:
-      - voter: 5080
+      - voter1: 5080
   checker1:
     endpoint: 192.168.2.244:8001
     config:
@@ -104,8 +106,9 @@ nodes:
       width: 1920
       height: 550
       mode: 2
+#      review: true
     subscriber:
-      - voter: 5081
+      - voter1: 5081
   checker2:
     endpoint: 192.168.2.244:8002
     config:
@@ -113,9 +116,10 @@ nodes:
       face: 2
       width: 480
       height: 900
-      mode: 0
+      mode: 2
+#      review: true
     subscriber:
-      - voter: 5082
+      - voter1: 5082
   checker3:
     endpoint: 192.168.2.244:8003
     config:
@@ -124,6 +128,7 @@ nodes:
       width: 1624
       height: 448
       mode: 2
+      review: true
     subscriber:
       - voter2: 5083
   checker4:
@@ -133,9 +138,10 @@ nodes:
       face: 4
       width: 1920
       height: 1050
-      mode: 0
+      mode: 2
+#      review: true
     subscriber:
-      - voter: 5084
+      - voter1: 5084
   checker5:
     endpoint: 192.168.2.244:8005
     config:
@@ -144,10 +150,11 @@ nodes:
       width: 480
       height: 900
       mode: 2
+#      review: true
     subscriber:
-      - voter: 5085
-  voter:
-    endpoint: 192.168.2.244:9001
+      - voter1: 5085
+  voter1:
+    endpoint: 192.168.2.244:9011
     config:
       type: socket
       ip: 192.168.2.244
@@ -155,7 +162,7 @@ nodes:
     subscriber:
       - publisher: 5091
   voter2:
-    endpoint: 192.168.2.244:9002
+    endpoint: 192.168.2.244:9012
     config:
       type: socket
       ip: 192.168.2.244
