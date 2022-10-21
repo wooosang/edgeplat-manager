@@ -15,7 +15,7 @@ nodes:
       loglevel: 1
     subscriber:
       - preview_publisher: 5020
-      - pypublisher: 5030
+      - publisher: 5030
   camera1:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: localhost:6021
@@ -29,7 +29,7 @@ nodes:
       offline: 1
     subscriber:
       - preview_publisher: 5021
-      - pypublisher: 5031
+      - publisher: 5031
   camera2:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: localhost:6022
@@ -43,7 +43,7 @@ nodes:
       offline: 1
     subscriber:
       - preview_publisher: 5022
-      - pypublisher: 5032
+      - publisher: 5032
   camera3:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: localhost:6023
@@ -57,7 +57,7 @@ nodes:
       offline: 1
     subscriber:
       - preview_publisher: 5023
-      - pypublisher: 5033
+      - publisher: 5033
   camera4:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: localhost:6024
@@ -72,7 +72,7 @@ nodes:
       loglevel: 1
     subscriber:
       - preview_publisher: 5024
-      - pypublisher: 5034
+      - publisher: 5034
   camera5:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: localhost:6025
@@ -86,7 +86,7 @@ nodes:
       offline: 1
     subscriber:
       - preview_publisher: 5025
-      - pypublisher: 5035
+      - publisher: 5035
   preview_publisher:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/preview:1.0
     endpoint: localhost:8070
