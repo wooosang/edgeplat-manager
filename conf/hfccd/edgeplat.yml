@@ -1,0 +1,13 @@
+name: offlinetest
+version: 1.0
+nodes:
+  publisher:
+    endpoint: 192.168.10.10:8092
+    debug: true
+    config:
+      host: 192.168.10.10
+      port: 5672
+      username: admin
+      password: softwork
+      exchange: goldenhome
+      routekey: detect
