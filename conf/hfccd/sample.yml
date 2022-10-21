@@ -3,7 +3,7 @@ version: 1.0
 nodes:
   camera0:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
-    endpoint: 192.168.2.244:6020
+    endpoint: localhost:6020
     code: camera0
     type: 2DCamera
     config:
@@ -18,7 +18,7 @@ nodes:
       - pypublisher: 5030
   camera1:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
-    endpoint: 192.168.2.244:6021
+    endpoint: localhost:6021
     code: camera1
     type: 2DCamera
     config:
@@ -32,7 +32,7 @@ nodes:
       - pypublisher: 5031
   camera2:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
-    endpoint: 192.168.2.244:6022
+    endpoint: localhost:6022
     code: camera2
     type: 2DCamera
     config:
@@ -46,7 +46,7 @@ nodes:
       - pypublisher: 5032
   camera3:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
-    endpoint: 192.168.2.244:6023
+    endpoint: localhost:6023
     code: camera3
     type: 2DCamera
     config:
@@ -60,7 +60,7 @@ nodes:
       - pypublisher: 5033
   camera4:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
-    endpoint: 192.168.2.244:6024
+    endpoint: localhost:6024
     code: camera4
     type: 2DCamera
     config:
@@ -75,7 +75,7 @@ nodes:
       - pypublisher: 5034
   camera5:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
-    endpoint: 192.168.2.244:6025
+    endpoint: localhost:6025
     code: camera5
     type: 2DCamera
     config:
@@ -89,12 +89,12 @@ nodes:
       - pypublisher: 5035
   preview_publisher:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/preview:1.0
-    endpoint: 192.168.2.244:8070
+    endpoint: localhost:8070
     config:
       outport: 5550
   publisher:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/publisher:1.0
-    endpoint: 192.168.2.244:8071
+    endpoint: localhost:8071
     ignore_response: true
     type: Uploader
     config:
