@@ -61,6 +61,11 @@ class Node:
             config_command['config'] = self.config
         else:
             config_command = self.config
+
+        if parameter:
+            for key in parameter:
+                config_command[key] = parameter[key]
+
         config_command['command'] = 'config'
 
         if self.hasConfig('cameraip') and self.sources:
@@ -95,6 +100,9 @@ class Node:
             consume = 'tcp://' + self.sources[0].getIp() + ':' + str(self.sources[0].getOutboundPort(self.getName()))
             start_command['endpoint'] = consume
 
+        if parameter:
+            for key in parameter:
+                start_command[key] = parameter[key]
         start_command['command'] = 'start'
         return start_command
 

@@ -8,7 +8,7 @@ connect_timeout=30.0
 
 t_result = queue.Queue()
 
-def _configAndSubscribe(node, debug):
+def _configAndSubscribe(node, parameter, debug):
     global t_result
     logging.debug("Debug mode: {}".format(debug))
     logging.debug("{} Start config node: [{}] \n".format(threading.current_thread().name, node.getName()))
@@ -20,7 +20,7 @@ def _configAndSubscribe(node, debug):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(connect_timeout)
         sock.connect((nodeip, nodeport))
-    config_command = node.getConfigCommand()
+    config_command = node.getConfigCommand(parameter)
     # config_command = config_command | config
     logging.info("Config [%s]: %s", node.getName(), config_command)
     if not debug and not node.debug:
@@ -179,7 +179,7 @@ class Manager(object):
         start_thread_list = []
         for edgenode in self.edgenodes:
             node = self.edgenodes[edgenode]
-            config_t = threading.Thread(target=_configAndSubscribe, args=( node, debug,))
+            config_t = threading.Thread(target=_configAndSubscribe, args=( node, parameter, debug,))
             config_thread_list.append(config_t)
             start_t = threading.Thread(target=_start, args=(node, parameter, debug,))
             start_thread_list.append(start_t)
