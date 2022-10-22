@@ -3,11 +3,11 @@ version: 1.0
 nodes:
   camera0:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
-    endpoint: localhost:6020
+    endpoint: 172.17.0.1:6020
     code: camera0
     type: 2DCamera
     config:
-      cameraip: 192.168.40.20
+      cameraip: 192.168.0.20
       station: S1_0_2D
       face: 0
       offline: 1
@@ -17,11 +17,11 @@ nodes:
       - preview_publisher: 5020
   camera1:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
-    endpoint: localhost:6021
+    endpoint: 172.17.0.1:6021
     code: camera1
     type: 2DCamera
     config:
-      cameraip: 192.168.20.20
+      cameraip: 192.168.1.20
       station: S1_1_2D
       face: 1
       offline: 1
@@ -30,11 +30,11 @@ nodes:
       - preview_publisher: 5021
   camera2:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
-    endpoint: localhost:6022
+    endpoint: 172.17.0.1:6022
     code: camera2
     type: 2DCamera
     config:
-      cameraip: 192.168.50.20
+      cameraip: 192.168.2.20
       station: S1_2_2D
       face: 2
       offline: 1
@@ -43,11 +43,11 @@ nodes:
       - preview_publisher: 5022
   camera3:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
-    endpoint: localhost:6023
+    endpoint: 172.17.0.1:6023
     code: camera3
     type: 2DCamera
     config:
-      cameraip: 192.168.60.20
+      cameraip: 192.168.3.20
       station: S1_3_2D
       face: 3
       offline: 1
@@ -57,11 +57,11 @@ nodes:
       - preview_publisher: 5023
   camera4:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
-    endpoint: localhost:6024
+    endpoint: 172.17.0.1:6024
     code: camera4
     type: 2DCamera
     config:
-      cameraip: 192.168.10.20
+      cameraip: 192.168.4.20
       station: S1_4_2D
       face: 4
       offline: 1
@@ -71,11 +71,12 @@ nodes:
       - preview_publisher: 5024
   camera5:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
-    endpoint: localhost:6025
+    endpoint: 172.17.0.1:6025
     code: camera5
     type: 2DCamera
+    debug: true
     config:
-      cameraip: 192.168.30.20
+      cameraip: 192.168.5.20
       station: S1_5_2D
       face: 5
       offline: 1
@@ -84,85 +85,85 @@ nodes:
       - preview_publisher: 5025
   preview_publisher:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/preview:1.0
-    endpoint: localhost:8070
+    endpoint: 172.17.0.1:8070
     config:
       outport: 5550
 #      saveall: true
   checker0:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
-    endpoint: localhost:8000
+    endpoint: 172.17.0.1:8000
     config:
       savepath: /home/ubuntu/work/defects
       face: 0
       width: 1920
       height: 950
-      mode: 2
+      mode: 0
 #      review: true
     subscriber:
       - voter1: 5080
   checker1:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
-    endpoint: localhost:8001
+    endpoint: 172.17.0.1:8001
     config:
       savepath: /home/ubuntu/work/defects
       face: 1
       width: 1920
       height: 550
-      mode: 2
+      mode: 0
 #      review: true
     subscriber:
       - voter1: 5081
   checker2:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
-    endpoint: localhost:8002
+    endpoint: 172.17.0.1:8002
     config:
       savepath: /home/ubuntu/work/defects
       face: 2
       width: 480
       height: 900
-      mode: 2
+      mode: 0
 #      review: true
     subscriber:
       - voter1: 5082
   checker3:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
-    endpoint: localhost:8003
+    endpoint: 172.17.0.1:8003
     config:
       savepath: /home/ubuntu/work/defects
       face: 3
       width: 1624
       height: 448
-      mode: 2
+      mode: 0
       review: true
     subscriber:
       - voter2: 5083
   checker4:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
-    endpoint: localhost:8004
+    endpoint: 172.17.0.1:8004
     config:
       savepath: /home/ubuntu/work/defects
       face: 4
       width: 1920
       height: 1050
-      mode: 2
+      mode: 0
 #      review: true
     subscriber:
       - voter1: 5084
   checker5:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
-    endpoint: localhost:8005
+    endpoint: 172.17.0.1:8005
     config:
       savepath: /home/ubuntu/work/defects
       face: 5
       width: 480
       height: 900
-      mode: 2
+      mode: 0
 #      review: true
     subscriber:
       - voter1: 5085
   voter1:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/voter:1.0
-    endpoint: localhost:9011
+    endpoint: 172.17.0.1:9011
     config:
       type: socket
       ip: 192.168.2.244
@@ -171,7 +172,7 @@ nodes:
       - publisher: 5091
   voter2:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/voter:1.0
-    endpoint: localhost:9012
+    endpoint: 172.17.0.1:9012
     config:
       type: socket
       ip: 192.168.2.244
@@ -180,7 +181,7 @@ nodes:
       - publisher: 5092
   publisher:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/publisher:1.0
-    endpoint: localhost:8071
+    endpoint: 172.17.0.1:8071
     ignore_response: true
     type: Uploader
     config:
