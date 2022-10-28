@@ -10,7 +10,6 @@ nodes:
       cameraip: 192.168.0.20
       station: S1_0_2D
       face: 0
-      savepath: /home/ubuntu/work/samples/0
       offline: 1
       loglevel: 1
     subscriber:
@@ -24,7 +23,6 @@ nodes:
       cameraip: 192.168.1.20
       station: S1_1_2D
       face: 1
-      savepath: /home/ubuntu/work/samples/1
       offline: 1
     subscriber:
       - preview_publisher: 5021
@@ -37,7 +35,6 @@ nodes:
       cameraip: 192.168.2.20
       station: S1_2_2D
       face: 2
-      savepath: /home/ubuntu/work/samples/2
       offline: 1
     subscriber:
       - preview_publisher: 5022
@@ -50,7 +47,6 @@ nodes:
       cameraip: 192.168.3.20
       station: S1_3_2D
       face: 3
-      savepath: /home/ubuntu/work/samples/3
       offline: 1
     subscriber:
       - preview_publisher: 5023
@@ -63,7 +59,6 @@ nodes:
       cameraip: 192.168.4.20
       station: S1_4_2D
       face: 4
-      savepath: /home/ubuntu/work/samples/4
       offline: 1
       loglevel: 1
     subscriber:
@@ -78,7 +73,6 @@ nodes:
       cameraip: 192.168.5.20
       station: S1_5_2D
       face: 5
-      savepath: /home/ubuntu/work/samples/5
       offline: 1
     subscriber:
       - preview_publisher: 5025
