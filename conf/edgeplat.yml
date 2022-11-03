@@ -13,6 +13,8 @@ nodes:
   checker:
     deploy:
       image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
+      volume: /home/ubuntu/work/edgeplat/nodes/defect_checker:/app
+      command: /app/defect_checker -p 8000
     endpoint: localhost:6060
     config:
       face: 0
