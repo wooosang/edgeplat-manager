@@ -4,6 +4,7 @@ import traceback
 from Manager import Manager
 from flask import Flask, jsonify, request
 from ManagerExt import ext_api
+from AgentHelper import AgentHelper
 
 edgenodes = {}
 debug=False
@@ -23,7 +24,7 @@ formatter = logging.Formatter(log_file_format)
 handler.setFormatter(formatter) #设置文件的log格式
 main_logger.addHandler(handler)
 
-
+agentHelpers = {}
 
 app = Flask(__name__)
 app.register_blueprint(ext_api)
@@ -50,6 +51,26 @@ def start():
     logging.debug("Request body: {}".format(request_param))
     result = doStop(conf, debug)
     return doStart(conf, request_param, debug)
+
+@app.route("/register", methods=["POST"])
+def register():
+    logging.debug("Register an agent........")
+    request_json = request.get_json()
+    logging.debug("Agent params: {}".format(request_json))
+    ip = request_json['agent_ip']
+    agentHelper = AgentHelper()
+    agentHelper.parseConfig(request_json)
+    agentHelpers[ip] = agentHelper
+    return {"success": True}
+
+@app.route("/deploy")
+def deploy():
+    logging.debug("Begin deploy!")
+    try:
+        app.manager.deploy(agentHelpers)
+    except Exception as e:
+        return {"success": False, "msg": str(e)}
+    return {"success": True}
 
 def doStop(conf=None, debug=False):
     logging.debug("Start stopping................")
@@ -109,7 +130,6 @@ def init(conf):
     ext_api.manager = app.manager
 
 if __name__ == '__main__':
-    # ext_api.manager = app.manager
     conf = 'conf/edgeplat.yml'
     init(conf)
     app.run(debug=False, host='0.0.0.0', port=9000)

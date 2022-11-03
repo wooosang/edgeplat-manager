@@ -116,3 +116,10 @@ class Node:
 
     def hasConfig(self, key):
         return key in self.config
+
+    def getJson(self):
+        data = dict()
+        data['name'] = self.name
+        data['command_port'] = self.port
+        data['config'] = self.yml
+        return data

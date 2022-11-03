@@ -2,15 +2,27 @@ name: base
 version: 1.0
 nodes:
   test:
-    endpoint: 192.168.9.135:8080
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
+      volume:
+        - /home/ubuntu/work/edgeplat/logs/voter1:/app/logs
+    endpoint: localhost:8080
     debug: true
     subscriber:
       - checker: 5030
   checker:
-    endpoint: 192.168.9.135:8800
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
+    endpoint: localhost:6060
     config:
       face: 0
       width: 1920
       height: 950
+    subscriber:
+      - voter: 9000
+  voter:
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/voter:1.0
+    endpoint: localhost:9011
 
 

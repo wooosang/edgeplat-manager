@@ -385,3 +385,17 @@ class Manager(object):
                     sock.close()
                     logging.debug("Close connection to {}".format(edgenode))
 
+    def deploy(self, agentHelpers, debug=False):
+        for edgenode in self.edgenodes:
+            try:
+                node = self.edgenodes[edgenode]
+                if str(node.getIp()) not in agentHelpers:
+                    raise Exception("Agent on {} not exists!".format(node.getIp()))
+                agentHelper = agentHelpers[node.getIp()]
+                logging.debug("Begin deploy node [{}] by agent [{}]".format(node.getName(), agentHelper.getName()))
+                agentHelper.deploy(node)
+            except Exception as e:
+                logging.error(e)
+                raise e
+
+
