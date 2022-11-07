@@ -6,7 +6,7 @@ class CameraNode(Node):
         super(CameraNode,self).__init__(name,config)
 
     def getConfigCommand(self, parameter={}):
-        configCommand = super(CameraNode, self).getConfigCommand(self)
+        configCommand = super(CameraNode, self).getConfigCommand(parameter)
         return configCommand
 
     def getSubscribeCommand(self):
