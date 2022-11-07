@@ -45,12 +45,17 @@ def doStart(conf=None, request_param={}, debug=False):
 @app.route("/start", methods=["POST"])
 def start():
     logging.debug(request)
+    if 'starting' in app.config:
+        return {"success": False, "msg": "Already starting!"}
+    app.config["starting"] = True
     debug = request.args.get('debug')
     conf = request.args.get('conf')
     request_param = request.get_json()
     logging.debug("Request body: {}".format(request_param))
     result = doStop(conf, debug)
-    return doStart(conf, request_param, debug)
+    reesult = doStart(conf, request_param, debug)
+    del app.config['starting']
+    return result
 
 @app.route("/register", methods=["POST"])
 def register():
