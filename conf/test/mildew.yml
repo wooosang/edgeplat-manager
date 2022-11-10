@@ -1,0 +1,8 @@
+name: mildew
+version: 1.0
+nodes:
+  camera:
+    endpoint: localhost:8888
+    deploy:
+      image: camera/mildew/1.0.zip
+      command: Debug/FigSpecDemo.exe

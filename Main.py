@@ -72,6 +72,8 @@ def register():
 def deploy():
     logging.debug("Begin deploy!")
     try:
+        conf = request.args.get('conf')
+        init('conf/' + conf + '.yml')
         app.manager.deploy(agentHelpers)
     except Exception as e:
         return {"success": False, "msg": str(e)}
