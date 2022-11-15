@@ -2,17 +2,18 @@ name: onlinecheck
 version: 1.0
 nodes:
   camera0:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/mockcamera:1.0
     endpoint: 192.168.8.105:6020
     code: camera0
     type: 2DCamera
-    debug: true
     config:
       cameraip: 192.168.40.20
       station: S1_0_2D
       face: 0
       offline: 1
       loglevel: 1
+      image_path: /Users/woosang/Downloads/wyccd/0-20221107
+      frequency: 2
     subscriber:
       - checker0: 5030
       - preview_publisher: 5020
