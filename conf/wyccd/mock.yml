@@ -1,0 +1,187 @@
+name: onlinecheck
+version: 1.0
+nodes:
+  camera0:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
+    endpoint: 192.168.8.105:6020
+    code: camera0
+    type: 2DCamera
+    debug: true
+    config:
+      cameraip: 192.168.40.20
+      station: S1_0_2D
+      face: 0
+      offline: 1
+      loglevel: 1
+    subscriber:
+      - checker0: 5030
+      - preview_publisher: 5020
+  camera1:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
+    endpoint: 192.168.8.105:6021
+    code: camera1
+    type: 2DCamera
+    debug: true
+    config:
+      cameraip: 192.168.20.20
+      station: S1_1_2D
+      face: 1
+      offline: 1
+    subscriber:
+      - checker1: 5031
+      - preview_publisher: 5021
+  camera2:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
+    endpoint: 192.168.8.105:6022
+    code: camera2
+    type: 2DCamera
+    debug: true
+    config:
+      cameraip: 192.168.50.20
+      station: S1_2_2D
+      face: 2
+      offline: 1
+    subscriber:
+      - checker2: 5032
+      - preview_publisher: 5022
+  camera3:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
+    endpoint: 192.168.8.105:6023
+    code: camera3
+    type: 2DCamera
+    debug: true
+    config:
+      cameraip: 192.168.60.20
+      station: S1_3_2D
+      face: 3
+      offline: 1
+      loglevel: 1
+    subscriber:
+      - checker3: 5033
+      - preview_publisher: 5023
+  camera4:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
+    endpoint: 192.168.8.105:6024
+    code: camera4
+    type: 2DCamera
+    debug: true
+    config:
+      cameraip: 192.168.10.20
+      station: S1_4_2D
+      face: 4
+      offline: 1
+      loglevel: 1
+    subscriber:
+      - checker4: 5034
+      - preview_publisher: 5024
+  camera5:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
+    endpoint: 192.168.8.105:6025
+    code: camera5
+    type: 2DCamera
+    debug: true
+    config:
+      cameraip: 192.168.30.20
+      station: S1_5_2D
+      face: 5
+      offline: 1
+    subscriber:
+      - checker5: 5035
+      - preview_publisher: 5025
+  preview_publisher:
+    endpoint: 192.168.8.105:8070
+    config:
+      outport: 5550
+#      saveall: true
+  checker0:
+    endpoint: 192.168.8.105:8000
+    config:
+      savepath: /home/ubuntu/work/defects
+      face: 0
+      width: 1920
+      height: 950
+      mode: 2
+#      review: true
+    subscriber:
+      - voter1: 5080
+  checker1:
+    endpoint: 192.168.8.105:8001
+    config:
+      savepath: /home/ubuntu/work/defects
+      face: 1
+      width: 1920
+      height: 550
+      mode: 2
+#      review: true
+    subscriber:
+      - voter1: 5081
+  checker2:
+    endpoint: 192.168.8.105:8002
+    config:
+      savepath: /home/ubuntu/work/defects
+      face: 2
+      width: 480
+      height: 900
+      mode: 2
+#      review: true
+    subscriber:
+      - voter1: 5082
+  checker3:
+    endpoint: 192.168.8.105:8003
+    config:
+      savepath: /home/ubuntu/work/defects
+      face: 3
+      width: 1624
+      height: 448
+      mode: 2
+    subscriber:
+      - voter2: 5083
+  checker4:
+    endpoint: 192.168.8.105:8004
+    config:
+      savepath: /home/ubuntu/work/defects
+      face: 4
+      width: 1920
+      height: 1050
+      mode: 2
+#      review: true
+    subscriber:
+      - voter1: 5084
+  checker5:
+    endpoint: 192.168.8.105:8005
+    config:
+      savepath: /home/ubuntu/work/defects
+      face: 5
+      width: 480
+      height: 900
+      mode: 2
+#      review: true
+    subscriber:
+      - voter1: 5085
+  voter1:
+    endpoint: 192.168.8.105:9011
+    config:
+      type: socket
+      ip: 192.168.8.105
+      port: 3000
+    subscriber:
+      - publisher: 5091
+  voter2:
+    endpoint: 192.168.8.105:9012
+    config:
+      type: socket
+      ip: 192.168.8.105
+      port: 4000
+    subscriber:
+      - publisher: 5092
+  publisher:
+    endpoint: 192.168.8.105:8071
+    ignore_response: true
+    type: Uploader
+    config:
+      host: 192.168.8.105
+      port: 5672
+      username: admin
+      password: softwork
+      exchange: ccd
+      routekey: defect
