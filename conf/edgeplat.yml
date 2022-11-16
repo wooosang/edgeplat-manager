@@ -16,7 +16,7 @@ nodes:
       volume:
         - /home/ubuntu/work/edgeplat/nodes/defect_checker:/app
       command: /app/defect_checker -p 8000
-    endpoint: localhost:6060
+    endpoint: 192.168.8.120:8000
     config:
       face: 0
       width: 1920
@@ -27,5 +27,6 @@ nodes:
     deploy:
       image: registry.cn-hangzhou.aliyuncs.com/open-ys/voter:1.0
     endpoint: localhost:9011
+    debug: true
 
 

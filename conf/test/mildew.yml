@@ -5,4 +5,5 @@ nodes:
     endpoint: localhost:8888
     deploy:
       image: camera/mildew/1.0.zip
+      svcname: mildew
       command: Debug/FigSpecDemo.exe
