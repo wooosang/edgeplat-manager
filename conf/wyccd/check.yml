@@ -2,7 +2,6 @@ name: onlinecheck
 version: 1.0
 nodes:
   camera0:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: 192.168.2.244:6020
     code: camera0
     type: 2DCamera
@@ -12,11 +11,12 @@ nodes:
       face: 0
       offline: 1
       loglevel: 1
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     subscriber:
       - checker0: 5030
       - preview_publisher: 5020
   camera1:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: 192.168.2.244:6021
     code: camera1
     type: 2DCamera
@@ -25,11 +25,12 @@ nodes:
       station: S1_1_2D
       face: 1
       offline: 1
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     subscriber:
       - checker1: 5031
       - preview_publisher: 5021
   camera2:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: 192.168.2.244:6022
     code: camera2
     type: 2DCamera
@@ -38,11 +39,12 @@ nodes:
       station: S1_2_2D
       face: 2
       offline: 1
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     subscriber:
       - checker2: 5032
       - preview_publisher: 5022
   camera3:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: 192.168.2.244:6023
     code: camera3
     type: 2DCamera
@@ -52,11 +54,12 @@ nodes:
       face: 3
       offline: 1
       loglevel: 1
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     subscriber:
       - checker3: 5033
       - preview_publisher: 5023
   camera4:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: 192.168.2.244:6024
     code: camera4
     type: 2DCamera
@@ -66,11 +69,12 @@ nodes:
       face: 4
       offline: 1
       loglevel: 1
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     subscriber:
       - checker4: 5034
       - preview_publisher: 5024
   camera5:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: 192.168.2.244:6025
     code: camera5
     type: 2DCamera
@@ -79,6 +83,8 @@ nodes:
       station: S1_5_2D
       face: 5
       offline: 1
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     subscriber:
       - checker5: 5035
       - preview_publisher: 5025
