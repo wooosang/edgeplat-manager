@@ -1,0 +1,62 @@
+name: offlinetest
+version: 1.0
+nodes:
+  camera0:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
+    endpoint: 172.17.0.1:6020
+    code: camera0
+    type: 2DCamera
+    config:
+      cameraip: 192.168.0.20
+      station: S1_0_2D
+      face: 0
+      offline: 1
+      loglevel: 1
+    subscriber:
+      - checker0: 5030
+      - preview_publisher: 5020
+
+  preview_publisher:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/preview:1.0
+    endpoint: 172.17.0.1:8070
+    config:
+      outport: 5550
+
+  checker0:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
+    endpoint: 172.17.0.1:8000
+    config:
+      savepath: /home/ubuntu/work/defects
+      face: 0
+      width: 1920
+      height: 950
+      mode: 0
+    #      review: true
+    subscriber:
+      - voter1: 5080
+
+  voter1:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/voter:1.0
+    endpoint: 172.17.0.1:9011
+    config:
+      type: socket
+      ip: 192.168.2.244
+      port: 3000
+    subscriber:
+      - publisher: 5091
+
+  publisher:
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/publisher:1.0
+    endpoint: 172.17.0.1:8071
+    ignore_response: true
+    type: Uploader
+    config:
+      host: 192.168.2.244
+      port: 5672
+      username: admin
+      password: softwork
+      exchange: ccd
+      routekey: defect
+
+monitor:
+  interval: 1s

@@ -331,7 +331,7 @@ class Manager(object):
         stop_thread_list = []
         for edgenode in self.edgenodes:
             node = self.edgenodes[edgenode]
-            stop_t = threading.Thread(target=_stop, args=(node, debug,))
+            stop_t = threading.Thread(target=_stop, args=(node, None, debug))
             stop_thread_list.append(stop_t)
         for t in stop_thread_list:
             t.setDaemon(True)
