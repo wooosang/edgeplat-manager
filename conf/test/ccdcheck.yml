@@ -2,6 +2,7 @@ name: offlinetest
 version: 1.0
 nodes:
   camera0:
+    description: 相机采集节点0
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: 172.17.0.1:6020
     code: camera0
@@ -17,12 +18,14 @@ nodes:
       - preview_publisher: 5020
 
   preview_publisher:
+    description: 预览节点
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/preview:1.0
     endpoint: 172.17.0.1:8070
     config:
       outport: 5550
 
   checker0:
+    description: 检测节点0
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
     endpoint: 172.17.0.1:8000
     config:
@@ -36,6 +39,7 @@ nodes:
       - voter1: 5080
 
   voter1:
+    description: 决策节点0
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/voter:1.0
     endpoint: 172.17.0.1:9011
     config:
@@ -46,6 +50,7 @@ nodes:
       - publisher: 5091
 
   publisher:
+    description: 发布节点
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/publisher:1.0
     endpoint: 172.17.0.1:8071
     ignore_response: true
@@ -60,3 +65,4 @@ nodes:
 
 monitor:
   interval: 1s
+  conf_path: /home/ubuntu/data/prometheus/conf.d

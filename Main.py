@@ -132,6 +132,14 @@ def upload():
         return jsonify({"success": True, "msg": "文件上传成功!"})
     return jsonify({"success": False, "msg":"文件上传失败！未找到文件"})
 
+@app.route('/monitor/deploy',methods = ['GET', 'POST'], strict_slashes=False)
+def monitor_deploy():
+    conf = request.args.get('conf')
+    if conf:
+        manager = Manager('conf/'+conf+'.yml')
+        manager.deploy_monitor()
+    return {"success": True}
+
 def init(conf):
     app.manager = Manager(conf)
     ext_api.manager = app.manager

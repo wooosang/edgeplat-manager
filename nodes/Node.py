@@ -123,3 +123,18 @@ class Node:
         data['command_port'] = self.port
         data['config'] = self.yml
         return data
+
+    def getMonitor_conf(self):
+        nodes = []
+        node = {}
+        nodes.append(node)
+        node['targets'] = self.yml['endpoint']
+
+        labels = {}
+        node['lables'] = labels
+        labels['name'] = self.name
+        if 'description' in self.yml:
+            labels['description'] = self.yml['description']
+        else:
+            labels['description'] = self.name
+        return nodes

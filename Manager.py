@@ -128,6 +128,7 @@ def _stop(node, parameter, debug=False):
 class Manager(object):
     def __init__(self,yml):
         logging.debug('Init config file {}'.format(yml))
+        self.conf = yml
         self.edgenodes = {}
         with open(yml, 'r',encoding='utf-8') as file:
             edgeconfig = yaml.safe_load(file)
@@ -398,4 +399,10 @@ class Manager(object):
                 logging.error(e)
                 raise e
 
+    def deploy_monitor(self):
+        print("Begin deploy monitor {}.".format(self.conf))
+        for edgenode in self.edgenodes:
+            node = self.edgenodes[edgenode]
+            logging.debug("Begin deploy monitor [{}]".format(node.getName()))
+            logging.debug("Monitor conf: {}".format(node.getMonitor_conf()))
 
