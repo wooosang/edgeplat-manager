@@ -4,7 +4,7 @@ nodes:
   camera0:
     description: 相机采集节点0
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
-    endpoint: localhost:6020
+    endpoint: 192.168.9.149:6020
     code: camera0
     type: 2DCamera
     config:
@@ -20,14 +20,14 @@ nodes:
   preview_publisher:
     description: 预览节点
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/preview:1.0
-    endpoint: localhost:8070
+    endpoint: 192.168.9.149:8070
     config:
       outport: 5550
 
   checker0:
     description: 检测节点0
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
-    endpoint: localhost:8000
+    endpoint: 192.168.9.149:8000
     config:
       savepath: /home/ubuntu/work/defects
       face: 0
@@ -41,7 +41,7 @@ nodes:
   voter1:
     description: 决策节点0
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/voter:1.0
-    endpoint: localhost:9011
+    endpoint: 192.168.9.149:9011
     config:
       type: socket
       ip: 192.168.2.244
@@ -52,7 +52,7 @@ nodes:
   publisher:
     description: 发布节点
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/publisher:1.0
-    endpoint: localhost:8071
+    endpoint: 192.168.9.149:8071
     ignore_response: true
     type: Uploader
     config:
