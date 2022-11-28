@@ -73,9 +73,12 @@ def deploy():
     logging.debug("Begin deploy!")
     try:
         conf = request.args.get('conf')
+        if not conf:
+            conf = 'edgeplat'
         init('conf/' + conf + '.yml')
         app.manager.deploy(agentHelpers)
     except Exception as e:
+        traceback.print_exc()
         return {"success": False, "msg": str(e)}
     return {"success": True}
 
@@ -135,10 +138,14 @@ def upload():
 @app.route('/monitor/deploy',methods = ['GET', 'POST'], strict_slashes=False)
 def monitor_deploy():
     conf = request.args.get('conf')
-    if conf:
-        manager = Manager('conf/'+conf+'.yml')
-        manager.deploy_monitor()
-    return {"success": True}
+    try:
+        if conf:
+            manager = Manager('conf/'+conf+'.yml')
+            manager.deploy_monitor(agentHelpers)
+        return {"success": True}
+    except Exception as e:
+        traceback.print_exc()
+        return {"success": False, "msg": str(e)}
 
 def init(conf):
     app.manager = Manager(conf)

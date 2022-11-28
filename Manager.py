@@ -2,6 +2,7 @@
 import traceback,socket,yaml,logging,time,json, threading, queue
 from nodes.NodeFactory import NodeFactory
 from ManagerExt import ManagerExt
+from configparser import ConfigParser
 
 connect_timeout=30.0
 # recv_timeout=9.0
@@ -127,6 +128,10 @@ def _stop(node, parameter, debug=False):
 
 class Manager(object):
     def __init__(self,yml):
+        configfile = 'manager.ini'
+        conf = ConfigParser()  # 需要实例化一个ConfigParser对象
+        conf.read(configfile)
+        self.manager_config = conf
         logging.debug('Init config file {}'.format(yml))
         self.conf = yml
         self.edgenodes = {}
@@ -394,13 +399,34 @@ class Manager(object):
                     raise Exception("Agent on {} not exists!".format(node.getIp()))
                 agentHelper = agentHelpers[node.getIp()]
                 logging.debug("Begin deploy node [{}] by agent [{}]".format(node.getName(), agentHelper.getName()))
-                agentHelper.deploy(node)
+                agentHelper.deploy_node(node)
             except Exception as e:
                 logging.error(e)
                 raise e
 
-    def deploy_monitor(self):
-        print("Begin deploy monitor {}.".format(self.conf))
+    def deploy_monitor(self, agentHelpers):
+        monitor_server_ip = self.manager_config['monitor']['server_ip']
+        # logging.debug("Begin deploy monitor {} on server {}.".format(self.conf, monitor_server_ip))
+        # if str(monitor_server_ip) not in agentHelpers:
+        #     raise Exception("Agent on {} not exists!".format(monitor_server_ip))
+        #
+        # monitor_server_helper = agentHelpers[str(monitor_server_ip)]
+        # monitor_server_helper.deploy_monitor_slave()
+
+        #Deploy monitor slave
+        slaves = {}
+        for edgenode in self.edgenodes:
+            node = self.edgenodes[edgenode]
+            logging.debug("Add slave {}".format(node.getIp()))
+            slaves[node.getIp()] = node.getIp()
+
+        for slave in slaves:
+            logging.debug("Deploy slave {}".format(slave))
+            if slave not in agentHelpers:
+                raise Exception("Agent on [{}] not exists!".format(slave))
+            slaveAgentHelper = agentHelpers[slave]
+            slaveAgentHelper.deploy_monitor_slave()
+
         for edgenode in self.edgenodes:
             node = self.edgenodes[edgenode]
             logging.debug("Begin deploy monitor [{}]".format(node.getName()))

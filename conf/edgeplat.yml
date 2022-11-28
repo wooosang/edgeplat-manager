@@ -16,7 +16,7 @@ nodes:
       volume:
         - /home/ubuntu/work/edgeplat/nodes/defect_checker:/app
       command: /app/defect_checker -p 8000
-    endpoint: 192.168.8.120:8000
+    endpoint: localhost:8000
     config:
       face: 0
       width: 1920
