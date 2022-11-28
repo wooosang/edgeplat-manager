@@ -30,6 +30,8 @@ class AgentHelper(object):
     def deploy_monitor_slave(self):
         logging.debug("部署节点服务器资源监控服务......")
         #目前是部署node_exporter容器
+        self.req = self.context.socket(zmq.REQ)
+        self.req.connect("tcp://" + self.ip + ":" + str(self.port))
         command = {}
         command['command'] = 'deploy_monitor_slave'
         command['config'] = {}
