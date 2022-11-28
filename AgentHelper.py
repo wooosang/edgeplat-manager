@@ -37,21 +37,25 @@ class AgentHelper(object):
         command['config'] = {}
         self.req.send_string(json.dumps(command))
         result = self.req.recv_string()
-        logging.debug("Deploy monitor server [{}] result: {}".format(self.ip, result))
+        logging.debug("Deploy monitor slave [{}] result: {}".format(self.ip, result))
         return result
 
     def deploy_monitor_node(self):
         logging.debug("部署节点存活监控服务.......")
         #目前是使用promethues中的blackbox模块，故直接使用不再做其它处理
 
-    def deploy_monitor_server_config(self):
-        logging.debug("在prometheus上部署服务器资源监控配置......")
-        #在配置文件夹中增加配置文件  server-ccd.json
-        #[
-        #   {
-        #       "targets": [ "192.168.9.149:9100"]
-        #   }
-        #]
+    def deploy_monitor_slave_config(self, slave_ip):
+        logging.debug("在prometheus上部署服务器[{}]资源监控配置......".format(slave_ip))
+        self.req = self.context.socket(zmq.REQ)
+        self.req.connect("tcp://" + self.ip + ":" + str(self.port))
+        command = {}
+        command['command'] = 'deploy_monitor_slave_config'
+        command['config'] = {"ip":slave_ip}
+        self.req.send_string(json.dumps(command))
+        result = self.req.recv_string()
+        logging.debug("Deploy monitor slave [{}] config result: {}".format(self.ip, result))
+        return result
+
 
     def deploy_monitor_node_config(self, node):
         logging.debug("在prometheus上部署节点存活监控配置......")

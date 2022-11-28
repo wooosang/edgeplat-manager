@@ -407,11 +407,11 @@ class Manager(object):
     def deploy_monitor(self, agentHelpers):
         monitor_server_ip = self.manager_config['monitor']['server_ip']
         # logging.debug("Begin deploy monitor {} on server {}.".format(self.conf, monitor_server_ip))
-        # if str(monitor_server_ip) not in agentHelpers:
-        #     raise Exception("Agent on {} not exists!".format(monitor_server_ip))
-        #
-        # monitor_server_helper = agentHelpers[str(monitor_server_ip)]
-        # monitor_server_helper.deploy_monitor_slave()
+        if str(monitor_server_ip) not in agentHelpers:
+            raise Exception("Agent on {} not exists!".format(monitor_server_ip))
+
+        monitor_server_helper = agentHelpers[str(monitor_server_ip)]
+
 
         #Deploy monitor slave
         slaves = {}
@@ -426,6 +426,7 @@ class Manager(object):
                 raise Exception("Agent on [{}] not exists!".format(slave))
             slaveAgentHelper = agentHelpers[slave]
             slaveAgentHelper.deploy_monitor_slave()
+            monitor_server_helper.deploy_monitor_slave_config(slave)
 
         for edgenode in self.edgenodes:
             node = self.edgenodes[edgenode]
