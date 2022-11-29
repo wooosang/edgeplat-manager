@@ -16,9 +16,9 @@ nodes:
       image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     subscriber:
       - checker0: 5030
-      - preview_publisher: 5020
+      - preview: 5020
 
-  preview_publisher:
+  preview:
     description: 预览节点
     endpoint: 192.168.9.149:8070
     config:
