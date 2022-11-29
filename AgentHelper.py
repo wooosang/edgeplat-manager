@@ -56,16 +56,14 @@ class AgentHelper(object):
         logging.debug("Deploy monitor slave [{}] config result: {}".format(self.ip, result))
         return result
 
-
-    def deploy_monitor_node_config(self, node):
+    def deploy_monitor_node_online_config(self, node):
         logging.debug("在prometheus上部署节点存活监控配置......")
-        #在配置文件夹中增加配置文件node-ccd.json
-        #[
-        #   {
-        #       "targets": [ "192.168.9.149:9011"],
-        #       "labels": {
-        #           "name": "voter",
-	    #           "description": "投票节点"
-        #       }
-        #   }
-        #]
+        self.req = self.context.socket(zmq.REQ)
+        self.req.connect("tcp://" + self.ip + ":" + str(self.port))
+        command = {}
+        command['command'] = 'deploy_monitor_node_online_config'
+        command['config'] = {"blackbox_config": node.getMonitor_conf(),"node_name": node.getName()}
+        self.req.send_string(json.dumps(command))
+        result = self.req.recv_string()
+        logging.debug("Deploy monitor slave [{}] config result: {}".format(self.ip, result))
+        return result

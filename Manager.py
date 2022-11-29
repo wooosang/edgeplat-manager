@@ -428,8 +428,11 @@ class Manager(object):
             slaveAgentHelper.deploy_monitor_slave()
             monitor_server_helper.deploy_monitor_slave_config(slave)
 
+
+        #Deploy node health check
         for edgenode in self.edgenodes:
             node = self.edgenodes[edgenode]
             logging.debug("Begin deploy monitor [{}]".format(node.getName()))
             logging.debug("Monitor conf: {}".format(node.getMonitor_conf()))
+            monitor_server_helper.deploy_monitor_node_online_config(node)
 
