@@ -128,7 +128,10 @@ class Node:
         nodes = []
         node = {}
         nodes.append(node)
-        node['targets'] = self.yml['endpoint']
+        targets = []
+        targets.append(self.yml['endpoint'])
+        node['targets'] = targets
+
 
         labels = {}
         node['lables'] = labels
