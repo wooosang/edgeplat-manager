@@ -38,6 +38,8 @@ nodes:
     #      review: true
     deploy:
       image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
+      volume:
+        - /home/ubuntu/work/edgeplat/nodes/defect_checker:/app
     subscriber:
       - voter1: 5080
 
