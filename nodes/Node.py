@@ -134,7 +134,7 @@ class Node:
 
 
         labels = {}
-        node['lables'] = labels
+        node['labels'] = labels
         labels['name'] = self.name
         if 'description' in self.yml:
             labels['description'] = self.yml['description']
