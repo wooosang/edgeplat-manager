@@ -3,7 +3,6 @@ version: 1.0
 nodes:
   camera0:
     description: 相机采集节点0
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: 192.168.9.149:6020
     code: camera0
     type: 2DCamera
@@ -13,20 +12,22 @@ nodes:
       face: 0
       offline: 1
       loglevel: 1
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     subscriber:
       - checker0: 5030
       - preview_publisher: 5020
 
   preview_publisher:
     description: 预览节点
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/preview:1.0
     endpoint: 192.168.9.149:8070
     config:
       outport: 5550
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/preview:1.0
 
   checker0:
     description: 检测节点0
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
     endpoint: 192.168.9.149:8000
     config:
       savepath: /home/ubuntu/work/defects
@@ -35,23 +36,25 @@ nodes:
       height: 950
       mode: 0
     #      review: true
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
     subscriber:
       - voter1: 5080
 
   voter1:
     description: 决策节点0
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/voter:1.0
     endpoint: 192.168.9.149:9011
     config:
       type: socket
       ip: 192.168.2.244
       port: 3000
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/voter:1.0
     subscriber:
       - publisher: 5091
 
   publisher:
     description: 发布节点
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/publisher:1.0
     endpoint: 192.168.9.149:8071
     ignore_response: true
     type: Uploader
@@ -62,6 +65,8 @@ nodes:
       password: softwork
       exchange: ccd
       routekey: defect
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/publisher:1.0
 
 monitor:
   interval: 1s
