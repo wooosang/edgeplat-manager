@@ -4,7 +4,7 @@ from nodes.NodeFactory import NodeFactory
 from ManagerExt import ManagerExt
 from configparser import ConfigParser
 
-connect_timeout=30.0
+connect_timeout=15.0
 # recv_timeout=9.0
 
 t_result = queue.Queue()
@@ -23,7 +23,7 @@ def _configAndSubscribe(node, parameter, debug):
         sock.connect((nodeip, nodeport))
     config_command = node.getConfigCommand(parameter)
     # config_command = config_command | config
-    logging.info("Config [%s]: %s", node.getName(), config_command)
+    logging.info("Config [%s] request: %s", node.getName(), config_command)
     if not debug and not node.debug:
         sock.sendall(json.dumps(config_command).encode())
         try:
@@ -39,13 +39,14 @@ def _configAndSubscribe(node, parameter, debug):
                 msg = 'Config node [{}] failed!'.format(node.getName())
             t_result.put((result, msg))
         except socket.timeout:
-            t_result.put((3, '>>> Config node [{}] failed! Fetch result timeout！'.format(node.getName())))
+            t_result.put((3, '>>> Config node [{}] failed! Reason: Fetch result timeout！'.format(node.getName())))
+            return
         except Exception as e:
             logging.error("Error!!! {}", e)
 
     subscribe_commands = node.getSubscribeCommand()
     if subscribe_commands:
-        logging.info("Subscribe [%s]: %s", node.getName(), subscribe_commands)
+        logging.info("Subscribe [%s] request: %s", node.getName(), subscribe_commands)
         if not debug and not node.debug:
             for subscribe_command in subscribe_commands:
                 # logging.info("%s: %s", node.getName(), subscribe_command)
@@ -96,7 +97,7 @@ def _start(node, parameter, debug):
         traceback.print_exc()
         t_result.put((-1, ">>> 启动节点 [{}] 失败！ 地址:  {}:{}!!! 原因: {}".format(node.getName(), nodeip, nodeport, e)))
     finally:
-        if not debug and not node.debug:
+        if not debug and not node.debug and sock:
             sock.close()
 
 #Stop异步执行方式暂未启用
@@ -105,25 +106,34 @@ def _stop(node, parameter, debug=False):
     nodeip = node.getIp()
     nodeport = int(node.getPort())
     logging.debug("Begin connect to node {} {}:{}".format(node.getName(), nodeip, nodeport))
-    if not debug and not node.debug:
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.settimeout(connect_timeout)
-        sock.connect((nodeip, nodeport))
-    stop_command = node.getStopCommand()
-    logging.debug("Send to [{}] command: {}".format(node.getName(), stop_command))
-    if not debug and not node.debug:
-        sock.send(json.dumps(stop_command).encode())
-        if hasattr(node, 'ignore_response') and node.ignore_response:
-            time.sleep(1)
-            result = 0
-        else:
-            result = sock.recv(1)
-            result = int.from_bytes(result, 'big')
-        if result != 0:
-            logging.error("停止节点[{}]失败！ Result: {}".format(node.getName(), result))
-        else:
-            logging.debug("Stop [{}] succeed! Result: {}".format(node.getName(), result))
-        # time.sleep(0.1)
+    try:
+        if not debug and not node.debug:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(connect_timeout)
+            sock.connect((nodeip, nodeport))
+        stop_command = node.getStopCommand()
+        logging.debug("Send to [{}] command: {}".format(node.getName(), stop_command))
+        if not debug and not node.debug:
+            sock.send(json.dumps(stop_command).encode())
+            if hasattr(node, 'ignore_response') and node.ignore_response:
+                time.sleep(1)
+                result = 0
+            else:
+                result = sock.recv(1)
+                result = int.from_bytes(result, 'big')
+            if result != 0:
+                logging.error("停止节点[{}]失败！ Result: {}".format(node.getName(), result))
+            else:
+                logging.debug("Stop [{}] succeed! Result: {}".format(node.getName(), result))
+    except Exception as e:
+        logging.error(
+            "Stop node [{}] failed！ Address:  {}:{}!!! Reason: {}".format(node.getName(), nodeip, nodeport, e))
+        traceback.print_exc()
+        t_result.put((-1, ">>> 停止节点 [{}] 失败！ 地址:  {}:{}!!! 原因: {}".format(node.getName(), nodeip, nodeport, e)))
+    finally:
+        if not debug and not node.debug and sock:
+            sock.close()
+
     logging.debug("Node {} stopped.".format(node.getName()))
 
 class Manager(object):

@@ -53,7 +53,7 @@ def start():
     request_param = request.get_json()
     logging.debug("Request body: {}".format(request_param))
     result = doStop(conf, debug)
-    reesult = doStart(conf, request_param, debug)
+    result = doStart(conf, request_param, debug)
     del app.config['starting']
     return result
 
