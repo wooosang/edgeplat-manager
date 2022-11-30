@@ -38,7 +38,7 @@ def _configAndSubscribe(node, parameter, debug):
                     msg = sock.recv(int(result))
                     logging.debug("{}".format(msg))
                     t_result.put(
-                        (3, '>>> Config node [{}] failed! Reason: {}'.format(node.getName(),msg.decode('utf-8'))))
+                        (3, '>>> 配置节点 [{}] failed! Reason: {}'.format(node.getName(),msg.decode('utf-8'))))
                     return
             logging.debug("Config [{}] result: {}".format(node.getName(), result))
             msg = ''
@@ -154,6 +154,7 @@ class Manager(object):
         self.edgenodes = {}
         with open(yml, 'r',encoding='utf-8') as file:
             edgeconfig = yaml.safe_load(file)
+            self.name = edgeconfig['name']
             nodes = edgeconfig["nodes"]
             for node_name in nodes:
                 config = nodes[node_name]
@@ -222,9 +223,9 @@ class Manager(object):
             if int(result[0]) != 0:
                 success = False
                 logging.warn("{}".format(result))
-                msg = msg + result[1] + ';'
+                msg = msg + result[1] + "; "
         if not success:
-            raise Exception("启动失败!!! {}".format(msg))
+            raise Exception("启动 {} 失败!    {}".format(self.name,msg))
 
         t_result.queue.clear()
         for t in start_thread_list:
