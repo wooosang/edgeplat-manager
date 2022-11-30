@@ -31,8 +31,15 @@ def _configAndSubscribe(node, parameter, debug):
                 time.sleep(0.1)
                 result = 0
             else:
-                result = sock.recv(4)
+                result = sock.recv(1)
                 result = int.from_bytes(result, 'big')
+                if int(result)>0:
+                    logging.error("Config node [{}] error,ready to receive {} bytes".format(node.getName(), int(result)))
+                    msg = sock.recv(int(result))
+                    logging.debug("{}".format(msg))
+                    t_result.put(
+                        (3, '>>> Config node [{}] failed! Reason: {}'.format(node.getName(),msg.decode('utf-8'))))
+                    return
             logging.debug("Config [{}] result: {}".format(node.getName(), result))
             msg = ''
             if result != 0:
