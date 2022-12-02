@@ -1,4 +1,4 @@
-name: onlinecheck
+name: wyccd_online_check
 version: 1.0
 nodes:
   camera0:
@@ -13,6 +13,8 @@ nodes:
       loglevel: 1
     deploy:
       image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
+      volume:
+        - /home/ubuntu/work/camera/0/logs:/app/logs
     subscriber:
       - checker0: 5030
       - preview_publisher: 5020
@@ -88,11 +90,13 @@ nodes:
     subscriber:
       - checker5: 5035
       - preview_publisher: 5025
+
   preview_publisher:
     endpoint: 192.168.2.244:8070
     config:
       outport: 5550
-#      saveall: true
+      #saveall: true
+
   checker0:
     endpoint: 192.168.2.244:8000
     config:
@@ -159,6 +163,7 @@ nodes:
 #      review: true
     subscriber:
       - voter1: 5085
+
   voter1:
     endpoint: 192.168.2.244:9011
     config:
@@ -175,6 +180,7 @@ nodes:
       port: 4000
     subscriber:
       - publisher: 5092
+
   publisher:
     endpoint: 192.168.2.244:8071
     ignore_response: true
