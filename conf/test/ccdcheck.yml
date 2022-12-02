@@ -43,6 +43,7 @@ nodes:
         - /home/ubuntu/work/edgeplat/nodes/defect_checker:/app
         - /opt/edgeplat/libext/lb:/opt/edgeplat/libext
         - /home/ubuntu/work/models:/home/ubuntu/work/models
+        - /opt/halcon:/opt/halcon
       command: /app/defect_checker -p 8000
     subscriber:
       - voter1: 5080
