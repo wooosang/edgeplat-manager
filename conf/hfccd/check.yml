@@ -93,10 +93,10 @@ nodes:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
     endpoint: 172.17.0.1:8000
     config:
-      savepath: /home/ubuntu/work/defects
+      savepath: /home/ubuntu/work/images/defects
       face: 0
-      width: 1920
-      height: 950
+      model_path: /home/ubuntu/work/models/
+      model: mobilenet_v2_512_no7_hefei_ccd_{}face_2class_2_2_net.onnx
       mode: 0
 #      review: true
     subscriber:
@@ -105,7 +105,7 @@ nodes:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
     endpoint: 172.17.0.1:8001
     config:
-      savepath: /home/ubuntu/work/defects
+      savepath: /home/ubuntu/work/images/defects
       face: 1
       width: 1920
       height: 550
@@ -117,7 +117,7 @@ nodes:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
     endpoint: 172.17.0.1:8002
     config:
-      savepath: /home/ubuntu/work/defects
+      savepath: /home/ubuntu/work/images/defects
       face: 2
       width: 480
       height: 900
@@ -129,7 +129,7 @@ nodes:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
     endpoint: 172.17.0.1:8003
     config:
-      savepath: /home/ubuntu/work/defects
+      savepath: /home/ubuntu/work/images/defects
       face: 3
       width: 1624
       height: 448
@@ -141,7 +141,7 @@ nodes:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
     endpoint: 172.17.0.1:8004
     config:
-      savepath: /home/ubuntu/work/defects
+      savepath: /home/ubuntu/work/images/defects
       face: 4
       width: 1920
       height: 1050
@@ -153,7 +153,7 @@ nodes:
     image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
     endpoint: 172.17.0.1:8005
     config:
-      savepath: /home/ubuntu/work/defects
+      savepath: /home/ubuntu/work/images/defects
       face: 5
       width: 480
       height: 900

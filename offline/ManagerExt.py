@@ -3,9 +3,6 @@ import requests as requests
 from flask import Blueprint
 
 ext_api = Blueprint('ext_api', __name__)
-credentials = pika.PlainCredentials('admin', 'softwork')
-connection = pika.BlockingConnection(pika.ConnectionParameters('192.168.10.10', 5672, '/', credentials))
-channel = connection.channel()
 plc_url = 'http://192.168.10.10:1880/'
 
 
@@ -13,8 +10,11 @@ plc_url = 'http://192.168.10.10:1880/'
 def stopTest():
     global appExt
     print('PLC结束，MQ发送通知.')
+    time.sleep(10)
     result = ext_api.manager.stop()
-    global channel
+    credentials = pika.PlainCredentials('admin', 'softwork')
+    connection = pika.BlockingConnection(pika.ConnectionParameters('192.168.10.10', 5672, '/', credentials))
+    channel = connection.channel()
     data = {'status': 'stop'}
     message = json.dumps(data)
     channel.basic_publish(exchange='test', routing_key='status', body=message)
