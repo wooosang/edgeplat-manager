@@ -4,7 +4,8 @@ from nodes.NodeFactory import NodeFactory
 from ManagerExt import ManagerExt
 from configparser import ConfigParser
 
-connect_timeout=15.0
+connect_timeout=30.0
+socket.setdefaulttimeout(connect_timeout)
 # recv_timeout=9.0
 
 t_result = queue.Queue()
