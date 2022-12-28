@@ -447,6 +447,12 @@ class Manager(object):
             slaveAgentHelper.deploy_monitor_slave()
             monitor_server_helper.deploy_monitor_slave_config(slave)
 
+        for slave in slaves:
+            logging.debug("Deploy node monitor service on {}".format(slave))
+            if slave not in agentHelpers:
+                raise Exception("Agent on [{}] not exists!".format(slave))
+            slaveAgentHelper = agentHelpers[slave]
+            slaveAgentHelper.deploy_monitor_node()
 
         #Deploy node health check
         for edgenode in self.edgenodes:

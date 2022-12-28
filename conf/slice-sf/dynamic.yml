@@ -2,7 +2,7 @@ name: dynamictest
 version: 1.0
 nodes:
   camera:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
+    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.1
     endpoint: 192.168.8.107:6000
     code: camera
     type: 2DCamera

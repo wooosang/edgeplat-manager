@@ -42,7 +42,15 @@ class AgentHelper(object):
 
     def deploy_monitor_node(self):
         logging.debug("部署节点存活监控服务.......")
-        #目前是使用promethues中的blackbox模块，故直接使用不再做其它处理
+        self.req = self.context.socket(zmq.REQ)
+        self.req.connect("tcp://" + self.ip + ":" + str(self.port))
+        command = {}
+        command['command'] = 'deploy_monitor_node'
+        command['config'] = {}
+        self.req.send_string(json.dumps(command))
+        result = self.req.recv_string()
+        logging.debug("Deploy monitor node [{}] result: {}".format(self.ip, result))
+        return result
 
     def deploy_monitor_slave_config(self, slave_ip):
         logging.debug("在prometheus上部署服务器[{}]资源监控配置......".format(slave_ip))
