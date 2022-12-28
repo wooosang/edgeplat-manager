@@ -40,7 +40,7 @@ class AgentHelper(object):
         try:
             json_result = json.loads(str(result))
         except:
-            logging.error("result: {}", result)
+            logging.error("result: {}".format(result))
         logging.debug("Deploy monitor slave on [{}] result: {}".format(self.ip, json_result))
         if not json_result['success']:
             raise Exception("部署从属机监控服务失败!")
