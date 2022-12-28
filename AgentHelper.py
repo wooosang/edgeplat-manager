@@ -37,7 +37,7 @@ class AgentHelper(object):
         command['config'] = {}
         self.req.send_string(json.dumps(command))
         result = self.req.recv_string()
-        logging.debug("Deploy monitor slave [{}] result: {}".format(self.ip, result))
+        logging.debug("Deploy monitor slave on [{}] result: {}".format(self.ip, result))
         return result
 
     def deploy_monitor_node(self):
@@ -49,6 +49,7 @@ class AgentHelper(object):
         command['config'] = {}
         self.req.send_string(json.dumps(command))
         result = self.req.recv_string()
+        self.req.close()
         logging.debug("Deploy monitor node [{}] result: {}".format(self.ip, result))
         return result
 
