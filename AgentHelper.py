@@ -37,7 +37,7 @@ class AgentHelper(object):
         command['config'] = {}
         self.req.send_string(json.dumps(command))
         result = self.req.recv_string()
-        json_result = json.loads(result)
+        json_result = json.loads(str(result))
         logging.debug("Deploy monitor slave on [{}] result: {}".format(self.ip, json_result))
         if not json_result['success']:
             raise Exception("部署从属机监控服务失败!")
