@@ -166,7 +166,7 @@ def halcon_threshold_modify():
             params["area"][conf[str(face)+'-'+str(type)]]["matchFuction"]["ncc_standScore"] = str(threshold)
             with open(conf_file, 'w') as r:
                 # 将params写入名称为r的文件中
-                json.dump(params, r)
+                json.dump(params, r, indent=4)
     except Exception as e:
         return {"success": False, "msg": str(e)}
 
