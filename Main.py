@@ -172,6 +172,29 @@ def halcon_threshold_modify():
 
     return {"success": True}
 
+@app.route('/halcon/threshold/get',methods = ['POST'])
+def halcon_threshold_modify():
+    conf = {}
+    conf['0-seal_skew'] = 2
+    conf['1-tooth_skew'] = 1
+    conf['4-seal_skew'] = 3
+    request_json = request.get_json()
+    face = request_json['face']
+    type = request_json['type']
+    threshold = request_json['threshold']
+    print("face: {}, type: {}".format(face, type))
+    conf_file = '/home/ubuntu/work/models/10000/'+str(face)+'_config.json'
+    try:
+        with open(conf_file, 'rb') as f:
+            params = json.load(f)
+            print(params["area"][conf[str(face)+'-'+str(type)]]["matchFuction"]["ncc_standScore"])
+            ncc_value = params["area"][conf[str(face)+'-'+str(type)]]["matchFuction"]["ncc_standScore"]
+            return {"success": True, "threshold": ncc_value}
+    except Exception as e:
+        return {"success": False, "msg": str(e)}
+
+
+
 def init(conf):
     app.manager = Manager(conf)
     ext_api.manager = app.manager
