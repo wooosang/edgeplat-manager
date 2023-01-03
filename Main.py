@@ -192,7 +192,32 @@ def halcon_threshold_get():
     except Exception as e:
         return {"success": False, "msg": str(e)}
 
+@app.route('/halcon/threshold/getall',methods = ['GET'])
+def halcon_threshold_getAll():
+    result = {}
+    facetypes = [(0,'seal_skew'),(1,'tooth_skew'),(4,'seal_skew')]
 
+    for face,type in facetypes:
+        ncc_standScore = get_halcon_threshold(face, type)
+        result[str(face)+'-'+str(type)] = ncc_standScore
+    result['success'] = True
+    return result
+
+def get_halcon_threshold(face, type):
+    conf = {}
+    conf['0-seal_skew'] = 2
+    conf['1-tooth_skew'] = 1
+    conf['4-seal_skew'] = 3
+    print("face: {}, type: {}".format(face, type))
+    conf_file = '/home/ubuntu/work/models/10000/' + str(face) + '_config.json'
+    try:
+        with open(conf_file, 'rb') as f:
+            params = json.load(f)
+            print(params["area"][conf[str(face) + '-' + str(type)]]["matchFuction"]["ncc_standScore"])
+            ncc_value = params["area"][conf[str(face) + '-' + str(type)]]["matchFuction"]["ncc_standScore"]
+            return ncc_value
+    except Exception as e:
+        return e
 
 def init(conf):
     app.manager = Manager(conf)
