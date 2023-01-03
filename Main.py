@@ -173,7 +173,7 @@ def halcon_threshold_modify():
     return {"success": True}
 
 @app.route('/halcon/threshold/get',methods = ['POST'])
-def halcon_threshold_modify():
+def halcon_threshold_get():
     conf = {}
     conf['0-seal_skew'] = 2
     conf['1-tooth_skew'] = 1
