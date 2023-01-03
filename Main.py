@@ -181,7 +181,6 @@ def halcon_threshold_get():
     request_json = request.get_json()
     face = request_json['face']
     type = request_json['type']
-    threshold = request_json['threshold']
     print("face: {}, type: {}".format(face, type))
     conf_file = '/home/ubuntu/work/models/10000/'+str(face)+'_config.json'
     try:
