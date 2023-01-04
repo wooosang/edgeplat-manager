@@ -199,7 +199,7 @@ def halcon_threshold_getAll():
 
     for face,type in facetypes:
         ncc_standScore = get_halcon_threshold(face, type)
-        result['face'+str(face)+'-'+str(type)] = ncc_standScore
+        result['face'+str(face)+'_'+str(type)] = ncc_standScore
     result['success'] = True
     return result
 
