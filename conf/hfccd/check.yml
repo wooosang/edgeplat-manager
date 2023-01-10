@@ -2,7 +2,6 @@ name: onlinecheck
 version: 1.0
 nodes:
   camera0:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: 172.17.0.1:6020
     code: camera0
     type: 2DCamera
@@ -15,8 +14,12 @@ nodes:
     subscriber:
       - checker0: 5030
       - preview_publisher: 5020
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.1
+      volume:
+        - /home/ubuntu/work/camera/0/logs:/app/logs
+        - /home/ubuntu/work/images/samples/0:/home/ubuntu/work/samples/0
   camera1:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: 172.17.0.1:6021
     code: camera1
     type: 2DCamera
@@ -28,8 +31,12 @@ nodes:
     subscriber:
       - checker1: 5031
       - preview_publisher: 5021
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.1
+      volume:
+        - /home/ubuntu/work/camera/1/logs:/app/logs
+        - /home/ubuntu/work/images/samples/1:/home/ubuntu/work/samples/1
   camera2:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: 172.17.0.1:6022
     code: camera2
     type: 2DCamera
@@ -41,8 +48,12 @@ nodes:
     subscriber:
       - checker2: 5032
       - preview_publisher: 5022
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.1
+      volume:
+        - /home/ubuntu/work/camera/2/logs:/app/logs
+        - /home/ubuntu/work/images/samples/2:/home/ubuntu/work/samples/2
   camera3:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: 172.17.0.1:6023
     code: camera3
     type: 2DCamera
@@ -55,8 +66,12 @@ nodes:
     subscriber:
       - checker3: 5033
       - preview_publisher: 5023
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.1
+      volume:
+        - /home/ubuntu/work/camera/3/logs:/app/logs
+        - /home/ubuntu/work/images/samples/3:/home/ubuntu/work/samples/3
   camera4:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: 172.17.0.1:6024
     code: camera4
     type: 2DCamera
@@ -69,8 +84,12 @@ nodes:
     subscriber:
       - checker4: 5034
       - preview_publisher: 5024
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.1
+      volume:
+        - /home/ubuntu/work/camera/4/logs:/app/logs
+        - /home/ubuntu/work/images/samples/4:/home/ubuntu/work/samples/4
   camera5:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
     endpoint: 172.17.0.1:6025
     code: camera5
     type: 2DCamera
@@ -83,14 +102,21 @@ nodes:
     subscriber:
       - checker5: 5035
       - preview_publisher: 5025
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.1
+    volume:
+      - /home/ubuntu/work/camera/5/logs:/app/logs
+      - /home/ubuntu/work/images/samples/5:/home/ubuntu/work/samples/5
   preview_publisher:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/preview:1.0
     endpoint: 172.17.0.1:8070
     config:
       outport: 5550
 #      saveall: true
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/preview:1.0
+      volume:
+        - /home/ubuntu/work/edgeplat/logs/voter1:/app/logs
   checker0:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
     endpoint: 172.17.0.1:8000
     config:
       savepath: /home/ubuntu/work/images/defects
@@ -101,8 +127,17 @@ nodes:
 #      review: true
     subscriber:
       - voter1: 5080
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
+      volume:
+        - /home/ubuntu/work/edgeplat/nodes/defect_checker:/app
+        - /home/ubuntu/work/models/lb:/home/ubuntu/work/models
+        - /home/ubuntu/work/images:/home/ubuntu/work/images
+        - /home/ubuntu/work/config:/home/ubuntu/work/config
+        - /opt/edgeplat/libext/lb:/opt/edgeplat/libext
+        - /opt/halcon:/opt/halcon
+      command: /app/defect_checker -p 8000
   checker1:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
     endpoint: 172.17.0.1:8001
     config:
       savepath: /home/ubuntu/work/images/defects
@@ -113,8 +148,17 @@ nodes:
 #      review: true
     subscriber:
       - voter1: 5081
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
+      volume:
+        - /home/ubuntu/work/edgeplat/nodes/defect_checker:/app
+        - /home/ubuntu/work/models/lb:/home/ubuntu/work/models
+        - /home/ubuntu/work/images:/home/ubuntu/work/images
+        - /home/ubuntu/work/config:/home/ubuntu/work/config
+        - /opt/edgeplat/libext/lb:/opt/edgeplat/libext
+        - /opt/halcon:/opt/halcon
+        command: /app/defect_checker -p 8001
   checker2:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
     endpoint: 172.17.0.1:8002
     config:
       savepath: /home/ubuntu/work/images/defects
@@ -125,8 +169,17 @@ nodes:
 #      review: true
     subscriber:
       - voter1: 5082
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
+      volume:
+        - /home/ubuntu/work/edgeplat/nodes/defect_checker:/app
+        - /home/ubuntu/work/models/lb:/home/ubuntu/work/models
+        - /home/ubuntu/work/images:/home/ubuntu/work/images
+        - /home/ubuntu/work/config:/home/ubuntu/work/config
+        - /opt/edgeplat/libext/lb:/opt/edgeplat/libext
+        - /opt/halcon:/opt/halcon
+        command: /app/defect_checker -p 8002
   checker3:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
     endpoint: 172.17.0.1:8003
     config:
       savepath: /home/ubuntu/work/images/defects
@@ -137,8 +190,17 @@ nodes:
       review: true
     subscriber:
       - voter2: 5083
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
+      volume:
+        - /home/ubuntu/work/edgeplat/nodes/defect_checker:/app
+        - /home/ubuntu/work/models/lb:/home/ubuntu/work/models
+        - /home/ubuntu/work/images:/home/ubuntu/work/images
+        - /home/ubuntu/work/config:/home/ubuntu/work/config
+        - /opt/edgeplat/libext/lb:/opt/edgeplat/libext
+        - /opt/halcon:/opt/halcon
+        command: /app/defect_checker -p 8003
   checker4:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
     endpoint: 172.17.0.1:8004
     config:
       savepath: /home/ubuntu/work/images/defects
@@ -149,8 +211,17 @@ nodes:
 #      review: true
     subscriber:
       - voter1: 5084
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
+      volume:
+        - /home/ubuntu/work/edgeplat/nodes/defect_checker:/app
+        - /home/ubuntu/work/models/lb:/home/ubuntu/work/models
+        - /home/ubuntu/work/images:/home/ubuntu/work/images
+        - /home/ubuntu/work/config:/home/ubuntu/work/config
+        - /opt/edgeplat/libext/lb:/opt/edgeplat/libext
+        - /opt/halcon:/opt/halcon
+        command: /app/defect_checker -p 8004
   checker5:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
     endpoint: 172.17.0.1:8005
     config:
       savepath: /home/ubuntu/work/images/defects
@@ -161,8 +232,17 @@ nodes:
 #      review: true
     subscriber:
       - voter1: 5085
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/checker-gpu:1.1
+      volume:
+        - /home/ubuntu/work/edgeplat/nodes/defect_checker:/app
+        - /home/ubuntu/work/models/lb:/home/ubuntu/work/models
+        - /home/ubuntu/work/images:/home/ubuntu/work/images
+        - /home/ubuntu/work/config:/home/ubuntu/work/config
+        - /opt/edgeplat/libext/lb:/opt/edgeplat/libext
+        - /opt/halcon:/opt/halcon
+        command: /app/defect_checker -p 8005
   voter1:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/voter:1.0
     endpoint: 172.17.0.1:9011
     config:
       type: socket
@@ -170,8 +250,11 @@ nodes:
       port: 3000
     subscriber:
       - publisher: 5091
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/voter:1.0
+      volume:
+        - /home/ubuntu/work/edgeplat/logs/voter1:/app/logs
   voter2:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/voter:1.0
     endpoint: 172.17.0.1:9012
     config:
       type: socket
@@ -179,8 +262,11 @@ nodes:
       port: 4000
     subscriber:
       - publisher: 5092
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/voter:1.0
+      volume:
+        - /home/ubuntu/work/edgeplat/logs/voter2:/app/logs
   publisher:
-    image: registry.cn-hangzhou.aliyuncs.com/open-ys/publisher:1.0
     endpoint: 172.17.0.1:8071
     ignore_response: true
     type: Uploader
@@ -191,3 +277,5 @@ nodes:
       password: softwork
       exchange: ccd
       routekey: defect
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/publisher:1.0
