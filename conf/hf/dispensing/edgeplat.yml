@@ -10,7 +10,7 @@ nodes:
       offline: 1
       loglevel: 1
     deploy:
-      image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.1
     subscriber:
       - preview: 5020
 
