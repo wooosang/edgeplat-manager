@@ -1,0 +1,24 @@
+name: dispensing
+version: 1.0
+nodes:
+  camera:
+    description: 相机采集节点0
+    endpoint: 172.17.0.1:6020
+    type: 2DCamera
+    config:
+      cameraip: 192.168.0.20
+      offline: 1
+      loglevel: 1
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/2dhik:2.0
+    subscriber:
+      - preview: 5020
+
+  preview:
+    description: 预览节点
+    endpoint: 172.17.0.1:8070
+    config:
+      outport: 5550
+      saveall: true
+    deploy:
+      image: registry.cn-hangzhou.aliyuncs.com/open-ys/zmqout:1.0
